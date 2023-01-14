@@ -334,3 +334,5 @@ class Coordinate{
         return "Latitude: "+this.#latitude+", Longitude: "+this.#longitude;
     }
 }
+
+export {Person,Category,Resource,Production,Movie,Serie,User,Coordinate};
