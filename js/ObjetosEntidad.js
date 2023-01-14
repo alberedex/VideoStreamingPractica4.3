@@ -14,7 +14,7 @@ class Person{
     #born; //Fecha de nacimiento
     #picture; //String de la ruta de la imagen
 
-    constructor(name,lastname1,lastname2,born,picture){
+    constructor(name,lastname1,lastname2 = "",born,picture=""){
         //Validar datos de entrada
         if(!name) throw new InvalidValueException("name",name);
         if(!lastname1) throw new InvalidValueException("lastname1",lastname1);
@@ -33,6 +33,7 @@ class Person{
     }
     
     set name(nameNew){
+        if(!name) throw new InvalidValueException("name",name);
         this.#name = nameNew;
     }
     
@@ -42,6 +43,7 @@ class Person{
     }
 
     set lastname1(name){
+        if(!lastname1) throw new InvalidValueException("lastname1",lastname1);
         this.#lastname1 = name;
     }
 
@@ -60,6 +62,7 @@ class Person{
     }
 
     set born(name){
+        if(isNaN(Date.parse(born))) throw new InvalidValueException("born",born);
         this.#born = name;
     }
 
@@ -83,7 +86,7 @@ class Category {
     #name;
     #description;
 
-    constructor(name, description) {
+    constructor(name, description ="") {
         //Validar datos de entrada
         if (!name) throw new InvalidValueException("name", name);
 
@@ -107,8 +110,7 @@ class Category {
     }
 
     set description(descriptionN) {
-        if (!descriptionN) throw new InvalidValueException("description", description);
-        this.#description = description;
+        this.#description = descriptionN;
     }
 
     //Metodo toString
@@ -130,6 +132,23 @@ class Resource {
         this.#link = link;
     }
 
+    get duration(){
+        return this.#duration;
+    }
+
+    set duration(durationN){
+        if (duration <= 0) throw new InvalidValueException("duration", durationN);
+        this.#duration = durationN;
+    }
+
+    get link(){
+        return this.#link;
+    }
+
+    set link(linkN){
+        if (!link) throw new InvalidValueException("link",linkN);
+        this.#link = linkN;
+    }
     //Metodo toString
     toString(){
         return "Duration: "+this.#duration+", Link: "+this.#link;
@@ -144,7 +163,7 @@ class Production {
     #synopsis;
     #image;
 
-    constructor(title,nationality,publication,synopsis,image){
+    constructor(title,nationality="",publication,synopsis="",image=""){
         //Comprobación que no sea Production que es clase abstracta.
 		if ((new.target === Production)) throw new AbstractClassException("Production");
 
@@ -188,7 +207,7 @@ class Movie extends Production{
     #resource;
     #locations;
 
-    constructor(title,nationality,publication,synopsis,image,resource,locations) {
+    constructor(title,nationality,publication,synopsis,image,resource="",locations=[]) {
         super(title,nationality,publication,synopsis,image);
 
         this.#resource = resource;
@@ -228,7 +247,7 @@ class Serie extends Production{
     #locations;
     #seasons;
 
-    constructor(title,nationality,publication,synopsis,image,resources,locations,seasons) {
+    constructor(title,nationality,publication,synopsis,image,resources=[],locations=[],seasons=0) {
         super(title,nationality,publication,synopsis,image);
 
         this.#resources = resources;
