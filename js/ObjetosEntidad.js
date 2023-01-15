@@ -3,7 +3,7 @@ import {
     BaseException,
     InvalidAccessConstructorException,
     InvalidValueException,
-    AbstractClassException } from './js/Exception.js';
+    AbstractClassException } from './Exception.js';
 
 //Objeto Person, para identificar los datos de una persona.
 class Person{
@@ -256,14 +256,14 @@ class Serie extends Production{
 
     }
 
-    //Getter y setter de resource
-    get resource(){
-        return this.#resource;
+    //Getter y setter de resources
+    get resources(){
+        return this.#resources;
     }
 
-    set resource(resourseN){
+    set resources(resourseN){
 
-        this.#resource = resourseN;
+        this.#resources = resourseN;
     }
 
     
@@ -278,7 +278,7 @@ class Serie extends Production{
     }
 
     toString(){
-        return this.#resource.toString()+this.#locations.toString();
+        return this.#resources.toString()+this.#locations.toString();
     }
 }
 
