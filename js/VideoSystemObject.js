@@ -78,7 +78,21 @@ class ProductionIsNotExistsException extends VideoSystemException {
         this.name = "ProductionIsNotExistsException";
     }
 }
+//En caso que exista la Persona
+class PersonIsExistsException extends VideoSystemException {
+    constructor(fileName, lineNumber) {
+        super("Error: The Person is exists.", fileName, lineNumber);
+        this.name = "PersonIsExistsException";
+    }
+}
 
+//En caso que exista la Persona
+class PersonIsNotExistsException extends VideoSystemException {
+    constructor(fileName, lineNumber) {
+        super("Error: The Person is not exists.", fileName, lineNumber);
+        this.name = "PersonIsNotExistsException";
+    }
+}
 //La function anonima
 let VideoSystem = (function () {
     let instantiated; //Objeto con la instancia única ImageManager
@@ -324,7 +338,54 @@ let VideoSystem = (function () {
                 return this.#productions.length;
             }
 
-            
+            /**
+             * Metodos para ACTORS 
+             */
+
+            //Metodo donde devuelve un iterador de los actores del sistema
+            get actors(){
+                let array = this.#actors;
+                return {
+                    *[Symbol.iterator](){
+                        for (let i = 0; i < array.length; i++) {
+                            yield array[i].actor;
+                        }
+                    }
+                }
+            }
+
+            //Metodo donde se add actor en el sistema
+            addActor(actor){
+                //Validamos los datos de entrada
+                if (!actor) throw new InvalidValueException("actor", actor);
+                if (!(actor instanceof Person)) throw new TypeVideoSystemException("Actor");
+
+                //Comprobamos por nombre y lastname  
+                let position = this.#actors.findIndex((actorElement) => actorElement.actor.name === actor.name && actorElement.actor.lastname1 === actor.lastname1);
+                if (position >= 0) throw new PersonIsExistsException(); //Excepcion en caso que exista
+
+                this.#actors.push({
+                    actor:actor,
+                    productions: []
+                });
+
+                return this.#actors.length;
+            }
+
+            //Metodo donde se elimina un actor del sistema
+            removeActor(actor){
+                //Validamos los datos de entrada
+                if (!actor) throw new InvalidValueException("actor", actor);
+                if (!(actor instanceof Person)) throw new TypeVideoSystemException("Actor");
+
+                //Comprobamos por nombre y lastname  
+                let position = this.#actors.findIndex((actorElement) => actorElement.actor.name === actor.name && actorElement.actor.lastname1 === actor.lastname1);
+                if (position === -1) throw new PersonIsNotExistsException(); //Excepcion en caso que no exista
+
+                this.#actors.splice(position,1);
+
+                return this.#actors.length;
+            }
         }
         let vs = new VideoSystem();
         Object.freeze(vs);

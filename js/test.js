@@ -56,6 +56,20 @@ function test() {
         console.log(categoria);
     }
 
+    //ACTORS 
+
+    let actor1 = new Person("Christian", "Bale", "", new Date(1974, 0, 30), "");
+    let actor2 = new Person("Harry", "Melling", "", new Date(1989, 3, 13), "");
+
+    console.log(vs.addActor(actor1));
+    console.log(vs.addActor(actor2));
+    
+    console.log(vs.removeActor(actor1));
+    console.log(vs.addActor(actor1));
+
+    for(let actor of vs.actors){
+        console.log(actor);
+    }
 
     let user1 = new User("alberedex","2001rs@gmail.com","pass1234");
 
