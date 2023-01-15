@@ -386,6 +386,56 @@ let VideoSystem = (function () {
 
                 return this.#actors.length;
             }
+
+            /**
+             * Metodos para Director
+             */
+
+            //Metodo donde devuelve un iterador de los directores del sistema
+            get directors() {
+                let array = this.#directors;
+                return {
+                    *[Symbol.iterator]() {
+                        for (let i = 0; i < array.length; i++) {
+                            yield array[i].director;
+                        }
+                    }
+                }
+            }
+
+            //Metodo donde se add director en el sistema
+            addDirector(director) {
+                //Validamos los datos de entrada
+                if (!director) throw new InvalidValueException("director", director);
+                if (!(director instanceof Person)) throw new TypeVideoSystemException("director");
+
+                //Comprobamos por nombre y lastname  
+                let position = this.#directors.findIndex((directorElement) => directorElement.director.name === director.name && directorElement.director.lastname1 === director.lastname1);
+                if (position >= 0) throw new PersonIsExistsException(); //Excepcion en caso que exista
+
+                this.#directors.push({
+                    director: director,
+                    productions: []
+                });
+
+                return this.#directors.length;
+            }
+
+            //Metodo donde se elimina un/a director/a del sistema
+            removeDirector(director) {
+                //Validamos los datos de entrada
+                if (!director) throw new InvalidValueException("director", director);
+                if (!(director instanceof Person)) throw new TypeVideoSystemException("director");
+
+                //Comprobamos por nombre y lastname  
+                let position = this.#directors.findIndex((directorElement) => directorElement.director.name === director.name && directorElement.director.lastname1 === director.lastname1);
+                if (position === -1) throw new PersonIsNotExistsException(); //Excepcion en caso que no exista
+
+                this.#directors.splice(position, 1);
+
+                return this.#directors.length;
+            }
+
         }
         let vs = new VideoSystem();
         Object.freeze(vs);

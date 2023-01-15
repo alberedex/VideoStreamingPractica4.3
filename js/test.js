@@ -71,6 +71,19 @@ function test() {
         console.log(actor);
     }
 
+
+    //Directors
+
+    let director1 = new Person("Scott","Cooper","",new Date(1970,4,20),"fotoScott.jpg");
+    let director2 = new Person("Nacho","Vigalondo","Palacios",new Date(1977,4,6),"fotoNacho.jpg");
+
+    console.log(vs.addDirector(director1));
+    console.log(vs.addDirector(director2));
+
+    for (let director of vs.directors) {
+        console.log(director);
+    }
+
     let user1 = new User("alberedex","2001rs@gmail.com","pass1234");
 
     console.log(user.toString());
