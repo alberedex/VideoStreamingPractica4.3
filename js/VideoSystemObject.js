@@ -63,6 +63,22 @@ class UserNotIsExistsException extends VideoSystemException {
     }
 }
 
+//En caso que exista la produccion
+class ProductionIsExistsException extends VideoSystemException {
+    constructor(fileName, lineNumber) {
+        super("Error: The Production is exists.", fileName, lineNumber);
+        this.name = "ProductionIsExistsException";
+    }
+}
+
+//En caso que no exista la produccion
+class ProductionIsNotExistsException extends VideoSystemException {
+    constructor(fileName, lineNumber) {
+        super("Error: The Production is not exists.", fileName, lineNumber);
+        this.name = "ProductionIsNotExistsException";
+    }
+}
+
 //La function anonima
 let VideoSystem = (function () {
     let instantiated; //Objeto con la instancia única ImageManager
@@ -212,7 +228,7 @@ let VideoSystem = (function () {
                 if (!(user instanceof User)) throw new TypeVideoSystemException("User");
                 //Comprobamos por nombre de usuario
                 let position = this.#users.findIndex((userElement) => userElement.username === user.username);
-                if (position === -1) throw new UserNotIsExistsException(); //Excepcion en caso que exista
+                if (position === -1) throw new UserNotIsExistsException(); //Excepcion en caso que no exista
 
                 this.#users.splice(position, 1); //Eliminamos el usuario
 
@@ -223,6 +239,92 @@ let VideoSystem = (function () {
              * Metodos para PRODUCTIONS
              */
 
+            //Metodo donde devuelve un iterador de las producciones del sistema
+            get productions(){
+                let array = this.#productions;
+                return {
+                    * [Symbol.iterator](){
+                        for (let i = 0; i < array.length; i++) {
+                            yield array[i];
+                            
+                        }
+                    }
+                }    
+            }
+
+            //Metodo donde se add producciones al sistema
+            addProduction(production){
+                //Validamos los datos de entrada
+                if (!production) throw new InvalidValueException("user", production);
+                if (!(production instanceof Production)) throw new TypeVideoSystemException("Production");
+
+                //Comprobamos por titulo 
+                let position = this.#productions.findIndex((productionElement) => productionElement.title === production.title);
+                if (position >= 0) throw new ProductionIsExistsException(); //Excepcion en caso que exista
+
+                this.#productions.push(production);
+
+                return this.#productions.length;
+            }
+
+            //Metodo donde se elimina un produccion del sistema
+            removeProduction(production){
+                //Validamos los datos de entrada
+                if (!production) throw new InvalidValueException("user", production);
+                if (!(production instanceof Production)) throw new TypeVideoSystemException("Production");
+
+                //Comprobamos por titulo 
+                let position = this.#productions.findIndex((productionElement) => productionElement.title === production.title);
+                if (position === -1) throw new ProductionIsNotExistsException(); //Excepcion en caso que no exista
+                
+                //En caso que exista, comprobamos en el resto de la listas que posse la produccion
+
+                //Para la lista de categoria, eliminar la produccion 
+                for(let categoria of this.#categories){
+                    //categoria me da un objeto literal , metemos en otro bucle para recorrer la array de producciones
+                    
+                    for (let i = 0; i < categoria.productions.length; i++) {
+                        if(categoria.productions[i].title === production.title){
+                            categoria.productions.splice(i, 1);
+                            break; //lo finalizamos para esta categoria, ya esta borrado
+                        }
+                        
+                    }
+                }
+
+                //Para la lista de actors, eliminar la produccion 
+                for(let actor of this.#actors){
+                    //categoria me da un objeto literal , metemos en otro bucle para recorrer la array de producciones
+                    
+                    for (let i = 0; i < actor.productions.length; i++) {
+                        if(actor.productions[i].title === production.title){
+                            actor.productions.splice(i, 1);
+                            break; //lo finalizamos para el actor, ya esta borrado
+                        }
+                        
+                    }
+                }
+
+                //Para la lista de directores, eliminar la produccion 
+                for(let director of this.#directors){
+                    //categoria me da un objeto literal , metemos en otro bucle para recorrer la array de producciones
+                    
+                    for (let i = 0; i < director.productions.length; i++) {
+                        if(director.productions[i].title === production.title){
+                            director.productions.splice(i, 1);
+                            break; //lo finalizamos para el/la director/a, ya esta borrado
+                        }
+                        
+                    }
+                }
+
+                //Una vez comprobamos, eliminamos en la lista general de producciones
+                this.#productions.splice(position,1);
+
+                return this.#productions.length;
+            }
+
+            
         }
         let vs = new VideoSystem();
         Object.freeze(vs);

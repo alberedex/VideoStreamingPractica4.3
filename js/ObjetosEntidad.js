@@ -282,6 +282,8 @@ class Serie extends Production{
     }
 }
 
+const EXPR_EMAIL = /^\w{1,}\@{1}\w{1,}\.{1}\w{2,}$/;
+
 //Objeto User, que representa un usuario
 class User{
     #username;
@@ -290,7 +292,7 @@ class User{
 
     constructor(username,email,password) {
         if (!username) throw new InvalidValueException("username",username);
-        if (!email) throw new InvalidValueException("email",email);
+        if (!EXPR_EMAIL.test(email)) throw new InvalidValueException("email",email);
         if (!password) throw new InvalidValueException("password",password);
 
         this.#username = username;
