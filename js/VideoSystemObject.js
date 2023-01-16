@@ -132,6 +132,26 @@ let VideoSystem = (function () {
             */
 
             #defaultCategory = new Category("default category"); //Categoría por defecto
+            
+            //Devuelve la posicion de una produccion de la lista
+            #getPositionProduction(production){
+                return this.#productions.findIndex((productionElement) => productionElement.title === production.title);
+            }
+
+            //devuelve la posicion de la categoria de la lista 
+            #getPositionCategory(category){
+                return this.#categories.findIndex((categoryElement) => categoryElement.category.name === category.name);
+            }
+
+            //devuelve la posicion del actor de la lista 
+            #getPositionActor(actor){
+                return this.#actors.findIndex((actorElement) => actorElement.actor.name === actor.name && actorElement.actor.lastname1 === actor.lastname1);
+            }
+
+            //devuelve la posicion del director de la lista 
+            #getPositionDirector(director){
+                return this.#directors.findIndex((directorElement) => directorElement.director.name === director.name && directorElement.director.lastname1 === director.lastname1);
+            }
 
             constructor() {
                 this.addCategory(this.#defaultCategory);
@@ -168,7 +188,7 @@ let VideoSystem = (function () {
                 if (!newCategory) throw new InvalidValueException("Category", newCategory);
                 if (!(newCategory instanceof Category)) throw new TypeVideoSystemException("Category");
                 //Buscamos si existe la categoria
-                let position = this.#categories.findIndex((element) => element.category.name === newCategory.name)
+                let position = this.#getPositionCategory(newCategory);
                 if(position >=0) throw new CategoryIsExistsException(); //En caso que existe
 
                 //Insertamos el objeto literal a la lista de categorias 
@@ -188,7 +208,7 @@ let VideoSystem = (function () {
                 if (!category) throw new InvalidValueException("Category", category);
                 if (!(category instanceof Category)) throw new TypeVideoSystemException("Category");
 
-                let position = this.#categories.findIndex((element) => element.category.name === category.name)
+                let position = this.#getPositionCategory(category);
                 if(position === -1) throw new CategoryIsNotExistsException();
 
                 let productions = this.#categories[position].productions;
@@ -273,7 +293,7 @@ let VideoSystem = (function () {
                 if (!(production instanceof Production)) throw new TypeVideoSystemException("Production");
 
                 //Comprobamos por titulo 
-                let position = this.#productions.findIndex((productionElement) => productionElement.title === production.title);
+                let position = this.#getPositionProduction(production);
                 if (position >= 0) throw new ProductionIsExistsException(); //Excepcion en caso que exista
 
                 this.#productions.push(production);
@@ -288,7 +308,7 @@ let VideoSystem = (function () {
                 if (!(production instanceof Production)) throw new TypeVideoSystemException("Production");
 
                 //Comprobamos por titulo 
-                let position = this.#productions.findIndex((productionElement) => productionElement.title === production.title);
+                let position = this.#getPositionProduction(production);
                 if (position === -1) throw new ProductionIsNotExistsException(); //Excepcion en caso que no exista
                 
                 //En caso que exista, comprobamos en el resto de la listas que posse la produccion
@@ -361,7 +381,7 @@ let VideoSystem = (function () {
                 if (!(actor instanceof Person)) throw new TypeVideoSystemException("Actor");
 
                 //Comprobamos por nombre y lastname  
-                let position = this.#actors.findIndex((actorElement) => actorElement.actor.name === actor.name && actorElement.actor.lastname1 === actor.lastname1);
+                let position = this.#getPositionActor(actor);
                 if (position >= 0) throw new PersonIsExistsException(); //Excepcion en caso que exista
 
                 this.#actors.push({
@@ -379,7 +399,7 @@ let VideoSystem = (function () {
                 if (!(actor instanceof Person)) throw new TypeVideoSystemException("Actor");
 
                 //Comprobamos por nombre y lastname  
-                let position = this.#actors.findIndex((actorElement) => actorElement.actor.name === actor.name && actorElement.actor.lastname1 === actor.lastname1);
+                let position = this.#getPositionActor(actor);
                 if (position === -1) throw new PersonIsNotExistsException(); //Excepcion en caso que no exista
 
                 this.#actors.splice(position,1);
@@ -410,7 +430,7 @@ let VideoSystem = (function () {
                 if (!(director instanceof Person)) throw new TypeVideoSystemException("director");
 
                 //Comprobamos por nombre y lastname  
-                let position = this.#directors.findIndex((directorElement) => directorElement.director.name === director.name && directorElement.director.lastname1 === director.lastname1);
+                let position = this.#getPositionDirector(director);
                 if (position >= 0) throw new PersonIsExistsException(); //Excepcion en caso que exista
 
                 this.#directors.push({
@@ -428,7 +448,7 @@ let VideoSystem = (function () {
                 if (!(director instanceof Person)) throw new TypeVideoSystemException("director");
 
                 //Comprobamos por nombre y lastname  
-                let position = this.#directors.findIndex((directorElement) => directorElement.director.name === director.name && directorElement.director.lastname1 === director.lastname1);
+                let position = this.#getPositionDirector(director);
                 if (position === -1) throw new PersonIsNotExistsException(); //Excepcion en caso que no exista
 
                 this.#directors.splice(position, 1);
@@ -436,6 +456,66 @@ let VideoSystem = (function () {
                 return this.#directors.length;
             }
 
+            /**
+             * METODOS DE ASIGNACION Y DESASIGNACION EN LAS LISTAS
+             */
+            //CATEGORY
+
+            //metodo donde se asigna uno o mas producciones a una categoria
+            assignCategory(category,...productions){
+                //Validamos
+                if (!category) throw new InvalidValueException("Category", category);
+                if (!(category instanceof Category)) throw new TypeVideoSystemException("Category");
+                
+                let position = this.#getPositionCategory(category);
+                if(position === -1){
+                    //En caso que no exista, se añade la nueva categoria
+                    position = this.addCategory(category);
+                }
+
+                for (let i = 0; i < productions.length; i++) {
+                    if(productions[i] == null) throw new InvalidValueException("Productions",productions);
+                    
+                    //Obtenemos la posicion de la lista de Produccion 
+                    let positionProd = this.#getPositionProduction(productions[i]);
+                    //En caso que no exista, lo hacemos un push a la lista 
+                    if(positionProd === -1){
+                        this.addProduction(productions[i]);
+                    }
+                    //Asignar la produccion a la categoria
+                    this.#categories[position].productions.push(productions[i]);
+                    
+                }
+                
+                //Devolver el numero de producciones de la categoria
+                return this.#categories[position].productions.length;
+            }
+
+            //metodo donde se desasigna uno o mas producciones de una categoria
+            deassignCategory(category,...productions){
+                //Validamos
+                if (!category) throw new InvalidValueException("Category", category);
+                if (!(category instanceof Category)) throw new TypeVideoSystemException("Category");
+                
+                let position = this.#getPositionCategory(category);
+                if(position === -1){
+                    //En caso que no exista, se añade la nueva categoria
+                    throw new CategoryIsNotExistsException();
+                }
+
+                for (let i = 0; i < productions.length; i++) {
+                    if(productions[i] == null) throw new InvalidValueException("Productions",productions);
+                    
+                    let positionP = this.#getPositionCategory(productions[i]);
+
+                    if(positionP >=0) this.#categories.productions.splice(positionP,1);
+                     
+                }
+
+                //Devolver el numero de produciones de la categoria
+                return this.#categories[position].productions.length;
+            }
+            
         }
         let vs = new VideoSystem();
         Object.freeze(vs);

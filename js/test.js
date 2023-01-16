@@ -45,14 +45,19 @@ function test() {
         console.error(error.message);
     }
 
+    //recorremos las categorias registradas en el sistema
+    for (let categoria of vs.categories) {
+        console.log(categoria);
+    }
+    
     //Añadir produccion 
     console.log(vs.addProduction(movie1));
     console.log(vs.addProduction(serie1));
     
     console.log(vs.removeProduction(movie1));
 
-    //recorremos las categorias registradas en el sistema
-    for (let categoria of vs.categories) {
+    //recorremos las produccion registradas en el sistema
+    for (let categoria of vs.productions) {
         console.log(categoria);
     }
 
@@ -89,6 +94,15 @@ function test() {
     console.log(user.toString());
     director1.born = "01/3/2001";
     console.log(director1);
+
+
+    //Asignacion Categorias
+    vs.assignCategory(category1,movie1,serie1);
+    
+    
+    //Desasignacion Categorias
+    vs.deassignCategory(category1,serie1);
+
 }
 
 window.onload = test();
