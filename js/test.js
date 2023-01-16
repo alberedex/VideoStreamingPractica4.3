@@ -4,7 +4,7 @@ import { Person, Category, Resource, Production, Movie, Serie, User, Coordinate 
 import VideoSystem from './VideoSystemObject.js';
 
 function test() {
-    let user = new Person("Alberto", "Redondo", "", new Date(2001, 1, 26), "");
+    let user = new Person("Alberto", "Redondo", "","26/2/2001", "");
 
     let category1 = new Category("Comedia", "");
     let category2 = new Category("Terror", "");
@@ -13,14 +13,14 @@ function test() {
     let resource2 = new Resource(124,"/resource/1");
 
     try {
-        let production = new Production("prueba","Española",new Date(2022,2,15),"","");
+        let production = new Production("prueba","Española","15/1/2022","","");
     } catch (error) {
         console.error(error.message);
     }
 
-    let movie1 = new Movie("Los crímenes de la academia","USA",new Date(2022,11,23),"Un veterano detective","portada.png","movie.mp4");
+    let movie1 = new Movie("Los crímenes de la academia","USA","23/12/2022","Un veterano detective","portada.png","movie.mp4");
 
-    let serie1 = new Serie("El vecino","España",new Date(2019,11,31),"Un vecino superheroe","portadaVecino.png",["1.mp4","2.mp4","3.mp4"],"",2);
+    let serie1 = new Serie("El vecino","España","31/12/2019","Un vecino superheroe","portadaVecino.png",["1.mp4","2.mp4","3.mp4"],"",2);
 
     console.log(movie1);
 
@@ -58,8 +58,8 @@ function test() {
 
     //ACTORS 
 
-    let actor1 = new Person("Christian", "Bale", "", new Date(1974, 0, 30), "");
-    let actor2 = new Person("Harry", "Melling", "", new Date(1989, 3, 13), "");
+    let actor1 = new Person("Christian", "Bale", "","30/1/1974", "");
+    let actor2 = new Person("Harry", "Melling", "","13/4/1989", "");
 
     console.log(vs.addActor(actor1));
     console.log(vs.addActor(actor2));
@@ -74,8 +74,8 @@ function test() {
 
     //Directors
 
-    let director1 = new Person("Scott","Cooper","",new Date(1970,4,20),"fotoScott.jpg");
-    let director2 = new Person("Nacho","Vigalondo","Palacios",new Date(1977,4,6),"fotoNacho.jpg");
+    let director1 = new Person("Scott","Cooper","","20/5/1970","fotoScott.jpg");
+    let director2 = new Person("Nacho","Vigalondo","Palacios","06/4/1977","fotoNacho.jpg");
 
     console.log(vs.addDirector(director1));
     console.log(vs.addDirector(director2));
@@ -87,7 +87,8 @@ function test() {
     let user1 = new User("alberedex","2001rs@gmail.com","pass1234");
 
     console.log(user.toString());
-
+    director1.born = "01/3/2001";
+    console.log(director1);
 }
 
 window.onload = test();
