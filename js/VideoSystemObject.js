@@ -506,16 +506,16 @@ let VideoSystem = (function () {
                 for (let i = 0; i < productions.length; i++) {
                     if(productions[i] == null) throw new InvalidValueException("Productions",productions);
                     
-                    let positionP = this.#getPositionCategory(productions[i]);
-
-                    if(positionP >=0) this.#categories.productions.splice(positionP,1);
+                    let positionP = this.#categories.findIndex((categoryElement) => categoryElement.category.name === category.name);
+                    console.log(positionP);
+                    if(positionP >=0) this.#categories[position].productions.splice(positionP,1);
                      
                 }
-
+                
                 //Devolver el numero de produciones de la categoria
                 return this.#categories[position].productions.length;
             }
-            
+
         }
         let vs = new VideoSystem();
         Object.freeze(vs);
