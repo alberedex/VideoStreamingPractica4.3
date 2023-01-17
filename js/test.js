@@ -126,7 +126,16 @@ function test() {
     vs.deassignDirector(director1,movie1);
     vs.deassignDirector(director1,movie1);
     
+    
+    //Asignacion Actores
+    let moviePrueba = new Movie("Los crímenes de la academia","USA","23/12/2022","Un veterano detective","portada.png",new Resource(85,"movie.mp4"));
+    console.log(vs.assignActor(actor1,serie1));
+    console.log(vs.assignActor(actor1,movie1));
+    console.log(vs.assignActor(actor2,moviePrueba));
+    
     showProductionsActor(actor1);
+
+    // console.log(vs.deassignActor(actor1,serie1));
 }
 
 window.onload = test();

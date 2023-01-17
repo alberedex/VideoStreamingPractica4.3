@@ -588,8 +588,75 @@ let VideoSystem = (function () {
                 return this.#categories[position].productions.length;
             }
 
-            //assignActor
-            //deassignActor
+            //Metodo donde se asigna uno o varios producciones a un actor
+            assignActor(actor, ...productions) {
+                //Validamos
+                if (actor === null) throw new InvalidValueException("actor", actor);
+                if (productions === null) throw new InvalidValueException("production", production);
+
+                let position = this.#getPositionActor(actor);
+                if (position === -1) {
+                    //En caso que no exista, se añade la nuevo/a actor
+                    position = (this.addActor(actor) - 1);
+                }
+
+                let act = this.#actors[position];
+
+                for (let i = 0; i < productions.length; i++) {
+                    if (productions[i] == null) throw new InvalidValueException("Productions", productions);
+
+                    //Obtenemos la posicion de la lista de Produccion 
+                    let positionProd = this.#getPositionProduction(productions[i]);
+
+                    //En caso que no exista, lo hacemos un push a la lista 
+                    if (positionProd === -1) {
+
+                        this.addProduction(productions[i]);
+
+                        //Asignar la produccion al actor
+                        act.productions.push(productions[i]);
+                    } else {
+                        //Comprobamos que no esta asignado al actriz, para no haya duplicado
+                        let positionProdActor = act.productions.findIndex((productionElement) => productionElement.title === productions[i].title);
+
+                        if(positionProdActor === -1){
+                            //Asignar la produccion de la misma referencia al actor
+                            act.productions.push(this.#productions[positionProd]);
+
+                        }
+                    }
+                }
+                
+                //Devolver el numero de producciones del actor que hemos trabajado
+                return act.productions.length;
+            }
+
+            //Metodo donde se desasigna una o varias producciones al actor
+            deassignActor(actor,...productions){
+                //Validamos
+                if (actor === null) throw new InvalidValueException("actor", actor);
+                if (productions === null) throw new InvalidValueException("production", productions);
+
+                //Obtenemos la posicion del actor
+                let position = this.#getPositionActor(actor);
+                if(position === -1){
+                    //En caso que no exista
+                    throw new PersonIsNotExistsException();
+                }
+
+                let act = this.#actors[position];
+                //Recorremos los producciones, uno o varios
+                for (let i = 0; i < productions.length; i++) {
+                    if (productions[i] == null) throw new InvalidValueException("Productions", productions);
+                    //Buscamos la produccion en el actor
+                    let positionP = act.productions.findIndex((productionElement) => productionElement.title === productions[i].title);
+                    //Si se encuentra, eliminamos de la lista del actor, la produccion
+                    if (positionP >= 0) act.productions.splice(positionP, 1);
+
+                }
+                //Devolver el numero de producciones del actor que hemos trabajado
+                return act.productions.length;
+            }
             //getCast
 
             //Devuelve todas las producciones de un director
