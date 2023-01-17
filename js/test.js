@@ -103,6 +103,12 @@ function test() {
     //Desasignacion Categorias
     vs.deassignCategory(category1,serie1);
 
+    //Asignacion Producciones a un director
+    vs.assignDirector(director1,movie1);
+    vs.assignDirector(director1,serie1);
+
+    vs.deassignDirector(director1,movie1);
+    vs.deassignDirector(director1,movie1);
 }
 
 window.onload = test();

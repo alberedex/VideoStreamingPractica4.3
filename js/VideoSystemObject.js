@@ -486,7 +486,7 @@ let VideoSystem = (function () {
                     this.#categories[position].productions.push(productions[i]);
                     
                 }
-                
+                console.log(this.#categories);
                 //Devolver el numero de producciones de la categoria
                 return this.#categories[position].productions.length;
             }
@@ -506,10 +506,82 @@ let VideoSystem = (function () {
                 for (let i = 0; i < productions.length; i++) {
                     if(productions[i] == null) throw new InvalidValueException("Productions",productions);
                     
-                    let positionP = this.#categories.findIndex((categoryElement) => categoryElement.category.name === category.name);
-                    console.log(positionP);
+                    let positionP = this.#categories[position].productions.findIndex((productionElement) => productionElement.title === productions[i].title);
+                    
                     if(positionP >=0) this.#categories[position].productions.splice(positionP,1);
                      
+                }
+                console.log(this.#categories);
+                //Devolver el numero de produciones de la categoria
+                return this.#categories[position].productions.length;
+            }
+
+            
+            //DIRECTOR
+
+            //metodo donde se asigna uno o mas producciones a un director/a
+            assignDirector(director,...productions){
+                //Validamos
+                if (!director) throw new InvalidValueException("director", director);
+                if (!(director instanceof Person)) throw new TypeVideoSystemException("director");
+                
+                let position = this.#getPositionDirector(director);
+                if(position === -1){
+                    //En caso que no exista, se añade la nuevo/a director/a
+                    position = this.addDirector(director);
+                }
+
+                let d = this.#directors[position];
+
+                for (let i = 0; i < productions.length; i++) {
+                    if(productions[i] == null) throw new InvalidValueException("Productions",productions);
+                    
+                    //Obtenemos la posicion de la lista de Produccion 
+                    let positionProd = this.#getPositionProduction(productions[i]);
+                    let positionProdDirector;
+                    //En caso que no exista, lo hacemos un push a la lista 
+                    if(positionProd === -1){
+                        
+                        this.addProduction(productions[i]);
+
+                        //Asignar la produccion a la director
+                        this.#directors[position].productions.push(productions[i]);
+                    }else{
+                        //Comprobamos que no esta asignado al director, para no haya duplicado
+                        positionProdDirector = d.productions.findIndex((productionElement) => productionElement.title === productions[i].title);
+                    }
+
+                    if(positionProd === -1 || positionProdDirector === -1){
+                        //Asignar la produccion a la director
+                        this.#directors[position].productions.push(productions[i]);
+                    }
+                    
+                }
+                
+                //Devolver el numero de producciones del director/a
+                return this.#directors[position].productions.length;
+            }
+
+            //metodo donde se desasigna uno o mas producciones de un director/a
+            deassignDirector(director, ...productions) {
+                //Validamos
+                if (!director) throw new InvalidValueException("director", director);
+                if (!(director instanceof Person)) throw new TypeVideoSystemException("director");
+                
+                let position = this.#getPositionDirector(director);
+                if(position === -1){
+                    throw new PersonIsNotExistsException();
+                }
+
+                let d = this.#directors[position];
+
+                for (let i = 0; i < productions.length; i++) {
+                    if (productions[i] == null) throw new InvalidValueException("Productions", productions);
+
+                    let positionP = d.productions.findIndex((productionElement) => productionElement.title === productions[i].title);
+
+                    if (positionP >= 0) d.productions.splice(positionP, 1);
+
                 }
                 
                 //Devolver el numero de produciones de la categoria
