@@ -4,6 +4,13 @@ import { Person, Category, Resource, Production, Movie, Serie, User, Coordinate 
 import VideoSystem from './VideoSystemObject.js';
 
 function test() {
+
+
+    function showProductionsDirector(director) {
+        for(let production of vs.getProductionsDirector(director)){
+            console.log(production.toString());
+        }
+    }
     let user = new Person("Alberto", "Redondo", "","26/2/2001", "");
 
     let category1 = new Category("Comedia", "");
@@ -18,9 +25,9 @@ function test() {
         console.error(error.message);
     }
 
-    let movie1 = new Movie("Los crímenes de la academia","USA","23/12/2022","Un veterano detective","portada.png","movie.mp4");
+    let movie1 = new Movie("Los crímenes de la academia","USA","23/12/2022","Un veterano detective","portada.png",new Resource(85,"movie.mp4"));
 
-    let serie1 = new Serie("El vecino","España","31/12/2019","Un vecino superheroe","portadaVecino.png",["1.mp4","2.mp4","3.mp4"],"",2);
+    let serie1 = new Serie("El vecino","España","31/12/2019","Un vecino superheroe","portadaVecino.png",[new Resource(15,"1.mp4"),new Resource(25,"2.mp4"),new Resource(45,"3.mp4")],"",2);
 
     console.log(movie1);
 
@@ -106,9 +113,12 @@ function test() {
     //Asignacion Producciones a un director
     vs.assignDirector(director1,movie1);
     vs.assignDirector(director1,serie1);
-
+    
+    showProductionsDirector(director1);
+    
     vs.deassignDirector(director1,movie1);
     vs.deassignDirector(director1,movie1);
+    
 }
 
 window.onload = test();

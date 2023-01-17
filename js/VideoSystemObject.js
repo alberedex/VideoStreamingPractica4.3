@@ -470,7 +470,7 @@ let VideoSystem = (function () {
                 let position = this.#getPositionCategory(category);
                 if(position === -1){
                     //En caso que no exista, se añade la nueva categoria
-                    position = this.addCategory(category);
+                    position = (this.addCategory(category) - 1);
                 }
 
                 for (let i = 0; i < productions.length; i++) {
@@ -486,7 +486,7 @@ let VideoSystem = (function () {
                     this.#categories[position].productions.push(productions[i]);
                     
                 }
-                console.log(this.#categories);
+                
                 //Devolver el numero de producciones de la categoria
                 return this.#categories[position].productions.length;
             }
@@ -511,7 +511,7 @@ let VideoSystem = (function () {
                     if(positionP >=0) this.#categories[position].productions.splice(positionP,1);
                      
                 }
-                console.log(this.#categories);
+                
                 //Devolver el numero de produciones de la categoria
                 return this.#categories[position].productions.length;
             }
@@ -528,7 +528,7 @@ let VideoSystem = (function () {
                 let position = this.#getPositionDirector(director);
                 if(position === -1){
                     //En caso que no exista, se añade la nuevo/a director/a
-                    position = this.addDirector(director);
+                    position = (this.addDirector(director) - 1);
                 }
 
                 let d = this.#directors[position];
@@ -587,6 +587,34 @@ let VideoSystem = (function () {
                 //Devolver el numero de produciones de la categoria
                 return this.#categories[position].productions.length;
             }
+
+            //assignActor
+            //deassignActor
+            //getCast
+
+            //Devuelve todas las producciones de un director
+            * getProductionsDirector(director){
+                let position = this.#getPositionDirector(director);
+
+                if(position >= 0){
+                    for(let produccion of this.#directors[position].productions){
+                        yield produccion;
+                    }
+                }
+            }
+            
+            //getProductionsActor 
+
+            //Devuelve todas las producciones de una categoria
+            * getProductionsCategory(category){
+            let position = this.#getPositionCategory(category);
+
+            if(position >= 0){
+                for(let produccion of this.#categories[position].productions){
+                    yield produccion;
+                }
+            }
+        }
 
         }
         let vs = new VideoSystem();

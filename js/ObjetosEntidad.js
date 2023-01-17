@@ -264,7 +264,7 @@ class Movie extends Production {
     }
 
     toString() {
-        return this.#resource.toString() + this.#locations.toString();
+        return super.toString()+", Resource: ("+this.#resource.toString() +") , Locations: ["+ this.#locations.toString()+"]";
     }
 }
 
@@ -310,7 +310,7 @@ class Serie extends Production {
     }
 
     toString() {
-        return this.#resources.toString() + this.#locations.toString();
+        return super.toString()+", Resources: ["+this.#resources.toString() +"] , Locations: ["+ this.#locations.toString()+"]";
     }
 }
 
