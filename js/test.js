@@ -11,6 +11,13 @@ function test() {
             console.log(production.toString());
         }
     }
+
+    function showProductionsActor(actor) {
+        for(let production of vs.getProdutionsActor(actor)){
+            console.log(production.toString());
+        }
+    }
+
     let user = new Person("Alberto", "Redondo", "","26/2/2001", "");
 
     let category1 = new Category("Comedia", "");
@@ -119,6 +126,7 @@ function test() {
     vs.deassignDirector(director1,movie1);
     vs.deassignDirector(director1,movie1);
     
+    showProductionsActor(actor1);
 }
 
 window.onload = test();

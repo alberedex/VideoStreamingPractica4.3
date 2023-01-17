@@ -604,6 +604,18 @@ let VideoSystem = (function () {
             }
             
             //getProductionsActor 
+            //Devuelve todas las producciones del actor
+            * getProdutionsActor(actor){
+                if(!actor) throw new InvalidValueException("Actor",null);
+
+                let position = this.#getPositionActor(actor);
+                if(position >= 0){
+                    //Recorremos las producciones
+                    for(let produccion of this.#actors[position].productions){
+                        yield produccion;
+                    }
+                }
+            }
 
             //Devuelve todas las producciones de una categoria
             * getProductionsCategory(category){
