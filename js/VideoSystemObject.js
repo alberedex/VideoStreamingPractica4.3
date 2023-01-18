@@ -658,6 +658,19 @@ let VideoSystem = (function () {
                 return act.productions.length;
             }
             //getCast
+            //Devuelve todos los actores que tiene una relacion con una produccion
+            * getCast(production){
+                if (production === null) throw new InvalidValueException("production", productions);
+
+                for(let act of this.#actors){
+                    for (let productionActor of act.productions) {
+                        if(productionActor.title === production.title){
+                            yield act.actor;
+                            break;
+                        }
+                    }
+                }
+            }
 
             //Devuelve todas las producciones de un director
             * getProductionsDirector(director){
@@ -685,15 +698,15 @@ let VideoSystem = (function () {
             }
 
             //Devuelve todas las producciones de una categoria
-            * getProductionsCategory(category){
-            let position = this.#getPositionCategory(category);
+            * getProductionsCategory(category) {
+                let position = this.#getPositionCategory(category);
 
-            if(position >= 0){
-                for(let produccion of this.#categories[position].productions){
-                    yield produccion;
+                if (position >= 0) {
+                    for (let produccion of this.#categories[position].productions) {
+                        yield produccion;
+                    }
                 }
             }
-        }
 
         }
         let vs = new VideoSystem();

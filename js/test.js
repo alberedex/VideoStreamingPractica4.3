@@ -18,6 +18,12 @@ function test() {
         }
     }
 
+    function showActorsProductions(production) {
+        for(let actor of vs.getCast(production)){
+            console.log(actor.toString());
+        }
+    }
+
     let user = new Person("Alberto", "Redondo", "","26/2/2001", "");
 
     let category1 = new Category("Comedia", "");
@@ -136,6 +142,8 @@ function test() {
     showProductionsActor(actor1);
 
     // console.log(vs.deassignActor(actor1,serie1));
+    console.log("Actores de una Production");
+    showActorsProductions(movie1);
 }
 
 window.onload = test();
