@@ -336,6 +336,10 @@ class User {
         return this.#username;
     }
 
+    get email(){
+        return this.#email;
+    }
+
     //Metodo toString
     toString() {
         return "Username: " + this.#username + ", email: " + this.#email;

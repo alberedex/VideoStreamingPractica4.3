@@ -659,6 +659,130 @@ let VideoSystem = (function () {
                 //Devolver el numero de producciones del actor que hemos trabajado
                 return act.productions.length;
             }
+
+            //FACTORY METHOD 
+
+            //FACTORY ACTOR
+            getActor(name, lastname1, lastname2, born, picture) {
+                //Validar datos de entrada, antes de realizar la busqueda
+                if (!name) throw new InvalidValueException("name", name);
+                //Buscamos en la lista de actores registrados
+                let position = this.#actors.findIndex((actorElement) => actorElement.actor.name === name && actorElement.actor.lastname1 === lastname1);
+
+                let actor;
+
+                if (position === -1) {
+                    //En caso que no esta registrado, creamos el objeto
+                    actor = new Person(name, lastname1, lastname2, born, picture);
+                } else {
+                    //En caso que exista, devolver la misma
+                    actor = this.#actors[position].actor;
+                }
+                //Devolvemos el objeto
+                return actor;
+            }
+
+            //FACTORY DIRECTOR
+            getDirector(name, lastname1, lastname2, born, picture) {
+                //Validar datos de entrada, antes de realizar la busqueda
+                if (!name) throw new InvalidValueException("name", name);
+                //Buscamos en la lista de directores registrados
+                let position = this.#directors.findIndex((directorElement) => directorElement.director.name === name && directorElement.director.lastname1 === lastname1);
+
+                let director;
+
+                if (position === -1) {
+                    //En caso que no esta registrado, creamos el objeto
+                    director = new Person(name, lastname1, lastname2, born, picture);
+                } else {
+                    //En caso que exista, devolver la misma
+                    director = this.#directors[position].director;
+                }
+                //Devolvemos el objeto
+                return director;
+            }
+
+            //FACTORY CATEGORIA
+            getCategory(name, description = "") {
+                //Validar datos de entrada, antes de realizar la busqueda
+                if (!name) throw new InvalidValueException("name", name);
+                //Buscamos en la lista de categorias registrados
+                let position = this.#categories.findIndex((categoryElement) => categoryElement.category.name === name);
+
+                let category;
+
+                if (position === -1) {
+                    //En caso que no esta registrado, creamos el objeto
+                    category = new Category(name, description);
+                } else {
+                    //En caso que exista, devolver la misma
+                    category = this.#categories[position].category;
+                }
+                //Devolvemos el objeto
+                return category;
+            }
+
+
+            //FACTORY MOVIE
+            getMovie(title, nationality, publication, synopsis, image, resource, locations) {
+                //Validar datos de entrada, antes de realizar la busqueda
+                if (!title) throw new InvalidValueException("title", title);
+
+                let position = this.#productions.findIndex((proElement) => proElement.title === title);
+
+                let movie;
+
+                if (position === -1) {
+                    //En caso que no esta registrado, creamos el objeto
+                    movie = new Movie(title, nationality, publication, synopsis, image, resource, locations);
+                } else {
+                    //En caso que exista, devolver la misma
+                    movie = this.#productions[position];
+                }
+                //Devolvemos el objeto
+                return movie;
+            }
+
+            //FACTORY SERIE
+            getSerie(title, nationality, publication, synopsis, image, resources, locations, seasons) {
+                //Validar datos de entrada, antes de realizar la busqueda
+                if (!title) throw new InvalidValueException("title", title);
+
+                let position = this.#productions.findIndex((proElement) => proElement.title === title);
+
+                let serie;
+
+                if (position === -1) {
+                    //En caso que no esta registrado, creamos el objeto
+                    serie = new Serie(title, nationality, publication, synopsis, image, resources, locations, seasons);
+                } else {
+                    //En caso que exista, devolver la misma
+                    serie = this.#productions[position];
+                }
+                //Devolvemos el objeto
+                return serie;
+            }
+
+            //FACTORY USER 
+            getUser(username, email, password) {
+                //Validar datos de entrada, antes de realizar la busqueda
+                if (!username) throw new InvalidValueException("username", username);
+
+                let position = this.#users.findIndex((userElement) => userElement.username === username);
+
+                let user;
+
+                if (position === -1) {
+                    //En caso que no esta registrado, creamos el objeto
+                    user = new User(username, email, password);
+                } else {
+                    user = this.#users[position];
+                }
+
+                return user;
+
+            }
+
             //getCast
             //Devuelve todos los actores que tiene una relacion con una produccion
             * getCast(production) {
@@ -737,5 +861,5 @@ export {
     InvalidValueException,
     AbstractClassException
 };
-export { Person, Category, Resource, Production, Movie, Serie, User, Coordinate };
+export { Resource, Production, Coordinate };
 export default VideoSystem;
