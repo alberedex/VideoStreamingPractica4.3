@@ -855,11 +855,11 @@ let VideoSystem = (function () {
     }
 })();
 
-export {
-    BaseException,
-    InvalidAccessConstructorException,
-    InvalidValueException,
-    AbstractClassException
-};
+// export {
+//     BaseException,
+//     InvalidAccessConstructorException,
+//     InvalidValueException,
+//     AbstractClassException
+// };
 export { Resource, Production, Coordinate };
 export default VideoSystem;

@@ -8,6 +8,7 @@ import {
 
 //Elementos comunes para los objetos 
 const DATE_EXPR = /^(([0-2]{1}\d{1})|(3{1}[0-1]{1}))\/(([1-9]{1})|(1{1}[0-2]{1}))\/\d{4}$/;
+const RUTA_EXPR = /^(\/[a-zA-Z0-9_.$%._\+~#]+){1,}(\/[a-zA-Z0-9_.$%._\+~#]+){1,}\.[a-zA-Z0-9]{2,4}$/;
 
 //Metodo donde convierte el string en Date
 function stringToDate(dateNew) {
@@ -154,6 +155,7 @@ class Resource {
     constructor(duration, link) {
         if (duration <= 0) throw new InvalidValueException("duration", duration);
         if (!link) throw new InvalidValueException("link", link);
+        if(!RUTA_EXPR.test(link)) throw new InvalidValueException("link",link);
 
         this.#duration = duration;
         this.#link = link;
@@ -263,6 +265,15 @@ class Movie extends Production {
         this.#locations = locationsN;
     }
 
+    //Añadir una localizacion nuevo
+    addLocations(coordinate) {
+        if (coordinate instanceof Coordinate) {
+            let position = this.#locations.findIndex((locationElem) => locationElem.latitude === coordinate.latitude && locationElem.longitude === coordinate.longitude);
+            if (position >= 0) this.#resources.push(coordinate);
+        }
+        return this.#locations.length;
+    }
+
     toString() {
         return super.toString()+", Resource: ("+this.#resource.toString() +") , Locations: ["+ this.#locations.toString()+"]";
     }
@@ -293,6 +304,23 @@ class Serie extends Production {
         this.#resources = resourseN;
     }
 
+    //Añadir un recurso nuevo
+    addResources(resource){
+        if(resource instanceof Resource){
+            let position = this.#resources.findIndex((resourceElem) => resourceElem.link === resource.link);
+            if(position >= 0) this.#resources.push(resource);
+        }
+        return this.#resources.length;
+    }
+
+    deleteResources(resource){
+        if(resource instanceof Resource){
+            let position = this.#resources.findIndex((resourceElem) => resourceElem.link === resource.link);
+            if(position >= 0) this.#resources.splice(position,1);
+        }
+        return this.#resources.length;
+    }
+
 
     //Getter y setter de locations
     get locations() {
@@ -302,6 +330,15 @@ class Serie extends Production {
     set locations(locationsN) {
 
         this.#locations = locationsN;
+    }
+
+    //Añadir una localizacion nuevo
+    addLocations(coordinate) {
+        if (coordinate instanceof Coordinate) {
+            let position = this.#locations.findIndex((locationElem) => locationElem.latitude === coordinate.latitude && locationElem.longitude === coordinate.longitude);
+            if (position >= 0) this.#resources.push(coordinate);
+        }
+        return this.#locations.length;
     }
 
     //Getter de seasons

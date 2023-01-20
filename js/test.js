@@ -25,10 +25,10 @@ function test() {
     }
 
     let vs = VideoSystem.getInstance();
-    console.log(vs);
-
+    console.log(vs.name);
+    //Asignamos nombre a la plataforma
     vs.name = "Plataforma VideoSystem";
-    console.log(vs);
+    console.log(vs.name);
 
     console.log("************ TESTEO PERSON ************");
 
@@ -57,8 +57,8 @@ function test() {
     }
 
 
-    let resource1 = new Resource(85,"/resource/1");
-    let resource2 = new Resource(124,"/resource/1");
+    let resource1 = new Resource(85,"/resource/1.mp4");
+    let resource2 = new Resource(124,"/resource/1.mp4");
 
     try {
         let production = new Production("prueba","Española","15/1/2022","","");
@@ -71,12 +71,12 @@ function test() {
     let category2 = vs.getCategory("Terror", "Al espectador sensaciones de pavor, terror, miedo, disgusto, repugnancia, horror, incomodidad o preocupación.");
     
     //testeo factory production
-    let movie1 = vs.getMovie("Los crímenes de la academia","USA","23/12/2022","Un veterano detective","portada.png",new Resource(85,"movie/CrimenesDeLaAcademia.mp4"));
-    let movie2 = vs.getMovie("Murder Mystery","USA","14/6/2019","Un policía de Nueva York y su mujer se van de vacaciones a Europa pero terminan acusados de asesinato","murderMystery.png",new Resource(97,"movie/movieMurderM.mp4"));
-    let movie3 = vs.getMovie("Deadpool","USA","12/2/2016","Wade Wilson, tras ser sometido a un cruel experimento científico, adquiere poderes especiales","DeadpoolCartel.png",new Resource(109,"movie/dealpool.mp4"));
+    let movie1 = vs.getMovie("Los crímenes de la academia","USA","23/12/2022","Un veterano detective","portada.png",new Resource(85,"/movie/CrimenesDeLaAcademia.mp4"));
+    let movie2 = vs.getMovie("Murder Mystery","USA","14/6/2019","Un policía de Nueva York y su mujer se van de vacaciones a Europa pero terminan acusados de asesinato","murderMystery.png",new Resource(97,"/movie/movieMurderM.mp4"));
+    let movie3 = vs.getMovie("Deadpool","USA","12/2/2016","Wade Wilson, tras ser sometido a un cruel experimento científico, adquiere poderes especiales","DeadpoolCartel.png",new Resource(109,"/movie/dealpool.mp4"));
 
-    let serie1 = vs.getSerie("El vecino","España","31/12/2019","Un vecino superheroe","portadaVecino.png",[new Resource(32,"serie/Episode1.mp4"),new Resource(24,"serie/LaRedSocial.mp4"),new Resource(31,"serie/dia.mp4")],"",2);
-    let serie2 = vs.getSerie("Resident Evil","Estados Unidos","14/7/2022","Un virus mortal causara un apocalipsis global","portadaREvil.png",[new Resource(60,"serie/Bienvenidos_a_New_Raccoon_City.mp4"),new Resource(48,"serie/Lo_malo_conocido.mp4"),new Resource(45,"serie/La_luz.mp4"),new Resource(53,"serie/La_transformación.mp4")],"",2);
+    let serie1 = vs.getSerie("El vecino","España","31/12/2019","Un vecino superheroe","portadaVecino.png",[new Resource(32,"/serie/Episode1.mp4"),new Resource(24,"/serie/LaRedSocial.mp4"),new Resource(31,"/serie/dia.mp4")],"",2);
+    let serie2 = vs.getSerie("Resident Evil","Estados Unidos","14/7/2022","Un virus mortal causara un apocalipsis global","portadaREvil.png",[new Resource(60,"/serie/Bienvenidos_a_New_Raccoon_City.mp4"),new Resource(48,"/serie/Lo_malo_conocido.mp4"),new Resource(45,"/serie/La_luz.mp4"),new Resource(53,"/serie/La_transformacion.mp4")],"",2);
     
     console.log("** Category toString");
     console.log(category1.toString());
