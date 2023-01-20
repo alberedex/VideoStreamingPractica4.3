@@ -269,7 +269,7 @@ class Movie extends Production {
     addLocations(coordinate) {
         if (coordinate instanceof Coordinate) {
             let position = this.#locations.findIndex((locationElem) => locationElem.latitude === coordinate.latitude && locationElem.longitude === coordinate.longitude);
-            if (position >= 0) this.#resources.push(coordinate);
+            if (position >= 0) this.#locations.push(coordinate);
         }
         return this.#locations.length;
     }
@@ -336,7 +336,7 @@ class Serie extends Production {
     addLocations(coordinate) {
         if (coordinate instanceof Coordinate) {
             let position = this.#locations.findIndex((locationElem) => locationElem.latitude === coordinate.latitude && locationElem.longitude === coordinate.longitude);
-            if (position >= 0) this.#resources.push(coordinate);
+            if (position >= 0) this.#locations.push(coordinate);
         }
         return this.#locations.length;
     }
