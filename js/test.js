@@ -95,6 +95,7 @@ function test() {
     try {
         console.log("**Añadir una categoria ya existente");
         vs.addCategory(category1);
+        //Error: The Category is exists.
     } catch (error) {
         console.error(error.message);
     }
@@ -129,6 +130,7 @@ function test() {
     try{
         console.log("**Borrar una produccion no existente, despues lo añadimos para realizar más test");
         console.log(vs.removeProduction(movie1));
+        //Error: The Production is not exists.
     }catch(error){
         console.error(error.message);
     }
@@ -213,26 +215,43 @@ function test() {
     
     //Desasignacion Categorias
     vs.deassignCategory(category1,serie1);
-
+    console.log("************ ASIGNACION PRODUCCIONES A UN DIRECTOR ************");
     //Asignacion Producciones a un director
     vs.assignDirector(director1,movie1);
     vs.assignDirector(director1,serie1);
+    vs.assignDirector(director2,serie1);
+    vs.assignDirector(director3,serie2);
+    vs.assignDirector(director4,movie2);
+    vs.assignDirector(director5,movie3);
     
+    console.log("Mostrar producciones del director: "+director1.name);
     showProductionsDirector(director1);
     
+    console.log("Mostrar producciones del director: "+director3.name);
+    showProductionsDirector(director3);
+
+
     vs.deassignDirector(director1,movie1);
     vs.deassignDirector(director1,movie1);
     
-    
+    console.log("************ ASIGNACION PRODUCCIONES A UN ACTOR/ACTRIZ ************");
     //Asignacion Actores
-    console.log(vs.assignActor(actor1,serie1));
     console.log(vs.assignActor(actor1,movie1));
+    console.log(vs.assignActor(actor2,movie1));
+    console.log(vs.assignActor(actor3,serie2));
+    console.log(vs.assignActor(actor4,movie3));
+    console.log(vs.assignActor(actor5,movie2));
+    console.log(vs.assignActor(actor1,movie2));
+    console.log(vs.assignActor(actor6,movie2));
+    console.log(vs.assignActor(actor7,serie1));
 
-    
+    console.log("Mostrar producciones del actor: "+actor1.name);
     showProductionsActor(actor1);
-
+    
+    console.log("");
+    
     // console.log(vs.deassignActor(actor1,serie1));
-    console.log("Actores de una Production");
+    console.log("Actores de una Production: "+movie1.title);
     showActorsProductions(movie1);
 }
 
