@@ -292,7 +292,7 @@ let VideoSystem = (function () {
             //Metodo donde se add producciones al sistema
             addProduction(production) {
                 //Validamos los datos de entrada
-                if (!production) throw new InvalidValueException("user", production);
+                if (!production) throw new InvalidValueException("production", production);
                 if (!(production instanceof Production)) throw new TypeVideoSystemException("Production");
 
                 //Comprobamos por titulo 
@@ -307,7 +307,7 @@ let VideoSystem = (function () {
             //Metodo donde se elimina un produccion del sistema
             removeProduction(production) {
                 //Validamos los datos de entrada
-                if (!production) throw new InvalidValueException("user", production);
+                if (!production) throw new InvalidValueException("production", production);
                 if (!(production instanceof Production)) throw new TypeVideoSystemException("Production");
 
                 //Comprobamos por titulo 
@@ -484,8 +484,12 @@ let VideoSystem = (function () {
                 //Asignamos la referencia , para trabajar con el objeto
                 let catP = this.#categories[position].productions;
 
+                //Compruebo todos los productions que no sean null
+                for (let prod of productions) {
+                    if (prod == null) throw new InvalidValueException("Productions", prod);
+                }
+                                
                 for (let i = 0; i < productions.length; i++) {
-                    if (productions[i] == null) throw new InvalidValueException("Productions", productions);
 
                     //Obtenemos la posicion de la lista de Produccion 
                     let positionProd = this.#getPositionProduction(productions[i]);
@@ -497,8 +501,8 @@ let VideoSystem = (function () {
                     }else{
                         //en caso que existe, comprobamos que no tiene asignado a la categoria
                         let positionProduction = catP.findIndex((productionsE) => productionsE.title === productions[i].title);
-                        //En caso que no esta asignado, lo asignamos
-                        if(positionProduction === -1) catP.push(productions[i]);
+                        //En caso que no esta asignado, lo asignamos de la lista 
+                        if(positionProduction === -1) catP.push(this.#productions[positionProd]);
                     }
 
                 }
@@ -521,8 +525,12 @@ let VideoSystem = (function () {
                 //Asignamos la referencia, para trabajar con la categoria
                 let cat = this.#categories[position];
 
+                //Compruebo todos los productions que no sean null
+                for (let prod of productions) {
+                    if (prod == null) throw new InvalidValueException("Productions", prod);
+                }                
+
                 for (let i = 0; i < productions.length; i++) {
-                    if (productions[i] == null) throw new InvalidValueException("Productions", productions);
 
                     let positionP = cat.productions.findIndex((productionElement) => productionElement.title === productions[i].title);
 
@@ -551,28 +559,33 @@ let VideoSystem = (function () {
                 //Asignamos la referencia , para trabajar con el objeto
                 let d = this.#directors[position];
 
+                //Compruebo todos los productions que no sean null
+                for (let prod of productions) {
+                    if (prod == null) throw new InvalidValueException("Productions", prod);
+                }
+
                 for (let i = 0; i < productions.length; i++) {
-                    if (productions[i] == null) throw new InvalidValueException("Productions", productions);
 
                     //Obtenemos la posicion de la lista de Produccion 
                     let positionProd = this.#getPositionProduction(productions[i]);
-                    let positionProdDirector;
+                    
                     //En caso que no exista, lo hacemos un push a la lista 
                     if (positionProd === -1) {
 
-                        this.addProduction(productions[i]);
+                        this.addProduction(productions[i]); //Metemos la Production en el sistema
 
                         //Asignar la produccion a la director
                         d.productions.push(productions[i]);
                     } else {
                         //Comprobamos que no esta asignado al director, para no haya duplicado
-                        positionProdDirector = d.productions.findIndex((productionElement) => productionElement.title === productions[i].title);
+                        let positionProdDirector = d.productions.findIndex((productionElement) => productionElement.title === productions[i].title);
+
+                        if (positionProdDirector === -1) {
+                            //Asignar la produccion existente al director
+                            d.productions.push(this.#productions[positionProd]);
+                        }
                     }
 
-                    if (positionProd === -1 || positionProdDirector === -1) {
-                        //Asignar la produccion a la director
-                        d.productions.push(productions[i]);
-                    }
 
                 }
 
@@ -593,8 +606,12 @@ let VideoSystem = (function () {
 
                 let d = this.#directors[position];
 
+                //Compruebo todos los productions que no sean null
+                for (let prod of productions) {
+                    if (prod == null) throw new InvalidValueException("Productions", prod);
+                }
+
                 for (let i = 0; i < productions.length; i++) {
-                    if (productions[i] == null) throw new InvalidValueException("Productions", productions);
 
                     let positionP = d.productions.findIndex((productionElement) => productionElement.title === productions[i].title);
 
@@ -610,7 +627,6 @@ let VideoSystem = (function () {
             assignActor(actor, ...productions) {
                 //Validamos
                 if (actor === null) throw new InvalidValueException("actor", actor);
-                if (productions === null) throw new InvalidValueException("production", production);
 
                 let position = this.#getPositionActor(actor);
                 if (position === -1) {
@@ -620,8 +636,12 @@ let VideoSystem = (function () {
                 //Asignamos la referencia , para trabajar con el objeto
                 let act = this.#actors[position];
 
+                //Compruebo todos los productions que no sean null
+                for (let prod of productions) {
+                    if (prod == null) throw new InvalidValueException("Productions", prod);
+                }
+
                 for (let i = 0; i < productions.length; i++) {
-                    if (productions[i] == null) throw new InvalidValueException("Productions", productions);
 
                     //Obtenemos la posicion de la lista de Produccion 
                     let positionProd = this.#getPositionProduction(productions[i]);
@@ -638,8 +658,8 @@ let VideoSystem = (function () {
                         let positionProdActor = act.productions.findIndex((productionElement) => productionElement.title === productions[i].title);
 
                         if (positionProdActor === -1) {
-                            //Asignar la produccion de la misma referencia al actor
-                            act.productions.push(productions[i]);
+                            //Asignar la produccion existente en la lista de produccion al actor, en caso que no tiene el actor
+                            act.productions.push(this.#productions[positionProd]);
 
                         }
                     }
@@ -653,7 +673,6 @@ let VideoSystem = (function () {
             deassignActor(actor, ...productions) {
                 //Validamos
                 if (actor === null) throw new InvalidValueException("actor", actor);
-                if (productions === null) throw new InvalidValueException("production", productions);
 
                 //Obtenemos la posicion del actor
                 let position = this.#getPositionActor(actor);
@@ -663,9 +682,14 @@ let VideoSystem = (function () {
                 }
                 //Asignamos la referencia , para trabajar con el objeto
                 let act = this.#actors[position];
+
+                //Compruebo todos los productions que no sean null
+                for (let prod of productions) {
+                    if (prod == null) throw new InvalidValueException("Productions", prod);
+                }
+
                 //Recorremos los producciones, uno o varios
                 for (let i = 0; i < productions.length; i++) {
-                    if (productions[i] == null) throw new InvalidValueException("Productions", productions);
                     //Buscamos la produccion en el actor
                     let positionP = act.productions.findIndex((productionElement) => productionElement.title === productions[i].title);
                     //Si se encuentra, eliminamos de la lista del actor, la produccion
@@ -884,5 +908,4 @@ let VideoSystem = (function () {
 })();
 
 
-export { Resource, Production, Coordinate };
 export default VideoSystem;
