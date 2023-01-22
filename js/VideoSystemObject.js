@@ -473,6 +473,8 @@ let VideoSystem = (function () {
                     position = (this.addCategory(category) - 1);
                 }
 
+                let catP = this.#categories[position].productions;
+                
                 for (let i = 0; i < productions.length; i++) {
                     if (productions[i] == null) throw new InvalidValueException("Productions", productions);
 
@@ -481,14 +483,19 @@ let VideoSystem = (function () {
                     //En caso que no exista, lo hacemos un push a la lista 
                     if (positionProd === -1) {
                         this.addProduction(productions[i]);
+                        //Asignar la produccion a la categoria
+                        catP.push(productions[i]);
+                    }else{
+                        //en caso que existe, comprobamos que no tiene asignado a la categoria
+                        let positionProduction = catP.findIndex((productionsE) => productionsE.title === productions[i].title);
+                        //En caso que no esta asignado, lo asignamos
+                        if(positionProduction === -1) catP.push(productions[i]);
                     }
-                    //Asignar la produccion a la categoria
-                    this.#categories[position].productions.push(productions[i]);
 
                 }
 
                 //Devolver el numero de producciones de la categoria
-                return this.#categories[position].productions.length;
+                return catP.length;
             }
 
             //metodo donde se desasigna uno o mas producciones de una categoria

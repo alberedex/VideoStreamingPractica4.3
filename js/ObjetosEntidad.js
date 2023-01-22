@@ -7,21 +7,30 @@ import {
 } from './Exception.js';
 
 //Elementos comunes para los objetos 
-const DATE_EXPR = /^(([0-2]{1}\d{1})|(3{1}[0-1]{1}))\/(([1-9]{1})|(1{1}[0-2]{1}))\/\d{4}$/;
+const DATE_EXPR = /^(([0-2]{1}\d{1})|(3{1}[0-1]{1}))\/(([0]{1}[1-9]{1})|(1{1}[0-2]{1}))\/\d{4}$/;
 const RUTA_EXPR = /^(\/[a-zA-Z0-9_.$%._\+~#]+){1,}(\/[a-zA-Z0-9_.$%._\+~#]+){1,}\.[a-zA-Z0-9]{2,4}$/;
 
 //Metodo donde convierte el string en Date
 function stringToDate(dateNew) {
     //Convertimos en un array con el separador /
     let array = dateNew.split("/");
+    
+    //En caso que ha introducido el dia o mes [1-9] quitar el 0 para comparar el date del sistema
     let day = array[0];
     if (day[0] == 0) {
-        //En caso que ha introducido el dia [1-9] quitar el 0 para comparar el date del sistema
-        dateNew = day[1] + "/" + array[1] + "/" + array[2];
+        day = day[1];
     }
 
+    let month = array[1]; 
+    if(month[0] == 0){
+        month = month[1];
+    }
+    
+    //Construimos nuevo string de fecha, quitando 0 para estar de acuerdo con el objeto Date
+    dateNew = day + "/" + month + "/" + array[2];
+
     //creamos un objeto Date
-    let date = new Date(array[2], array[1] - 1, array[0]);
+    let date = new Date(array[2], (array[1] - 1), array[0]);
 
     //Comprobamos si la fecha es correcta en el calendario por el dia 30, 31 o years bisiesto 
     if (date.toLocaleDateString() === dateNew) {
@@ -45,6 +54,10 @@ class Person {
         if (!name) throw new InvalidValueException("name", name);
         if (!lastname1) throw new InvalidValueException("lastname1", lastname1);
         if (!(DATE_EXPR.test(born))) throw new InvalidValueException("born", born);
+
+        if(picture){
+            if (!RUTA_EXPR.test(picture)) throw new InvalidValueException("picture", picture);
+        } 
 
         this.#name = name;
         this.#lastname1 = lastname1;
@@ -100,6 +113,7 @@ class Person {
     }
 
     set picture(name) {
+        if (name && !RUTA_EXPR.test(name)) throw new InvalidValueException("picture", name);
         this.#picture = name;
     }
 
@@ -250,7 +264,7 @@ class Movie extends Production {
     }
 
     set resource(resourseN) {
-
+        if(!(resourseN instanceof Resource)) throw new InvalidValueException("Resource",resourseN);
         this.#resource = resourseN;
     }
 
@@ -261,7 +275,7 @@ class Movie extends Production {
     }
 
     set locations(locationsN) {
-
+        if(!(locationsN instanceof Coordinate)) throw new InvalidValueException("Coordinate",locationsN);
         this.#locations = locationsN;
     }
 
@@ -269,7 +283,7 @@ class Movie extends Production {
     addLocations(coordinate) {
         if (coordinate instanceof Coordinate) {
             let position = this.#locations.findIndex((locationElem) => locationElem.latitude === coordinate.latitude && locationElem.longitude === coordinate.longitude);
-            if (position >= 0) this.#locations.push(coordinate);
+            if (position === -1) this.#locations.push(coordinate);
         }
         return this.#locations.length;
     }
@@ -299,16 +313,11 @@ class Serie extends Production {
         return this.#resources;
     }
 
-    set resources(resourseN) {
-
-        this.#resources = resourseN;
-    }
-
     //Añadir un recurso nuevo
     addResources(resource){
         if(resource instanceof Resource){
             let position = this.#resources.findIndex((resourceElem) => resourceElem.link === resource.link);
-            if(position >= 0) this.#resources.push(resource);
+            if(position === -1) this.#resources.push(resource);
         }
         return this.#resources.length;
     }
@@ -328,7 +337,7 @@ class Serie extends Production {
     }
 
     set locations(locationsN) {
-
+        if(!(locationsN instanceof Coordinate)) throw new InvalidValueException("Coordinate",locationsN);
         this.#locations = locationsN;
     }
 
@@ -336,7 +345,7 @@ class Serie extends Production {
     addLocations(coordinate) {
         if (coordinate instanceof Coordinate) {
             let position = this.#locations.findIndex((locationElem) => locationElem.latitude === coordinate.latitude && locationElem.longitude === coordinate.longitude);
-            if (position >= 0) this.#locations.push(coordinate);
+            if (position === -1) this.#locations.push(coordinate);
         }
         return this.#locations.length;
     }
@@ -352,6 +361,8 @@ class Serie extends Production {
 }
 
 const EXPR_EMAIL = /^\w{1,}\@{1}\w{1,}\.{1}\w{2,}$/;
+const EXPR_USER = /^\S{3,}$/; //no permita espacios en blanco, pero si cualquier caracter
+const EXPR_PASSWORD = /^[a-zA-Z0-9_.$%._\+~#]{5,}$/; //no permita espacios en blanco, pero si cualquier caracter
 
 //Objeto User, que representa un usuario
 class User {
@@ -361,8 +372,10 @@ class User {
 
     constructor(username, email, password) {
         if (!username) throw new InvalidValueException("username", username);
+        if (!EXPR_USER.test(username)) throw new InvalidValueException("username", username);
         if (!EXPR_EMAIL.test(email)) throw new InvalidValueException("email", email);
         if (!password) throw new InvalidValueException("password", password);
+        if (!EXPR_PASSWORD.test(password)) throw new InvalidValueException("password", password);
 
         this.#username = username;
         this.#email = email;
@@ -390,7 +403,7 @@ class Coordinate {
 
     constructor(latitude, longitude) {
         if (Number.isNaN(latitude) || latitude < -90 || latitude > 90) throw new InvalidValueException("latitude", latitude);
-        if (Number.isNaN(longitude) || longitude < -90 || longitude > 90) throw new InvalidValueException("longitude", longitude);
+        if (Number.isNaN(longitude) || longitude < -180 || longitude > 180) throw new InvalidValueException("longitude", longitude);
 
         this.#latitude = latitude;
         this.#longitude = longitude;
@@ -411,12 +424,12 @@ class Coordinate {
     }
 
     set longitude(longitude) {
-        if (Number.isNaN(longitude) || longitude < -90 || longitude > 90) throw new InvalidValueException("longitude", longitude);
+        if (Number.isNaN(longitude) || longitude < -180 || longitude > 180) throw new InvalidValueException("longitude", longitude);
         this.#longitude = longitude;
     }
 
     toString() {
-        return "Latitude: " + this.#latitude + ", Longitude: " + this.#longitude;
+        return " Latitude: " + this.#latitude + ", Longitude: " + this.#longitude;
     }
 }
 
