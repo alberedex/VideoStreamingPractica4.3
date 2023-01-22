@@ -29,8 +29,14 @@ function test() {
             console.log(production.toString());
         }
     }
+    
+    function showProductionsCategoryDefault() {
+        for (let produccion of vs.getProductionsCategoryDefault()) {
+            console.log(produccion.toString());
+        }
+    }
 
-    let vs = VideoSystem.getInstance();
+    let vs = VideoSystem.getInstance("Prueba");
     console.log(vs.name);
     //Asignamos nombre a la plataforma
     vs.name = "Plataforma VideoSystem";
@@ -122,6 +128,7 @@ function test() {
     } catch (error) {
         console.error(error.message);
     }
+
     console.log("**Añadir Localizaciones tras el objeto movie ya creado");
     console.log(movie1.addLocations(coor2));
     console.log(movie1.addLocations(coor3));
@@ -322,7 +329,7 @@ function test() {
         console.error(error.message);
     }
     console.log(vs.addUser(user1));
-    
+
     console.log ("************ Mostramos todos los usuarios registrados. ************");
     for (const user of vs.users) {
         console.log(user.toString());
@@ -369,25 +376,67 @@ function test() {
     console.log(vs.assignActor(actor6,movie2));
     console.log(vs.assignActor(actor7,serie1));
 
-    console.log("Mostrar producciones del actor: "+actor1.name);
+    console.log("**Mostrar producciones del actor: "+actor1.name);
     showProductionsActor(actor1);
     console.log("");
-    console.log("Asignamos otra vez misma pelicula "+movie1.title+" al actor : "+actor1.name);
+    console.log("**Asignamos otra vez misma pelicula "+movie1.title+" al actor : "+actor1.name);
     console.log(vs.assignActor(actor1,movie1));
     
-    console.log("Mostrar producciones del actor despues de meter duplicado: "+actor1.name);
+    console.log("**Mostrar producciones del actor despues de meter duplicado: "+actor1.name);
     showProductionsActor(actor1);
 
     console.log("");
     
     // console.log(vs.deassignActor(actor1,serie1));
-    console.log("Actores de una Production: "+movie1.title);
+    console.log("**Actores de una Production: "+movie1.title);
     showActorsProductions(movie1);
     
     console.log("");
     
-    console.log("Producciones de una Categoria: "+category1.name);
+    console.log("**Producciones de una Categoria: "+category1.name);
     showProductionsCategory(category1);
+    
+    console.log("");
+    //Mostramos las producciones de la categoria por defecto
+    console.log("***Producciones de la categoria por defecto");
+    //pero no sale nada, aun no hemos borrado una categoria 
+    showProductionsCategoryDefault();
+    console.log("Vemos que no hay ninguno");
+    console.log("Eliminamos una categoria: " + category1.name);
+    console.log("***Producciones de la categoria por defecto, tras de eliminar una categoria");
+    vs.removeCategory(category1); //eliminamos la categoria 
+    showProductionsCategoryDefault(); //y vemos el resultado que han pasado a la categoria por defecto
+
+    //Asignamos un director a la pelicula "Los crímenes de la academia", que contiene en todas los objetos que hemos estado trabajando
+    //Para probar la funcionalidad de eliminar la production del sistema (producciones del actor, producciones del director y la propia lista de producciones)
+    vs.assignDirector(director1, movie1);
+
+    console.log("");
+    console.log("**********Vamos a eliminar una produccion: " + movie1.title+" **********");
+    console.log("");
+
+    //funcion que se va a ejecutar dos veces para ver antes y despues del borrado de una production del sistema
+    function testDeleteProductionSystem() {
+        console.log("");
+        console.log("-Produciones del actor-");
+        showProductionsActor(actor1);
+        console.log("");
+        console.log("-Produciones del director-");
+        showProductionsDirector(director1);
+        console.log("");
+        console.log("-Produciones de la categoria-");
+        showProductionsCategory(category2);
+        console.log("");
+    }
+
+    console.log("***Antes de eliminar, mostramos que esta la producción "+movie1.title);
+    testDeleteProductionSystem(); //ejecutamos la funcion 
+
+    vs.removeProduction(movie1); //Eliminamos la production del sistema
+
+    console.log("***Eliminamos la produccion, mostramos otra vez");
+    testDeleteProductionSystem(); //ejecutamos la funcion otra vez y vemos el resultado
+
 }
 
 window.onload = test();

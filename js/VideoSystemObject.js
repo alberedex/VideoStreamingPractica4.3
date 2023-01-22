@@ -97,7 +97,7 @@ class PersonIsNotExistsException extends VideoSystemException {
 let VideoSystem = (function () {
     let instantiated; //Objeto con la instancia única ImageManager
 
-    function init() { //Inicialización del Singleton
+    function init(name) { //Inicialización del Singleton
         class VideoSystem {
             #name;
             #users = [];
@@ -153,7 +153,9 @@ let VideoSystem = (function () {
                 return this.#directors.findIndex((directorElement) => directorElement.director.name === director.name && directorElement.director.lastname1 === director.lastname1);
             }
 
-            constructor() {
+            constructor(name) {
+                this.#name = name;
+                //Añadimos el primer categoria por defecto , posicion = 0
                 this.addCategory(this.#defaultCategory);
             }
 
@@ -209,7 +211,8 @@ let VideoSystem = (function () {
                 if (!(category instanceof Category)) throw new TypeVideoSystemException("Category");
 
                 let position = this.#getPositionCategory(category);
-                if (position === -1) throw new CategoryIsNotExistsException();
+                //En caso de que no exista o si es la categoria por defecto, no permito que elimine
+                if (position === -1 || position === 0) throw new CategoryIsNotExistsException(); 
 
                 let productions = this.#categories[position].productions;
 
@@ -256,7 +259,7 @@ let VideoSystem = (function () {
                 return this.#users.length;  //Devolvemos el numero de usuarios 
             }
 
-            //Metodo add User al sistema
+            //Metodo remove User al sistema
             removeUser(user) {
                 if (!user) throw new InvalidValueException("user", user);
                 if (!(user instanceof User)) throw new TypeVideoSystemException("User");
@@ -316,39 +319,45 @@ let VideoSystem = (function () {
                 //Para la lista de categoria, eliminar la produccion 
                 for (let categoria of this.#categories) {
                     //categoria me da un objeto literal , metemos en otro bucle para recorrer la array de producciones
+                    let i = 0;
+                    let encontrado = false;
 
-                    for (let i = 0; i < categoria.productions.length; i++) {
+                    while(i < categoria.productions.length && !encontrado){
                         if (categoria.productions[i].title === production.title) {
                             categoria.productions.splice(i, 1);
-                            break; //lo finalizamos para esta categoria, ya esta borrado
+                            encontrado = true; //lo finalizamos para esta categoria, ya esta borrado
                         }
-
+                        i++; //incrementamos
                     }
                 }
 
                 //Para la lista de actors, eliminar la produccion 
                 for (let actor of this.#actors) {
-                    //categoria me da un objeto literal , metemos en otro bucle para recorrer la array de producciones
+                    //actor me da un objeto literal , metemos en otro bucle para recorrer la array de producciones
+                    let i = 0;
+                    let encontrado = false;
 
-                    for (let i = 0; i < actor.productions.length; i++) {
-                        if (actor.productions[i].title === production.title) {
+                    while(i < actor.productions.length && !encontrado){
+                         if (actor.productions[i].title === production.title) {
                             actor.productions.splice(i, 1);
-                            break; //lo finalizamos para el actor, ya esta borrado
+                            encontrado = true; //lo finalizamos para el actor, ya esta borrado
                         }
-
+                        i++; //incrementamos el contador
                     }
                 }
 
                 //Para la lista de directores, eliminar la produccion 
                 for (let director of this.#directors) {
                     //categoria me da un objeto literal , metemos en otro bucle para recorrer la array de producciones
+                    let i = 0;
+                    let encontrado = false;
 
-                    for (let i = 0; i < director.productions.length; i++) {
+                    while(i < director.productions.length && !encontrado){
                         if (director.productions[i].title === production.title) {
                             director.productions.splice(i, 1);
-                            break; //lo finalizamos para el/la director/a, ya esta borrado
+                            encontrado = true; //lo finalizamos para el/la director/a, ya esta borrado
                         }
-
+                        i++; //incrementamos el contador
                     }
                 }
 
@@ -472,9 +481,9 @@ let VideoSystem = (function () {
                     //En caso que no exista, se añade la nueva categoria
                     position = (this.addCategory(category) - 1);
                 }
-
+                //Asignamos la referencia , para trabajar con el objeto
                 let catP = this.#categories[position].productions;
-                
+
                 for (let i = 0; i < productions.length; i++) {
                     if (productions[i] == null) throw new InvalidValueException("Productions", productions);
 
@@ -539,7 +548,7 @@ let VideoSystem = (function () {
                     //En caso que no exista, se añade la nuevo/a director/a
                     position = (this.addDirector(director) - 1);
                 }
-
+                //Asignamos la referencia , para trabajar con el objeto
                 let d = this.#directors[position];
 
                 for (let i = 0; i < productions.length; i++) {
@@ -608,7 +617,7 @@ let VideoSystem = (function () {
                     //En caso que no exista, se añade la nuevo/a actor
                     position = (this.addActor(actor) - 1);
                 }
-
+                //Asignamos la referencia , para trabajar con el objeto
                 let act = this.#actors[position];
 
                 for (let i = 0; i < productions.length; i++) {
@@ -630,7 +639,7 @@ let VideoSystem = (function () {
 
                         if (positionProdActor === -1) {
                             //Asignar la produccion de la misma referencia al actor
-                            act.productions.push(this.#productions[positionProd]);
+                            act.productions.push(productions[i]);
 
                         }
                     }
@@ -652,7 +661,7 @@ let VideoSystem = (function () {
                     //En caso que no exista
                     throw new PersonIsNotExistsException();
                 }
-
+                //Asignamos la referencia , para trabajar con el objeto
                 let act = this.#actors[position];
                 //Recorremos los producciones, uno o varios
                 for (let i = 0; i < productions.length; i++) {
@@ -775,7 +784,7 @@ let VideoSystem = (function () {
                 //Validar datos de entrada, antes de realizar la busqueda
                 if (!username) throw new InvalidValueException("username", username);
 
-                let position = this.#users.findIndex((userElement) => userElement.username === username);
+                let position = this.#users.findIndex((userElement) => userElement.username === username && userElement.email === email);
 
                 let user;
 
@@ -796,12 +805,15 @@ let VideoSystem = (function () {
                 if (production === null) throw new InvalidValueException("production", productions);
 
                 for (let act of this.#actors) {
-                    for (let productionActor of act.productions) {
-                        if (productionActor.title === production.title) {
-                            yield act.actor;
-                            break;
+                    let encontrado;
+                    let i = 0;
+                    while(i < act.productions.length && !encontrado){
+                        if (act.productions[i].title === production.title) {
+                            encontrado = act.actor;
                         }
+                        i++; //incrementamos 
                     }
+                    if(encontrado) yield encontrado;
                 }
             }
 
@@ -847,26 +859,30 @@ let VideoSystem = (function () {
                 }
             }
 
+            //Devuelve todas las producciones de la categoria por defecto
+            * getProductionsCategoryDefault() {
+                let position = 0;
+
+                for (let produccion of this.#categories[position].productions) {
+                    yield produccion;
+                }
+            }
+
         }
-        let vs = new VideoSystem();
+        let vs = new VideoSystem(name);
         Object.freeze(vs);
         return vs; //Devolvemos el objeto VideoSystem creado por primera vez y unico.
     }
     return {
-        getInstance: function () {
+        getInstance: function (name) {
             if (!instantiated) { //Si la variable instantiated es undefined, priemera ejecución, ejecuta init.
-                instantiated = init(); //instantiated contiene el objeto único
+                instantiated = init(name); //instantiated contiene el objeto único
             }
             return instantiated; //Si ya está asignado devuelve la asignación.
         }
     }
 })();
 
-// export {
-//     BaseException,
-//     InvalidAccessConstructorException,
-//     InvalidValueException,
-//     AbstractClassException
-// };
+
 export { Resource, Production, Coordinate };
 export default VideoSystem;

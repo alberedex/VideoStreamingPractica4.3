@@ -10,6 +10,11 @@ import {
 const DATE_EXPR = /^(([0-2]{1}\d{1})|(3{1}[0-1]{1}))\/(([0]{1}[1-9]{1})|(1{1}[0-2]{1}))\/\d{4}$/;
 const RUTA_EXPR = /^(\/[a-zA-Z0-9_.$%._\+~#]+){1,}(\/[a-zA-Z0-9_.$%._\+~#]+){1,}\.[a-zA-Z0-9]{2,4}$/;
 
+//Elementos para el objeto User
+const EXPR_EMAIL = /^\w{1,}\@{1}\w{1,}\.{1}\w{2,}$/;
+const EXPR_USER = /^\S{3,}$/; //no permita espacios en blanco, pero si cualquier caracter
+const EXPR_PASSWORD = /^[a-zA-Z0-9_.$%._\+~#]{5,}$/; //no permita espacios en blanco, pero si cualquier caracter
+
 //Metodo donde convierte el string en Date
 function stringToDate(dateNew) {
     //Convertimos en un array con el separador /
@@ -55,7 +60,9 @@ class Person {
         if (!lastname1) throw new InvalidValueException("lastname1", lastname1);
         if (!(DATE_EXPR.test(born))) throw new InvalidValueException("born", born);
 
+        //Como no es obligatorio picture, puede introducir vacio o una ruta de la fotografia cumpliendo el REGEX que exige
         if(picture){
+            //En caso que no sea vacio, validar
             if (!RUTA_EXPR.test(picture)) throw new InvalidValueException("picture", picture);
         } 
 
@@ -113,6 +120,7 @@ class Person {
     }
 
     set picture(name) {
+        
         if (name && !RUTA_EXPR.test(name)) throw new InvalidValueException("picture", name);
         this.#picture = name;
     }
@@ -281,9 +289,11 @@ class Movie extends Production {
 
     //Añadir una localizacion nuevo
     addLocations(coordinate) {
+        //Vertificamos que es Coordinate 
         if (coordinate instanceof Coordinate) {
+            //Buscamos si existe el mismo lugar
             let position = this.#locations.findIndex((locationElem) => locationElem.latitude === coordinate.latitude && locationElem.longitude === coordinate.longitude);
-            if (position === -1) this.#locations.push(coordinate);
+            if (position === -1) this.#locations.push(coordinate); //En caso que no exista el lugar, se añade en la lista de lugares de la pelicula 
         }
         return this.#locations.length;
     }
@@ -322,6 +332,7 @@ class Serie extends Production {
         return this.#resources.length;
     }
 
+    //Eliminar un recuso multimedia del array de los episodios de la serie
     deleteResources(resource){
         if(resource instanceof Resource){
             let position = this.#resources.findIndex((resourceElem) => resourceElem.link === resource.link);
@@ -344,25 +355,24 @@ class Serie extends Production {
     //Añadir una localizacion nuevo
     addLocations(coordinate) {
         if (coordinate instanceof Coordinate) {
+            //Buscamos si existe el mismo lugar
             let position = this.#locations.findIndex((locationElem) => locationElem.latitude === coordinate.latitude && locationElem.longitude === coordinate.longitude);
-            if (position === -1) this.#locations.push(coordinate);
+            if (position === -1) this.#locations.push(coordinate); //En caso que no exista el lugar, se añade en la lista de lugares de la serie 
         }
-        return this.#locations.length;
+        return this.#locations.length; //Devolver el numero total de localicaciones de la serie
     }
 
     //Getter de seasons
     get seasons(){
         return this.#seasons;
     }
-
+    //metodo toString
     toString() {
         return super.toString()+", Resources: ["+this.#resources.toString() +"] , Locations: ["+ this.#locations.toString()+"]";
     }
 }
 
-const EXPR_EMAIL = /^\w{1,}\@{1}\w{1,}\.{1}\w{2,}$/;
-const EXPR_USER = /^\S{3,}$/; //no permita espacios en blanco, pero si cualquier caracter
-const EXPR_PASSWORD = /^[a-zA-Z0-9_.$%._\+~#]{5,}$/; //no permita espacios en blanco, pero si cualquier caracter
+
 
 //Objeto User, que representa un usuario
 class User {
@@ -371,9 +381,13 @@ class User {
     #password;
 
     constructor(username, email, password) {
+        //Validamos 
+            //username
         if (!username) throw new InvalidValueException("username", username);
         if (!EXPR_USER.test(username)) throw new InvalidValueException("username", username);
+            //email
         if (!EXPR_EMAIL.test(email)) throw new InvalidValueException("email", email);
+            //password
         if (!password) throw new InvalidValueException("password", password);
         if (!EXPR_PASSWORD.test(password)) throw new InvalidValueException("password", password);
 
@@ -382,10 +396,11 @@ class User {
         this.#password = password;
     }
 
+    //getter de username
     get username() {
         return this.#username;
     }
-
+    //getter de email
     get email(){
         return this.#email;
     }
@@ -402,6 +417,7 @@ class Coordinate {
     #longitude;
 
     constructor(latitude, longitude) {
+        //Validamos los datos de entrada
         if (Number.isNaN(latitude) || latitude < -90 || latitude > 90) throw new InvalidValueException("latitude", latitude);
         if (Number.isNaN(longitude) || longitude < -180 || longitude > 180) throw new InvalidValueException("longitude", longitude);
 
@@ -410,24 +426,29 @@ class Coordinate {
 
     }
 
+    //getter de latitude
     get latitude() {
         return this.#latitude;
     }
 
+    //setter latitude, nueva localizacion 
     set latitude(latitude) {
         if (Number.isNaN(latitude) || latitude < -90 || latitude > 90) throw new InvalidValueException("latitude", latitude);
         this.#latitude = latitude;
     }
 
+    //getter de longitude
     get longitude() {
         return this.#longitude;
     }
 
+    //setter longitude
     set longitude(longitude) {
         if (Number.isNaN(longitude) || longitude < -180 || longitude > 180) throw new InvalidValueException("longitude", longitude);
         this.#longitude = longitude;
     }
-
+    
+    //Metodo de toString Coordinate
     toString() {
         return " Latitude: " + this.#latitude + ", Longitude: " + this.#longitude;
     }
