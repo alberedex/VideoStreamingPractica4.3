@@ -5,8 +5,8 @@ import {
     InvalidAccessConstructorException,
     InvalidValueException,
     AbstractClassException
-} from './Exception.js';
-import { Person, Category, Resource, Production, Movie, Serie, User, Coordinate } from './ObjetosEntidad.js'
+} from '../Exception.js';
+import { Person, Category, Resource, Production, Movie, Serie, User, Coordinate } from '../ObjetosEntidad.js'
 
 // Objeto VideoSystem
 class VideoSystemException extends BaseException {
