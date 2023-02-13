@@ -25,6 +25,12 @@ class VideoSystemController {
         let actor8 = this.#videoSystemModel.getActor("Andy ", "A. J.", "Samberg", "18/08/1978", "/imagesActor/andySamberg.jpg"); //Brooklyn 99
         let actor9 = this.#videoSystemModel.getActor("Melissa", "Gallo", "", "19/08/1982", "/imagesActor/melissaGallo.jpg"); //Brooklyn 99
 
+        let actor13 = this.#videoSystemModel.getActor("Ruth", "Codd", "", "13/06/1996", "/imagesActor/RuthCodd.jpg"); //El club de la medianoche
+        let actor14 = this.#videoSystemModel.getActor("Igby", "Rigney", "", "06/06/2003", "/imagesActor/IgbyRigney.jpg"); //El club de la medianoche
+
+        let actor15 = this.#videoSystemModel.getActor("Dina", "Shihabi", "", "22/09/1989", "/imagesActor/DinaShihabi.jpg"); //Archivo 81
+        let actor16 = this.#videoSystemModel.getActor("Mamoudou", "Athie", "", "25/07/1988", "/imagesActor/MamoudouAthie.jpg"); //Archivo 81
+
         actor1.picture = "/imagesActor/holhola.jpg";
 
         let category1 = this.#videoSystemModel.getCategory("Comedia", "Obra que presenta una mayoría de escenas y situaciones humorísticas o festivas");
@@ -38,6 +44,9 @@ class VideoSystemController {
         let serie1 = this.#videoSystemModel.getSerie("El vecino", "España", "31/12/2019", "Un vecino superheroe", "/image/portadaVecino.png", [new Resource(32, "/serie/Episode1.mp4"), new Resource(24, "/serie/LaRedSocial.mp4"), new Resource(31, "/serie/dia.mp4")], "", 2);
         let serie2 = this.#videoSystemModel.getSerie("Resident Evil", "Estados Unidos", "14/07/2022", "Un virus mortal causara un apocalipsis global", "/image/portadaREvil.png", [new Resource(60, "/serie/Bienvenidos_a_New_Raccoon_City.mp4"), new Resource(48, "/serie/Lo_malo_conocido.mp4"), new Resource(45, "/serie/La_luz.mp4"), new Resource(53, "/serie/La_transformacion.mp4")], "", 2);
         let serie3 = this.#videoSystemModel.getSerie("Brooklyn Nine-Nine", "Estados Unidos", "17/07/2013", "forman una simpática y poco convencional brigada, pero todo cambia tras la llegada del nuevo jefe, el inflexible Raymond Holt.", "/image/brooklyn99.png", [new Resource(60, "/serie/b99_1.mp4"), new Resource(48, "/serie/b99_2.mp4"), new Resource(45, "/serie/b99_3.mp4"), new Resource(53, "/serie/b99_4.mp4")], "", 9);
+        
+        let serie4 = this.#videoSystemModel.getSerie("El club de la medianoche", "Estados Unidos", "07/10/2022", "En una mansión con una misteriosa historia, ocho miembros del Midnight Club se reúnen cada noche a la medianoche para contar historias siniestras y buscar señales sobrenaturales del más allá.", "/image/clubMedianoche.png", [new Resource(60, "/serie/clubM_1.mp4"), new Resource(48, "/serie/clubM_2.mp4"), new Resource(45, "/serie/clubM_3.mp4"), new Resource(53, "/serie/clubM_4.mp4")], "", 1);
+        let serie5 = this.#videoSystemModel.getSerie("Archivo 81", "Estados Unidos", "14/01/2022", "Un archivista acepta un trabajo restaurando cintas de video dañadas y se ve envuelto en un misterio que involucra al director desaparecido y un culto demoníaco.", "/image/archivo81.png", [new Resource(60, "/serie/a81_1.mp4"), new Resource(48, "/serie/a81_2.mp4"), new Resource(45, "/serie/a81_3.mp4"), new Resource(53, "/serie/a81_4.mp4")], "", 1);
 
         serie2.addResources(new Resource(10, "/serie/insertadoDespues.mp4"));
 
@@ -65,6 +74,8 @@ class VideoSystemController {
         this.#videoSystemModel.addProduction(serie1);
         this.#videoSystemModel.addProduction(serie2);
         this.#videoSystemModel.addProduction(serie3);
+        this.#videoSystemModel.addProduction(serie4);
+        this.#videoSystemModel.addProduction(serie5);
 
 
         this.#videoSystemModel.addActor(actor1);
@@ -79,6 +90,8 @@ class VideoSystemController {
         this.#videoSystemModel.addActor(actor10);
         this.#videoSystemModel.addActor(actor11);
         this.#videoSystemModel.addActor(actor12);
+        this.#videoSystemModel.addActor(actor13);
+        this.#videoSystemModel.addActor(actor14);
 
         let director1 = this.#videoSystemModel.getDirector("Scott", "Cooper", "", "20/05/1970", "/director/fotoScott.jpg");
         let director2 = this.#videoSystemModel.getDirector("Nacho", "Vigalondo", "Palacios", "06/04/1977", "/director/fotoNacho.jpg");
@@ -88,6 +101,9 @@ class VideoSystemController {
         let director5 = this.#videoSystemModel.getDirector("Tim", "Miller", "", "10/10/1964", "/director/fotoTimMiller.jpg");
 
         let director6 = this.#videoSystemModel.getDirector("Daniel", "Joshua", "Goor", "10/10/1964", "/director/fotoDanielJoshua.jpg");
+        
+        let director7 = this.#videoSystemModel.getDirector("Mike", "Flanagan", "", "20/05/1978", "/director/fotoMikeFlanagan.jpg");
+        let director8 = this.#videoSystemModel.getDirector("James", "Wan", "", "26/02/1977", "/director/fotoJamesWan.jpg");
 
         this.#videoSystemModel.addDirector(director1);
         this.#videoSystemModel.addDirector(director2);
@@ -95,11 +111,15 @@ class VideoSystemController {
         this.#videoSystemModel.addDirector(director4);
         this.#videoSystemModel.addDirector(director5);
         this.#videoSystemModel.addDirector(director6);
+        this.#videoSystemModel.addDirector(director7);
+        this.#videoSystemModel.addDirector(director8);
 
         this.#videoSystemModel.assignCategory(category1, serie1, movie2, movie3, serie3);
         //Categoria1 = Comedia = El vecino, Murder Mystery, Deadpool
         this.#videoSystemModel.assignCategory(category2, serie2);
         this.#videoSystemModel.assignCategory(category2, movie1);
+        this.#videoSystemModel.assignCategory(category2, serie4);
+        this.#videoSystemModel.assignCategory(category2, serie5);
 
         this.#videoSystemModel.assignDirector(director1, movie1);
         this.#videoSystemModel.assignDirector(director1, serie1);
@@ -108,6 +128,8 @@ class VideoSystemController {
         this.#videoSystemModel.assignDirector(director4, movie2);
         this.#videoSystemModel.assignDirector(director5, movie3);
         this.#videoSystemModel.assignDirector(director6, serie3);
+        this.#videoSystemModel.assignDirector(director7, serie4);
+        this.#videoSystemModel.assignDirector(director8, serie5);
 
         this.#videoSystemModel.assignActor(actor1, movie1);
         this.#videoSystemModel.assignActor(actor2, movie1);
@@ -122,6 +144,10 @@ class VideoSystemController {
         this.#videoSystemModel.assignActor(actor10, serie1);
         this.#videoSystemModel.assignActor(actor8, serie3);
         this.#videoSystemModel.assignActor(actor9, serie3);
+        this.#videoSystemModel.assignActor(actor13, serie4);
+        this.#videoSystemModel.assignActor(actor14, serie4);
+        this.#videoSystemModel.assignActor(actor15, serie5);
+        this.#videoSystemModel.assignActor(actor16, serie5);
     }
 
     constructor(model, view) {
@@ -144,10 +170,16 @@ class VideoSystemController {
     onInit = () => {
         this.#videoSystemView.init(this.#videoSystemModel.categories, this.#videoSystemModel);
         this.#videoSystemView.showProductionsInit(this.#videoSystemModel.productions);
+        this.#videoSystemView.bindCategoriesList(this.handleProductionsCategoryList);
     }
 
     handleInit = () => {
         this.onInit();
+    }
+
+    handleProductionsCategoryList = (category) => {
+        let category1 = this.#videoSystemModel.getCategory(category);
+        this.#videoSystemView.listProductions(this.#videoSystemModel.getProductionsCategory(category1), category);
     }
 
 }

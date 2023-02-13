@@ -54,7 +54,7 @@ class VideoSystemView {
         let container = $('<div class="dropdown-menu" aria-labelledby="navCats" id="category-list-menu"></div>');
 
         for (let category of categories) {
-            container.append(`<a data-category="${category.name}" class="dropdown-item" href="#categorylist">
+            container.append(`<a data-category="${category.name}" class="dropdown-item" href="#">
                                 ${category.name}
                             </a>`);
         }
@@ -62,13 +62,12 @@ class VideoSystemView {
         this.menu.append(li);
     }
 
+    //Eventos para cuando pulse una categoria tanto en main o en el menu
     bindCategoriesList(handler) {
         $('#category-list').find('a').click(function (event) {
-            console.log("hola");
             handler(this.dataset.category);
         });
         $('#category-list-menu').find('a').click(function (event) {
-            console.log("hola");
             handler(this.dataset.category);
         });
     }
@@ -82,7 +81,7 @@ class VideoSystemView {
         //Titulo principal
         contanier.append('<h1>Producciones:</h1>');
         //Donde se va a contener las producciones con diseño flex
-        let contanierProduciones = $('<div class="d-flex gap-5 justify-content-evenly"></div>');
+        let contanierProduciones = $('<div class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
 
         //Generaramos numero aleatorios
         let produccionesA = Array.from(producciones);
@@ -116,7 +115,25 @@ class VideoSystemView {
         this.main.append(contanier);
     }
 
+    //Si selecciona una categoria, mostras todas las producciones del dicho categoria
+    listProductions(productions, title) {
+        this.main.empty(); //borramos el contenido del main
+        let contanier = $(`<h1>${title}</h1>`);
 
+        let contanierProduciones = $('<div class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
+
+        this.main.append(contanier);
+        for (let production of productions) {
+            // let contanier = $(`<h1>${production.title}</h1>`);
+            contanierProduciones.append(`<a data-produccion="${production.title}" href='#'><div class="card" style="width: 18rem;">
+                         <img src="${production.image}" class="card-img-top" alt="${production.title}">
+                             <div class="card-body">
+                                 <h5 class="card-title">${production.title}</h5>
+                             </div>
+                        </div ></a>`);
+        }
+        this.main.append(contanierProduciones);
+    }
 
 
 }
