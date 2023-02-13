@@ -143,6 +143,7 @@ class VideoSystemController {
     //En respuesta a un cambio de datos
     onInit = () => {
         this.#videoSystemView.init(this.#videoSystemModel.categories, this.#videoSystemModel);
+        this.#videoSystemView.showProductionsInit(this.#videoSystemModel.productions);
     }
 
     handleInit = () => {

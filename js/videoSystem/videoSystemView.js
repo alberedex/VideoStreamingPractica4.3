@@ -73,6 +73,51 @@ class VideoSystemView {
         });
     }
 
+    /**
+     * Mostrar 3 producciones de forma aleatoria 
+     */
+    showProductionsInit(producciones) {
+        //Creamos el contenedor principal
+        let contanier = $('<div></div>');
+        //Titulo principal
+        contanier.append('<h1>Producciones:</h1>');
+        //Donde se va a contener las producciones con diseño flex
+        let contanierProduciones = $('<div class="d-flex gap-5 justify-content-evenly"></div>');
+
+        //Generaramos numero aleatorios
+        let produccionesA = Array.from(producciones);
+        var numbers = [];
+        let lengthArray = produccionesA.length;
+
+        while (numbers.length < 3) {
+            let number = (Math.floor(Math.random() * lengthArray) + 0);
+
+            let result = numbers.indexOf(number);
+
+            if (result === -1) {
+                numbers.push(number);
+            }
+        }
+        //Mostramos el diseño card
+        for (const number of numbers) {
+            let produccion = produccionesA[number];
+
+
+            contanierProduciones.append(`<a data-produccion="${produccion.title}" href='#'><div class="card" style="width: 18rem;">
+                         <img src="${produccion.image}" class="card-img-top" alt="${produccion.title}">
+                             <div class="card-body">
+                                 <h5 class="card-title">${produccion.title}</h5>
+                             </div>
+                        </div ></a>`);
+        }
+        //append al contenier las tres cards
+        contanier.append(contanierProduciones);
+        //append al main principal del html
+        this.main.append(contanier);
+    }
+
+
+
 
 }
 
