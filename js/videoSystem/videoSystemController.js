@@ -131,16 +131,22 @@ class VideoSystemController {
         this.onLoad();
         this.onInit();
 
+        this.#videoSystemView.bindInit(this.handleInit);
     }
 
     //Carga inicial de la aplicacion
     onLoad = () => {
         this.#loadVideoSystemObjects();
+        this.#videoSystemView.showCategoriesInMenu(this.#videoSystemModel.categories);
     }
 
     //En respuesta a un cambio de datos
     onInit = () => {
+        this.#videoSystemView.init(this.#videoSystemModel.categories, this.#videoSystemModel);
+    }
 
+    handleInit = () => {
+        this.onInit();
     }
 
 }
