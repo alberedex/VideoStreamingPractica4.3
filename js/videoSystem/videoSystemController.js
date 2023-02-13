@@ -44,7 +44,7 @@ class VideoSystemController {
         let serie1 = this.#videoSystemModel.getSerie("El vecino", "España", "31/12/2019", "Un vecino superheroe", "/image/portadaVecino.png", [new Resource(32, "/serie/Episode1.mp4"), new Resource(24, "/serie/LaRedSocial.mp4"), new Resource(31, "/serie/dia.mp4")], "", 2);
         let serie2 = this.#videoSystemModel.getSerie("Resident Evil", "Estados Unidos", "14/07/2022", "Un virus mortal causara un apocalipsis global", "/image/portadaREvil.png", [new Resource(60, "/serie/Bienvenidos_a_New_Raccoon_City.mp4"), new Resource(48, "/serie/Lo_malo_conocido.mp4"), new Resource(45, "/serie/La_luz.mp4"), new Resource(53, "/serie/La_transformacion.mp4")], "", 2);
         let serie3 = this.#videoSystemModel.getSerie("Brooklyn Nine-Nine", "Estados Unidos", "17/07/2013", "forman una simpática y poco convencional brigada, pero todo cambia tras la llegada del nuevo jefe, el inflexible Raymond Holt.", "/image/brooklyn99.png", [new Resource(60, "/serie/b99_1.mp4"), new Resource(48, "/serie/b99_2.mp4"), new Resource(45, "/serie/b99_3.mp4"), new Resource(53, "/serie/b99_4.mp4")], "", 9);
-        
+
         let serie4 = this.#videoSystemModel.getSerie("El club de la medianoche", "Estados Unidos", "07/10/2022", "En una mansión con una misteriosa historia, ocho miembros del Midnight Club se reúnen cada noche a la medianoche para contar historias siniestras y buscar señales sobrenaturales del más allá.", "/image/clubMedianoche.png", [new Resource(60, "/serie/clubM_1.mp4"), new Resource(48, "/serie/clubM_2.mp4"), new Resource(45, "/serie/clubM_3.mp4"), new Resource(53, "/serie/clubM_4.mp4")], "", 1);
         let serie5 = this.#videoSystemModel.getSerie("Archivo 81", "Estados Unidos", "14/01/2022", "Un archivista acepta un trabajo restaurando cintas de video dañadas y se ve envuelto en un misterio que involucra al director desaparecido y un culto demoníaco.", "/image/archivo81.png", [new Resource(60, "/serie/a81_1.mp4"), new Resource(48, "/serie/a81_2.mp4"), new Resource(45, "/serie/a81_3.mp4"), new Resource(53, "/serie/a81_4.mp4")], "", 1);
 
@@ -101,7 +101,7 @@ class VideoSystemController {
         let director5 = this.#videoSystemModel.getDirector("Tim", "Miller", "", "10/10/1964", "/director/fotoTimMiller.jpg");
 
         let director6 = this.#videoSystemModel.getDirector("Daniel", "Joshua", "Goor", "10/10/1964", "/director/fotoDanielJoshua.jpg");
-        
+
         let director7 = this.#videoSystemModel.getDirector("Mike", "Flanagan", "", "20/05/1978", "/director/fotoMikeFlanagan.jpg");
         let director8 = this.#videoSystemModel.getDirector("James", "Wan", "", "26/02/1977", "/director/fotoJamesWan.jpg");
 
@@ -171,6 +171,8 @@ class VideoSystemController {
         this.#videoSystemView.init(this.#videoSystemModel.categories, this.#videoSystemModel);
         this.#videoSystemView.showProductionsInit(this.#videoSystemModel.productions);
         this.#videoSystemView.bindCategoriesList(this.handleProductionsCategoryList);
+
+        this.#videoSystemView.bindProductions(this.handleProduction);
     }
 
     handleInit = () => {
@@ -180,6 +182,15 @@ class VideoSystemController {
     handleProductionsCategoryList = (category) => {
         let category1 = this.#videoSystemModel.getCategory(category);
         this.#videoSystemView.listProductions(this.#videoSystemModel.getProductionsCategory(category1), category);
+
+        this.#videoSystemView.bindProductions(this.handleProduction);
+    }
+
+    handleProduction = (production) => {
+
+        console.log(production);
+        let production1 = this.#videoSystemModel.getSerie(production);
+        this.#videoSystemView.showProduction((production1), this.#videoSystemModel.getCast(production1), this.#videoSystemModel.getDirectorsProdutions(production1));
     }
 
 }

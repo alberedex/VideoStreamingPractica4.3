@@ -868,6 +868,23 @@ let VideoSystem = (function () {
                     }
                 }
             }
+            
+            //Devuelve el director de la produccion
+            * getDirectorsProdutions(produccion) {
+                if (!produccion) throw new InvalidValueException("produccion", null);
+
+                let position = this.#getPositionProduction(produccion);
+                if (position >= 0) {
+                    //Recorremos las producciones
+                    for (let director of this.#directors) {
+                        for (const produccionDirector of director.productions) {
+                            if(produccion === produccionDirector){
+                                yield director.director;
+                            }
+                        }
+                    }
+                }
+            }
 
             //Devuelve todas las producciones de una categoria
             * getProductionsCategory(category) {

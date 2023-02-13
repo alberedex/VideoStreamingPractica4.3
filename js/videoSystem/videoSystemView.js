@@ -81,7 +81,7 @@ class VideoSystemView {
         //Titulo principal
         contanier.append('<h1>Producciones:</h1>');
         //Donde se va a contener las producciones con diseño flex
-        let contanierProduciones = $('<div class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
+        let contanierProduciones = $('<div id="productionInit" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
 
         //Generaramos numero aleatorios
         let produccionesA = Array.from(producciones);
@@ -120,7 +120,7 @@ class VideoSystemView {
         this.main.empty(); //borramos el contenido del main
         let contanier = $(`<h1>${title}</h1>`);
 
-        let contanierProduciones = $('<div class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
+        let contanierProduciones = $('<div id="productionCategory" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
 
         this.main.append(contanier);
         for (let production of productions) {
@@ -133,6 +133,90 @@ class VideoSystemView {
                         </div ></a>`);
         }
         this.main.append(contanierProduciones);
+    }
+
+    //Eventos para cuando pulse una categoria tanto en main o en el menu
+    bindProductions(handler) {
+        $('#productionCategory').find('a').click(function (event) {
+            console.log("hola");
+            handler(this.dataset.produccion);
+        });
+        $('#productionInit').find('a').click(function (event) {
+            console.log("hola");
+            handler(this.dataset.produccion);
+        });
+    }
+
+    /**
+     * Al hacer click en una produccion, mostrar la ficha de la produccion
+     */
+    showProduction(production, castIterator, directorIterator) {
+        this.main.empty();
+        let directors = '';
+
+        for (const director of directorIterator) {
+            if (directors) directors += '<br>'; //en caso que haya mas de un director
+            directors += `${director.name} ${director.lastname1} ${director.lastname2}`;
+        }
+
+        let contanier = $('<div class="d-flex flex-column container w-75"></div>');
+        console.log(production);
+        contanier.append(`<div class="d-flex justify-content-center">
+                                    <img src="${production.image}" class="img-fluid rounded-start w-100"  alt="${production.title}">
+                                </div>
+                                <div class="">
+                                    <div class="">
+                                        <h1 class="card-title">${production.title}</h1>
+                                        <div class="d-flex gap-5" id='infoProduction'>
+                                            <p>${production.nationality}</p>
+                                            <p>${production.publication.getFullYear()}</p>
+                                        </div>
+                                        <p class="card-text">${production.synopsis}</p>
+                                        <div class='d-flex gap-5 justify-content-evenly flex-wrap'>
+                                            <div>
+                                                <h5>Director:</h5>
+                                                <p class="card-text">${directors}</p>
+                                            </div>
+                                            <div id='actorsProduction'>
+                                                <h5>Cast:</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`);
+
+
+        //Introducimos el contenedor 
+        this.main.append(contanier);
+
+        //Obtenemos para insertar los actores de la produccion
+        let cast = $('#actorsProduction');
+
+        for (const actor of castIterator) {
+            cast.append(`<a data-actor='${actor.name}-${actor.lastname1}' href='#'>${actor.name} ${actor.lastname1} ${actor.lastname2}</a><br>`);
+        }
+
+        //mostramos contenido segun si es serie o pelicula
+        if (production.constructor.name == 'Serie') {
+            let info = $('#infoProduction');
+
+            info.append(production.seasons + " temporadas");
+
+            let table = $(`<table class="table table-hover"><tbody></tbody></table>`);
+
+            for (const chapter of production.resources) {
+                table.append(`<tr>
+                                <td>${chapter.link}</td>
+                                <td>${chapter.duration}</td>
+                            </tr>`);
+            }
+
+            contanier.append(table);
+        } else {
+
+            //En caso que sea pelicula
+            let info = $('#infoProduction');
+            info.append(production.resource.duration + " min");
+        }
     }
 
 
