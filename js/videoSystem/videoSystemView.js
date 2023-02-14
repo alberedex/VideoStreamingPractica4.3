@@ -120,7 +120,7 @@ class VideoSystemView {
         this.main.empty(); //borramos el contenido del main
         let contanier = $(`<h1>${title}</h1>`);
 
-        let contanierProduciones = $('<div id="productionCategory" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
+        let contanierProduciones = $('<div id="productions" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
 
         this.main.append(contanier);
         for (let production of productions) {
@@ -137,7 +137,7 @@ class VideoSystemView {
 
     //Eventos para cuando pulse una categoria tanto en main o en el menu
     bindProductions(handler) {
-        $('#productionCategory').find('a').click(function (event) {
+        $('#productions').find('a').click(function (event) {
             console.log("hola");
             handler(this.dataset.produccion);
         });
@@ -177,7 +177,7 @@ class VideoSystemView {
                                                 <h5>Director:</h5>
                                                 <p class="card-text">${directors}</p>
                                             </div>
-                                            <div id='actorsProduction'>
+                                            <div id="actorId">
                                                 <h5>Cast:</h5>
                                             </div>
                                         </div>
@@ -189,10 +189,10 @@ class VideoSystemView {
         this.main.append(contanier);
 
         //Obtenemos para insertar los actores de la produccion
-        let cast = $('#actorsProduction');
+        let cast = $('#actorId');
 
         for (const actor of castIterator) {
-            cast.append(`<a data-actor='${actor.name}-${actor.lastname1}' href='#'>${actor.name} ${actor.lastname1} ${actor.lastname2}</a><br>`);
+            cast.append(`<a data-actor='${actor.name}/${actor.lastname1}' href='#'>${actor.name} ${actor.lastname1} ${actor.lastname2}</a><br>`);
         }
 
         //mostramos contenido segun si es serie o pelicula
@@ -217,6 +217,91 @@ class VideoSystemView {
             let info = $('#infoProduction');
             info.append(production.resource.duration + " min");
         }
+    }
+
+    showActorsMenu() {
+        this.menu.append(`<li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="#" data-nav='Actores'>Actores</a>
+        </li>`);
+    }
+
+    bindNav(handler) {
+        this.menu.find('a').click(function (event) {
+            console.log(this.dataset.nav);
+            handler(this.dataset.nav);
+        });
+    }
+
+    showActors(actors) {
+        this.main.empty();
+
+        let contanier = $(`<h1>Actores</h1>`);
+
+        let contanierActor = $('<div id="actorId" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
+
+        this.main.append(contanier);
+        for (let actor of actors) {
+            contanierActor.append(`<a data-actor="${actor.name}/${actor.lastname1}" href='#' ><div class="card" style="width: 18rem;">
+                         <img src="${actor.picture}" class="card-img-top" alt="${actor.name}">
+                             <div class="card-body">
+                                 <h5 class="card-title">${actor.name} ${actor.lastname1}</h5>
+                             </div>
+                        </div ></a>`);
+        }
+        this.main.append(contanierActor);
+
+    }
+
+    //Eventos para cuando pulse en un actor o actriz
+    bindActors(handler) {
+        $('#actorId').find('a').click(function (event) {
+            console.log("hola");
+            handler(this.dataset.actor);
+        });
+    }
+
+    //Donde muestra la ficha del actor
+    showFichaActor(actor, producciones) {
+        this.main.empty();
+
+        let contanier = $('<div class="container h-50"></div>');
+
+        contanier.append(`<div class="row h-50">
+                            <div class="col-md-4 h-50">
+                                    <img src="${actor.picture}" class="img-fluid h-50" alt="${actor.name}">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="">
+                                    <h1 class="card-title">${actor.name} ${actor.lastname1} ${actor.lastname2}</h1>
+                                    <div class="d-flex gap-5" id='infoProduction'>
+                                        <p>${actor.born.toLocaleString()}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`);
+
+        //Introducimos el contenedor 
+        this.main.append(contanier);
+
+        //Mostrar las producciones del actor
+        let produccionesContanier = $('<div id="actorId" class="row col-md-12"></div>');
+        produccionesContanier.append('<h2 class="col">Producciones: </h2>');
+
+        let produccionesCont = $('<div id="productions" class="d-flex gap-5 flex-row flex-wrap"></div>');
+
+        for (const production of producciones) {
+            produccionesCont.append(`<a data-produccion="${production.title}" href='#'>
+            <div class="card" style="width: 18rem;">
+                <img src="${production.image}" class="card-img-top img-fluid" alt="${production.title}">
+                    <div class="card-body">
+                        <h5 class="card-title">${production.title}</h5>
+                    </div>
+           </div></a>`);
+        }
+
+        produccionesContanier.append(produccionesCont);
+
+        contanier.append(produccionesContanier);
     }
 
 
