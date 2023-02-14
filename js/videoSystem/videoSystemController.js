@@ -16,7 +16,8 @@ class VideoSystemController {
         let actor11 = this.#videoSystemModel.getActor("Morena", "Silva", "de Vaz Setta Baccarin", "02/06/1979", "/imagesActor/morenaSilva.jpg"); //Deadpool
 
         let actor5 = this.#videoSystemModel.getActor("Adam", "Richard", "Sandler", "09/09/1966", "/imagesActor/adamRichardSandler.jpg");
-        let actor6 = this.#videoSystemModel.getActor("Jennifer", "Joanna", "Aniston", "11/02/1969", "/imagesActor/jAniston.jpg"); //Murder Mystery
+        let actor6 = this.#videoSystemModel.getActor("Jennifer", "Joanna", "Aniston", "11/02/1969", "/imagesActor/jAniston.jpg"); //Murder Mystery / Love Happens
+        let actor17 = this.#videoSystemModel.getActor("Aaron", "Edward", "Eckhart", "12/03/1968", "/imagesActor/AaronEdwardE.jpg"); //Love Happens
 
         let actor7 = this.#videoSystemModel.getActor("Joaquin", "Gutiérrez", "Ylla", "27/03/1981", "/imagesActor/quimGuti.jpg"); //El vecino
         let actor10 = this.#videoSystemModel.getActor("Adrian", "Pino", "", "03/02/1990", "/imagesActor/adrianPino.jpg"); //El vecino
@@ -31,6 +32,15 @@ class VideoSystemController {
         let actor15 = this.#videoSystemModel.getActor("Dina", "Shihabi", "", "22/09/1989", "/imagesActor/DinaShihabi.jpg"); //Archivo 81
         let actor16 = this.#videoSystemModel.getActor("Mamoudou", "Athie", "", "25/07/1988", "/imagesActor/MamoudouAthie.jpg"); //Archivo 81
 
+        let actor18 = this.#videoSystemModel.getActor("Jennifer", "Lynn", "Affleck", "24/07/1969", "/imagesActor/jenniferLopez.jpg"); //Cásate conmigo
+        let actor19 = this.#videoSystemModel.getActor("Owen", "Cunningham", "Wilson", "18/11/1968", "/imagesActor/owenCunningham.jpg"); //Cásate conmigo
+
+        let actor20 = this.#videoSystemModel.getActor("Mario", "Casas", "Sierra", "12/06/1986", "/imagesActor/MarioCasasS.jpg"); //Palmeras en la Nieve
+        let actor21 = this.#videoSystemModel.getActor("Berta", "Vázquez", "", "28/03/1992", "/imagesActor/BertaVazquez.jpg"); //Palmeras en la Nieve
+
+        let actor22 = this.#videoSystemModel.getActor("Penélope", "Cruz", "Sánchez", "28/04/1974", "/imagesActor/PenelopeCruz.jpg"); //Los abrazos rotos
+        let actor23 = this.#videoSystemModel.getActor("Blanca", "Portillo", "Martínez", "15/06/1963", "/imagesActor/BlancaPortillo.jpg"); //Los abrazos rotos
+
         actor1.picture = "/imagesActor/holhola.jpg";
 
         let category1 = this.#videoSystemModel.getCategory("Comedia", "Obra que presenta una mayoría de escenas y situaciones humorísticas o festivas");
@@ -40,6 +50,11 @@ class VideoSystemController {
         let movie1 = this.#videoSystemModel.getMovie("Los crímenes de la academia", "USA", "23/12/2022", "Un veterano detective", "/image/portada.png", new Resource(85, "/movie/CrimenesDeLaAcademia.mp4"));
         let movie2 = this.#videoSystemModel.getMovie("Murder Mystery", "USA", "14/06/2019", "Un policía de Nueva York y su mujer se van de vacaciones a Europa pero terminan acusados de asesinato", "/image/murderMystery.png", new Resource(97, "/movie/movieMurderM.mp4"));
         let movie3 = this.#videoSystemModel.getMovie("Deadpool", "USA", "12/02/2016", "Wade Wilson, tras ser sometido a un cruel experimento científico, adquiere poderes especiales", "/image/DeadpoolCartel.png", new Resource(109, "/movie/dealpool.mp4"));
+        
+        let movie4 = this.#videoSystemModel.getMovie("Love Happens", "USA", "18/09/2009", "El viudo Burke Ryan es un exitoso autor de libros de autoayuda que enseña cómo enfrentarse al dolor, pero es incapaz de seguir sus propios consejos. En uno de sus seminarios conoce a Eloise, una florista algo desencantada con el amor.", "/image/loveHappens.png", new Resource(90, "/movie/loveHappens.mp4"));
+        let movie5 = this.#videoSystemModel.getMovie("Cásate conmigo", "USA", "11/02/2022", "Una estrella del pop es abandonada por su prometido momentos antes de su boda en el Madison Square Garden, por lo que decide casarse con un hombre seleccionado aleatoriamente entre el público.", "/image/casateConmigo.png", new Resource(112, "/movie/casateConmigo.mp4"));
+        let movie6 = this.#videoSystemModel.getMovie("Palmeras en la Nieve", "España", "09/12/2015", "El descubrimiento de una carta olvidada durante años empuja a Clarence a viajar a Bioko para visitar la tierra en la que su padre Jacobo y su tío Kilian pasaron la mayor parte de su juventud, la isla de Fernando Poo. Allí experimentará la amistad, el amor y el odio, y los contrastes de una vida social ligera y espontánea opuesta a la rigidez de la sociedad española.", "/image/PalmerasEnLaNieve.png", new Resource(163, "/movie/PalmerasEnLaNieve.mp4"));
+        let movie7 = this.#videoSystemModel.getMovie("Los abrazos rotos", "España", "18/03/2009", "Mateo Blanco es un escritor y director de cine que catorce años atrás sufrió un accidente de coche que le dejó ciego. A partir de ese accidente, en el que también murió su mujer, Mateo usa su nombre para firmar como director y el pseudónimo Harry Caine para sus otros trabajos.", "/image/AbrazosRotos.png", new Resource(125, "/movie/AbrazosRotos.mp4"));
 
         let serie1 = this.#videoSystemModel.getSerie("El vecino", "España", "31/12/2019", "Un vecino superheroe", "/image/portadaVecino.png", [new Resource(32, "/serie/Episode1.mp4"), new Resource(24, "/serie/LaRedSocial.mp4"), new Resource(31, "/serie/dia.mp4")], "", 2);
         let serie2 = this.#videoSystemModel.getSerie("Resident Evil", "Estados Unidos", "14/07/2022", "Un virus mortal causara un apocalipsis global", "/image/portadaREvil.png", [new Resource(60, "/serie/Bienvenidos_a_New_Raccoon_City.mp4"), new Resource(48, "/serie/Lo_malo_conocido.mp4"), new Resource(45, "/serie/La_luz.mp4"), new Resource(53, "/serie/La_transformacion.mp4")], "", 2);
@@ -69,6 +84,10 @@ class VideoSystemController {
         this.#videoSystemModel.addProduction(movie1);
         this.#videoSystemModel.addProduction(movie2);
         this.#videoSystemModel.addProduction(movie3);
+        this.#videoSystemModel.addProduction(movie4);
+        this.#videoSystemModel.addProduction(movie5);
+        this.#videoSystemModel.addProduction(movie6);
+        this.#videoSystemModel.addProduction(movie7);
 
         //Series
         this.#videoSystemModel.addProduction(serie1);
@@ -92,6 +111,10 @@ class VideoSystemController {
         this.#videoSystemModel.addActor(actor12);
         this.#videoSystemModel.addActor(actor13);
         this.#videoSystemModel.addActor(actor14);
+        this.#videoSystemModel.addActor(actor18);
+        this.#videoSystemModel.addActor(actor19);
+        this.#videoSystemModel.addActor(actor20);
+        this.#videoSystemModel.addActor(actor21);
 
         let director1 = this.#videoSystemModel.getDirector("Scott", "Cooper", "", "20/05/1970", "/director/fotoScott.jpg");
         let director2 = this.#videoSystemModel.getDirector("Nacho", "Vigalondo", "Palacios", "06/04/1977", "/director/fotoNacho.jpg");
@@ -104,6 +127,10 @@ class VideoSystemController {
 
         let director7 = this.#videoSystemModel.getDirector("Mike", "Flanagan", "", "20/05/1978", "/director/fotoMikeFlanagan.jpg");
         let director8 = this.#videoSystemModel.getDirector("James", "Wan", "", "26/02/1977", "/director/fotoJamesWan.jpg");
+        let director9 = this.#videoSystemModel.getDirector("Brandon", "Camp", "", "25/08/1971", "/director/fotoBrandonCamp.jpg");
+        let director10 = this.#videoSystemModel.getDirector("Kat", "Coiro", "", "10/01/1974", "/director/KatCoiro.jpg");
+        let director11 = this.#videoSystemModel.getDirector("Fernando", "González", "Molina", "10/11/1975", "/director/FernandoGonzalez.jpg");
+        let director12 = this.#videoSystemModel.getDirector("Pedro", "Almodóvar", "Caballero", "25/07/1949", "/director/PedroAlmodovar.jpg");
 
         this.#videoSystemModel.addDirector(director1);
         this.#videoSystemModel.addDirector(director2);
@@ -113,6 +140,10 @@ class VideoSystemController {
         this.#videoSystemModel.addDirector(director6);
         this.#videoSystemModel.addDirector(director7);
         this.#videoSystemModel.addDirector(director8);
+        this.#videoSystemModel.addDirector(director9);
+        this.#videoSystemModel.addDirector(director10);
+        this.#videoSystemModel.addDirector(director11);
+        this.#videoSystemModel.addDirector(director12);
 
         this.#videoSystemModel.assignCategory(category1, serie1, movie2, movie3, serie3);
         //Categoria1 = Comedia = El vecino, Murder Mystery, Deadpool
@@ -120,6 +151,11 @@ class VideoSystemController {
         this.#videoSystemModel.assignCategory(category2, movie1);
         this.#videoSystemModel.assignCategory(category2, serie4);
         this.#videoSystemModel.assignCategory(category2, serie5);
+
+        this.#videoSystemModel.assignCategory(category3, movie4);
+        this.#videoSystemModel.assignCategory(category3, movie5);
+        this.#videoSystemModel.assignCategory(category3, movie6);
+        this.#videoSystemModel.assignCategory(category3, movie7);
 
         this.#videoSystemModel.assignDirector(director1, movie1);
         this.#videoSystemModel.assignDirector(director1, serie1);
@@ -130,6 +166,10 @@ class VideoSystemController {
         this.#videoSystemModel.assignDirector(director6, serie3);
         this.#videoSystemModel.assignDirector(director7, serie4);
         this.#videoSystemModel.assignDirector(director8, serie5);
+        this.#videoSystemModel.assignDirector(director9, movie4);
+        this.#videoSystemModel.assignDirector(director10, movie5);
+        this.#videoSystemModel.assignDirector(director11, movie6);
+        this.#videoSystemModel.assignDirector(director12, movie7);
 
         this.#videoSystemModel.assignActor(actor1, movie1);
         this.#videoSystemModel.assignActor(actor2, movie1);
@@ -148,6 +188,17 @@ class VideoSystemController {
         this.#videoSystemModel.assignActor(actor14, serie4);
         this.#videoSystemModel.assignActor(actor15, serie5);
         this.#videoSystemModel.assignActor(actor16, serie5);
+
+        this.#videoSystemModel.assignActor(actor6, movie4);
+        this.#videoSystemModel.assignActor(actor17, movie4);
+
+        this.#videoSystemModel.assignActor(actor18, movie5);
+        this.#videoSystemModel.assignActor(actor19, movie5);
+
+        this.#videoSystemModel.assignActor(actor20, movie6);
+        this.#videoSystemModel.assignActor(actor21, movie6);
+        this.#videoSystemModel.assignActor(actor22, movie7);
+        this.#videoSystemModel.assignActor(actor23, movie7);
     }
 
     constructor(model, view) {
