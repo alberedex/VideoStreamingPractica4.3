@@ -204,15 +204,20 @@ class VideoSystemController {
         this.onInit();
 
         this.#videoSystemView.bindInit(this.handleInit);
+        this.#videoSystemView.bindInitProduction(this.handleProductionsTypeList);
     }
 
     //Carga inicial de la aplicacion
     onLoad = () => {
         this.#loadVideoSystemObjects();
         this.#videoSystemView.showCategoriesInMenu(this.#videoSystemModel.categories);
+
+        
         this.#videoSystemView.showActorsMenu();
         this.#videoSystemView.bindNavActors(this.handleActoresList);
         this.#videoSystemView.bindNavDirectors(this.handleDirectoresList);
+
+        
     }
 
     //En respuesta a un cambio de datos
@@ -226,6 +231,11 @@ class VideoSystemController {
 
     handleInit = () => {
         this.onInit();
+    }
+
+    handleProductionsTypeList = (type) => {
+        this.#videoSystemView.listProductionsType(this.#videoSystemModel.productions,type);
+        this.#videoSystemView.bindProductions(this.handleProduction);
     }
 
     //Cuando pulsa una categoria

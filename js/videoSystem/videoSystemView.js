@@ -1,15 +1,15 @@
 class VideoSystemView {
 
     #convertMinToHours = (mins) => {
-        let result ='';
+        let result = '';
         let h = Math.floor(mins / 60);
         let m = mins % 60;
-        if(h > 0){
-            if(h<10) '0'+h;
+        if (h > 0) {
+            if (h < 10) '0' + h;
             result += `${h} h `;
         }
-        if(m>0){
-            if(m<10) '0'+m;
+        if (m > 0) {
+            if (m < 10) '0' + m;
             result += `${m} min`;
         }
         return result;
@@ -38,7 +38,7 @@ class VideoSystemView {
             contanier.append(contanierCategoria);
         }
 
-        this.main.append(contanier); 
+        this.main.append(contanier);
     }
     //Eventos Init 
     bindInit(handler) {
@@ -47,6 +47,16 @@ class VideoSystemView {
         });
         $('#logo').click((event) => {
             handler();
+        });
+    }
+
+    bindInitProduction(handler) {
+        console.log($('#peliculasNav'));
+        $('#peliculasNav').click(function (event) {
+            handler(this.dataset.prod);
+        });
+        $('#serieNav').click(function (event) {
+            handler(this.dataset.prod);
         });
     }
 
@@ -87,12 +97,12 @@ class VideoSystemView {
      */
     showProductionsInit(producciones) {
         //Creamos el contenedor principal
-        let contanier = $('<div></div>');
+        let carousel = $('<div id="carouselExampleAutoplaying" class="carousel slide container " data-bs-ride="carousel"></div>');
         //Titulo principal
-        contanier.append('<h1>Producciones:</h1>');
+        // contanier.append('<h1>Producciones:</h1>');
         //Donde se va a contener las producciones con diseño flex
         let contanierProduciones = $('<div id="productionInit" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
-
+        // let carouselInner = $(`<div class="carousel-inner" id="productionInit"></div>`);
         //Generaramos numero aleatorios
         let produccionesA = Array.from(producciones);
         var numbers = [];
@@ -111,7 +121,16 @@ class VideoSystemView {
         for (const number of numbers) {
             let produccion = produccionesA[number];
 
+        //     carouselInner.append(`<div class="carousel-item ">
+            
+        //     <img src="${produccion.image}" class=" " alt="${produccion.title}">
+        //     <div class="carousel-caption d-none d-md-block">
+        //         <h5>${produccion.title}</h5>
+        //         <a data-produccion="${produccion.title}" href='#' class="btn btn-primary">Más información</a>
+        //     </div>
+        //   </div>`);
 
+            //Diseño card
             contanierProduciones.append(`<a data-produccion="${produccion.title}" href='#'><div class="card" style="width: 18rem;">
                          <img src="${produccion.image}" class="card-img-top" alt="${produccion.title}">
                              <div class="card-body">
@@ -119,11 +138,42 @@ class VideoSystemView {
                              </div>
                         </div ></a>`);
         }
+        // carouselInner.children().first().addClass('active');
         //append al contenier las tres cards
-        contanier.append(contanierProduciones);
-
+        carousel.append(contanierProduciones);
+    //     carousel.append(` <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+    //     <span><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+    //     <span class="visually-hidden">Previous</span>
+    //   </button>
+    //   <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+    //     <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    //     <span class="visually-hidden">Next</span>
+    //   </button>`);
         //prepend al principio al main principal del html
-        this.main.prepend(contanier);
+        this.main.prepend(carousel);
+    }
+
+    //Si selecciona pelicula o serie, mostrar solo 
+    listProductionsType(productions, type) {
+        this.main.empty(); //borramos el contenido del main
+
+        let contanier = $(`<h1>${type}s</h1>`);
+
+        let contanierProduciones = $('<div id="productions" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
+
+        this.main.append(contanier);
+        for (let production of productions) {
+            if(production.constructor.name === type){
+                // let contanier = $(`<h1>${production.title}</h1>`);
+                contanierProduciones.append(`<a data-produccion="${production.title}" href='#'><div class="card" style="width: 18rem;">
+                             <img src="${production.image}" class="card-img-top" alt="${production.title}">
+                                 <div class="card-body">
+                                     <h5 class="card-title">${production.title}</h5>
+                                 </div>
+                            </div ></a>`);
+            }
+        }
+        this.main.append(contanierProduciones);
     }
 
     //Si selecciona una categoria, mostras todas las producciones del dicho categoria
