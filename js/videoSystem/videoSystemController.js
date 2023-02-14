@@ -50,7 +50,7 @@ class VideoSystemController {
         let movie1 = this.#videoSystemModel.getMovie("Los crímenes de la academia", "USA", "23/12/2022", "Un veterano detective", "/image/cartel/portada.png", new Resource(85, "/movie/CrimenesDeLaAcademia.mp4"));
         let movie2 = this.#videoSystemModel.getMovie("Murder Mystery", "USA", "14/06/2019", "Un policía de Nueva York y su mujer se van de vacaciones a Europa pero terminan acusados de asesinato", "/image/cartel/murderMystery.png", new Resource(97, "/movie/movieMurderM.mp4"));
         let movie3 = this.#videoSystemModel.getMovie("Deadpool", "USA", "12/02/2016", "Wade Wilson, tras ser sometido a un cruel experimento científico, adquiere poderes especiales", "/image/cartel/DeadpoolCartel.png", new Resource(109, "/movie/dealpool.mp4"));
-        
+
         let movie4 = this.#videoSystemModel.getMovie("Love Happens", "USA", "18/09/2009", "El viudo Burke Ryan es un exitoso autor de libros de autoayuda que enseña cómo enfrentarse al dolor, pero es incapaz de seguir sus propios consejos. En uno de sus seminarios conoce a Eloise, una florista algo desencantada con el amor.", "/image/cartel/loveHappens.png", new Resource(90, "/movie/loveHappens.mp4"));
         let movie5 = this.#videoSystemModel.getMovie("Cásate conmigo", "USA", "11/02/2022", "Una estrella del pop es abandonada por su prometido momentos antes de su boda en el Madison Square Garden, por lo que decide casarse con un hombre seleccionado aleatoriamente entre el público.", "/image/cartel/casateConmigo.png", new Resource(112, "/movie/casateConmigo.mp4"));
         let movie6 = this.#videoSystemModel.getMovie("Palmeras en la Nieve", "España", "09/12/2015", "El descubrimiento de una carta olvidada durante años empuja a Clarence a viajar a Bioko para visitar la tierra en la que su padre Jacobo y su tío Kilian pasaron la mayor parte de su juventud, la isla de Fernando Poo. Allí experimentará la amistad, el amor y el odio, y los contrastes de una vida social ligera y espontánea opuesta a la rigidez de la sociedad española.", "/image/cartel/PalmerasEnLaNieve.png", new Resource(163, "/movie/PalmerasEnLaNieve.mp4"));
@@ -61,7 +61,7 @@ class VideoSystemController {
         let serie3 = this.#videoSystemModel.getSerie("Brooklyn Nine-Nine", "Estados Unidos", "17/07/2013", "forman una simpática y poco convencional brigada, pero todo cambia tras la llegada del nuevo jefe, el inflexible Raymond Holt.", "/image/cartel/brooklyn99.png", [new Resource(60, "/serie/b99_1.mp4"), new Resource(48, "/serie/b99_2.mp4"), new Resource(45, "/serie/b99_3.mp4"), new Resource(53, "/serie/b99_4.mp4")], "", 9);
 
         let serie4 = this.#videoSystemModel.getSerie("El club de la medianoche", "Estados Unidos", "07/10/2022", "En una mansión con una misteriosa historia, ocho miembros del Midnight Club se reúnen cada noche a la medianoche para contar historias siniestras y buscar señales sobrenaturales del más allá.", "/image/cartel/clubMedianoche.png", [new Resource(60, "/serie/clubM_1.mp4"), new Resource(48, "/serie/clubM_2.mp4"), new Resource(45, "/serie/clubM_3.mp4"), new Resource(53, "/serie/clubM_4.mp4")], "", 1);
-        let serie5 = this.#videoSystemModel.getSerie("Archivo 81", "Estados Unidos", "14/01/2022", "Un archivista acepta un trabajo restaurando cintas de video dañadas y se ve envuelto en un misterio que involucra al director desaparecido y un culto demoníaco.", "/image/cartel/archivo81.png", [new Resource(60, "/serie/a81_1.mp4"), new Resource(48, "/serie/a81_2.mp4"), new Resource(45, "/serie/a81_3.mp4"), new Resource(53, "/serie/a81_4.mp4")], "", 1);
+        let serie5 = this.#videoSystemModel.getSerie("Archivo 81", "Estados Unidos", "14/01/2022", "Un archivista acepta un trabajo restaurando cintas de video dañadas y se ve envuelto en un misterio que involucra al director desaparecido y un culto demoníaco.", "/image/cartel/archivo81.png", [new Resource(75, "/serie/a81_1.mp4"), new Resource(48, "/serie/a81_2.mp4"), new Resource(45, "/serie/a81_3.mp4"), new Resource(53, "/serie/a81_4.mp4")], "", 1);
 
         serie2.addResources(new Resource(10, "/serie/insertadoDespues.mp4"));
 
@@ -70,12 +70,7 @@ class VideoSystemController {
         let coor3 = new Coordinate(42.5412, -44.5214);
 
         let user1 = this.#videoSystemModel.getUser("alberedex", "2001rs@gmail.com", "pass1234");
-        let user2 = this.#videoSystemModel.getUser("luciaVillalba", "luciacasa@hotmail.com", "passSupercomplicado");
-        let user3 = this.#videoSystemModel.getUser("Carlos123", "carlos_alvarez@gmail.com", "abcd1234");
-
         this.#videoSystemModel.addUser(user1);
-        this.#videoSystemModel.addUser(user2);
-        this.#videoSystemModel.addUser(user3);
 
         this.#videoSystemModel.addCategory(category1);
         this.#videoSystemModel.addCategory(category2);
@@ -97,40 +92,40 @@ class VideoSystemController {
         this.#videoSystemModel.addProduction(serie5);
 
 
-        this.#videoSystemModel.addActor(actor1);
-        this.#videoSystemModel.addActor(actor2);
-        this.#videoSystemModel.addActor(actor3);
-        this.#videoSystemModel.addActor(actor4);
-        this.#videoSystemModel.addActor(actor5);
-        this.#videoSystemModel.addActor(actor6);
-        this.#videoSystemModel.addActor(actor7);
-        this.#videoSystemModel.addActor(actor8);
-        this.#videoSystemModel.addActor(actor9);
-        this.#videoSystemModel.addActor(actor10);
-        this.#videoSystemModel.addActor(actor11);
-        this.#videoSystemModel.addActor(actor12);
-        this.#videoSystemModel.addActor(actor13);
-        this.#videoSystemModel.addActor(actor14);
-        this.#videoSystemModel.addActor(actor18);
-        this.#videoSystemModel.addActor(actor19);
-        this.#videoSystemModel.addActor(actor20);
-        this.#videoSystemModel.addActor(actor21);
+        // this.#videoSystemModel.addActor(actor1);
+        // this.#videoSystemModel.addActor(actor2);
+        // this.#videoSystemModel.addActor(actor3);
+        // this.#videoSystemModel.addActor(actor4);
+        // this.#videoSystemModel.addActor(actor5);
+        // this.#videoSystemModel.addActor(actor6);
+        // this.#videoSystemModel.addActor(actor7);
+        // this.#videoSystemModel.addActor(actor8);
+        // this.#videoSystemModel.addActor(actor9);
+        // this.#videoSystemModel.addActor(actor10);
+        // this.#videoSystemModel.addActor(actor11);
+        // this.#videoSystemModel.addActor(actor12);
+        // this.#videoSystemModel.addActor(actor13);
+        // this.#videoSystemModel.addActor(actor14);
+        // this.#videoSystemModel.addActor(actor18);
+        // this.#videoSystemModel.addActor(actor19);
+        // this.#videoSystemModel.addActor(actor20);
+        // this.#videoSystemModel.addActor(actor21);
 
-        let director1 = this.#videoSystemModel.getDirector("Scott", "Cooper", "", "20/05/1970", "/director/fotoScott.jpg");
-        let director2 = this.#videoSystemModel.getDirector("Nacho", "Vigalondo", "Palacios", "06/04/1977", "/director/fotoNacho.jpg");
+        let director1 = this.#videoSystemModel.getDirector("Scott", "Cooper", "", "20/05/1970", "/image/director/fotoScott.jpg");
+        let director2 = this.#videoSystemModel.getDirector("Nacho", "Vigalondo", "Palacios", "06/04/1977", "/image/director/fotoNacho.jpg");
 
-        let director3 = this.#videoSystemModel.getDirector("Andrew", "Dabb", "", "25/06/1985", "/director/fotoADabb.jpg");
-        let director4 = this.#videoSystemModel.getDirector("Kyle", "Newacheck", "", "23/01/1984", "/director/fotoKyleN.jpg");
-        let director5 = this.#videoSystemModel.getDirector("Tim", "Miller", "", "10/10/1964", "/director/fotoTimMiller.jpg");
+        let director3 = this.#videoSystemModel.getDirector("Andrew", "Dabb", "", "25/06/1985", "/image/director/fotoADabb.jpg");
+        let director4 = this.#videoSystemModel.getDirector("Kyle", "Newacheck", "", "23/01/1984", "/image/director/fotoKyleN.jpg");
+        let director5 = this.#videoSystemModel.getDirector("Tim", "Miller", "", "10/10/1964", "/image/director/fotoTimMiller.jpg");
 
-        let director6 = this.#videoSystemModel.getDirector("Daniel", "Joshua", "Goor", "10/10/1964", "/director/fotoDanielJoshua.jpg");
+        let director6 = this.#videoSystemModel.getDirector("Daniel", "Joshua", "Goor", "10/10/1964", "/image/director/fotoDanielJoshua.jpg");
 
-        let director7 = this.#videoSystemModel.getDirector("Mike", "Flanagan", "", "20/05/1978", "/director/fotoMikeFlanagan.jpg");
-        let director8 = this.#videoSystemModel.getDirector("James", "Wan", "", "26/02/1977", "/director/fotoJamesWan.jpg");
-        let director9 = this.#videoSystemModel.getDirector("Brandon", "Camp", "", "25/08/1971", "/director/fotoBrandonCamp.jpg");
-        let director10 = this.#videoSystemModel.getDirector("Kat", "Coiro", "", "10/01/1974", "/director/KatCoiro.jpg");
-        let director11 = this.#videoSystemModel.getDirector("Fernando", "González", "Molina", "10/11/1975", "/director/FernandoGonzalez.jpg");
-        let director12 = this.#videoSystemModel.getDirector("Pedro", "Almodóvar", "Caballero", "25/07/1949", "/director/PedroAlmodovar.jpg");
+        let director7 = this.#videoSystemModel.getDirector("Mike", "Flanagan", "", "20/05/1978", "/image/director/fotoMikeFlanagan.jpg");
+        let director8 = this.#videoSystemModel.getDirector("James", "Wan", "", "26/02/1977", "/image/director/fotoJamesWan.jpg");
+        let director9 = this.#videoSystemModel.getDirector("Brandon", "Camp", "", "25/08/1971", "/image/director/fotoBrandonCamp.jpg");
+        let director10 = this.#videoSystemModel.getDirector("Kat", "Coiro", "", "10/01/1974", "/image/director/KatCoiro.jpg");
+        let director11 = this.#videoSystemModel.getDirector("Fernando", "González", "Molina", "10/11/1975", "/image/director/FernandoGonzalez.jpg");
+        let director12 = this.#videoSystemModel.getDirector("Pedro", "Almodóvar", "Caballero", "25/07/1949", "/image/director/PedroAlmodovar.jpg");
 
         this.#videoSystemModel.addDirector(director1);
         this.#videoSystemModel.addDirector(director2);
@@ -216,7 +211,8 @@ class VideoSystemController {
         this.#loadVideoSystemObjects();
         this.#videoSystemView.showCategoriesInMenu(this.#videoSystemModel.categories);
         this.#videoSystemView.showActorsMenu();
-        this.#videoSystemView.bindNav(this.handleNav);
+        this.#videoSystemView.bindNavActors(this.handleActoresList);
+        this.#videoSystemView.bindNavDirectors(this.handleDirectoresList);
     }
 
     //En respuesta a un cambio de datos
@@ -235,7 +231,7 @@ class VideoSystemController {
     //Cuando pulsa una categoria
     handleProductionsCategoryList = (category) => {
         let category1 = this.#videoSystemModel.getCategory(category);
-        this.#videoSystemView.listProductions(this.#videoSystemModel.getProductionsCategory(category1), category);
+        this.#videoSystemView.listProductions(this.#videoSystemModel.getProductionsCategory(category1), category1);
 
         this.#videoSystemView.bindProductions(this.handleProduction); //Cuando pulse en una categoria, lanzar el bind para las producciones de la categoria
     }
@@ -246,22 +242,35 @@ class VideoSystemController {
         let production1 = this.#videoSystemModel.getSerie(production);
         this.#videoSystemView.showProduction((production1), this.#videoSystemModel.getCast(production1), this.#videoSystemModel.getDirectorsProdutions(production1));
         this.#videoSystemView.bindActors(this.handleActor);
+        this.#videoSystemView.bindDirectores(this.handleDirector);
     }
-    
-    //Cuando pulsa un elemento de nav
-    handleNav = (element) => {
-        if(element == 'Actores'){
-            this.#videoSystemView.showActors(this.#videoSystemModel.actors);
-            this.#videoSystemView.bindActors(this.handleActor);
-        }
+
+    handleActoresList = () => {
+        this.#videoSystemView.showPersonsList(this.#videoSystemModel.actors, "actor");
+        this.#videoSystemView.bindActors(this.handleActor);
+    }
+
+    handleDirectoresList = () => {
+        this.#videoSystemView.showPersonsList(this.#videoSystemModel.directors, "director");
+        this.#videoSystemView.bindDirectores(this.handleDirector);
     }
 
     //Cuando pulse en un actor
     handleActor = (actorSelec) => {
         actorSelec = actorSelec.split('/');
-        let actor = this.#videoSystemModel.getActor(actorSelec[0],actorSelec[1]);
+        let actor = this.#videoSystemModel.getActor(actorSelec[0], actorSelec[1]);
         console.log(actor);
-        this.#videoSystemView.showFichaActor(actor,this.#videoSystemModel.getProdutionsActor(actor));
+        this.#videoSystemView.showFichaActor(actor, this.#videoSystemModel.getProdutionsActor(actor));
+
+        this.#videoSystemView.bindProductions(this.handleProduction);
+    }
+
+    //Cuando pulse en un director
+    handleDirector = (directorSelec) => {
+        directorSelec = directorSelec.split('/');
+        let director = this.#videoSystemModel.getDirector(directorSelec[0], directorSelec[1]);
+        console.log(director);
+        this.#videoSystemView.showFichaDirector(director, this.#videoSystemModel.getProductionsDirector(director));
 
         this.#videoSystemView.bindProductions(this.handleProduction);
     }
