@@ -31,9 +31,11 @@ class VideoSystemView {
         //iterar cada categoria 
         for (let categoria of categories) {
 
-            contanierCategoria.append(`<a data-category="${categoria.name}" href="#categorylist">
+            contanierCategoria.append(`<div class="card">
+            <div class="card-body"><a data-category="${categoria.name}" href="#categorylist">
                                             <h1 class="h2">${categoria.name}</h1>
-                                        </a>`);
+                                        </a> </div>
+                                        </div>`);
 
             contanier.append(contanierCategoria);
         }
@@ -97,12 +99,12 @@ class VideoSystemView {
      */
     showProductionsInit(producciones) {
         //Creamos el contenedor principal
-        let carousel = $('<div id="carouselExampleAutoplaying" class="carousel slide container " data-bs-ride="carousel"></div>');
+        let carousel = $('<div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel"></div>');
         //Titulo principal
         // contanier.append('<h1>Producciones:</h1>');
         //Donde se va a contener las producciones con diseño flex
-        let contanierProduciones = $('<div id="productionInit" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
-        // let carouselInner = $(`<div class="carousel-inner" id="productionInit"></div>`);
+        // let contanierProduciones = $('<div id="productionInit" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
+        let carouselInner = $(`<div class="carousel-inner" id="productionInit"></div>`);
         //Generaramos numero aleatorios
         let produccionesA = Array.from(producciones);
         var numbers = [];
@@ -121,34 +123,35 @@ class VideoSystemView {
         for (const number of numbers) {
             let produccion = produccionesA[number];
 
-        //     carouselInner.append(`<div class="carousel-item ">
+            carouselInner.append(`<div class="carousel-item ">
             
-        //     <img src="${produccion.image}" class=" " alt="${produccion.title}">
-        //     <div class="carousel-caption d-none d-md-block">
-        //         <h5>${produccion.title}</h5>
-        //         <a data-produccion="${produccion.title}" href='#' class="btn btn-primary">Más información</a>
-        //     </div>
-        //   </div>`);
-
+            <div style='background-image:url(${produccion.image});' class=""  alt="${produccion.title}"></div>
+            <div class="carousel-caption d-none d-md-block">
+                <h5>${produccion.title}</h5>
+                <a data-produccion="${produccion.title}" href='#' class="btn btn-primary">Más información</a>
+            </div>
+          </div>`);
+            //d-none
             //Diseño card
-            contanierProduciones.append(`<a data-produccion="${produccion.title}" href='#'><div class="card" style="width: 18rem;">
-                         <img src="${produccion.image}" class="card-img-top" alt="${produccion.title}">
-                             <div class="card-body">
-                                 <h5 class="card-title">${produccion.title}</h5>
-                             </div>
-                        </div ></a>`);
+            // contanierProduciones.append(`<a data-produccion="${produccion.title}" href='#'><div class="card" style="width: 18rem;">
+            //              <img src="${produccion.image}" class="card-img-top" alt="${produccion.title}">
+            //                  <div class="card-body">
+            //                      <h5 class="card-title">${produccion.title}</h5>
+            //                  </div>
+            //             </div ></a>`);
         }
-        // carouselInner.children().first().addClass('active');
+        carouselInner.children().first().addClass('active');
         //append al contenier las tres cards
-        carousel.append(contanierProduciones);
-    //     carousel.append(` <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-    //     <span><i class="fa fa-angle-left" aria-hidden="true"></i></span>
-    //     <span class="visually-hidden">Previous</span>
-    //   </button>
-    //   <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-    //     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    //     <span class="visually-hidden">Next</span>
-    //   </button>`);
+        // carousel.append(contanierProduciones);
+        carousel.append(carouselInner);
+        carousel.append(` <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>`);
         //prepend al principio al main principal del html
         this.main.prepend(carousel);
     }
