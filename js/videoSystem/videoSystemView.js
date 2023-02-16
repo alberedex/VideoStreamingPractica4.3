@@ -126,7 +126,7 @@ class VideoSystemView {
             carouselInner.append(`<div class="carousel-item ">
             
             <div style='background-image:url(${produccion.image});' class=""  alt="${produccion.title}"></div>
-            <div class="carousel-caption d-none d-md-block">
+            <div class="carousel-caption d-md-block">
                 <h5>${produccion.title}</h5>
                 <a data-produccion="${produccion.title}" href='#' class="btn btn-primary">Más información</a>
             </div>
