@@ -31,6 +31,10 @@
     box-shadow: 0px 15px 10px -15px #111;
 }
 
+a{
+    text-decoration: none;
+}
+
 
 @media (max-width: 768px) {
     .carousel-item>div {

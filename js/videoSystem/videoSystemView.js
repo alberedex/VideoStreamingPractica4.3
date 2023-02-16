@@ -25,8 +25,11 @@ class VideoSystemView {
         this.main.empty(); //Vaciamos el main
 
         let contanier = $('<div id="category-list" class="container"></div>');
-        contanier.html('<h2>Categorias:</h2>');
+        let titleCategories = $('<h2>Categorias:</h2>');
+        titleCategories.addClass('mt-5 mb-3');
 
+        contanier.append(titleCategories);
+        
         let contanierCategoria = $('<div class="d-flex flex-row flex-wrap justify-content-evenly"></div>');
         //iterar cada categoria 
         for (let categoria of categories) {
@@ -50,6 +53,11 @@ class VideoSystemView {
         $('#logo').click((event) => {
             handler();
         });
+        //Evento cuando tenga el menu collapse, al hacer click , oculte la nav despelgada
+        $('.collapse-link').click(function() {
+            $('.navbar-collapse').collapse('hide');
+          });
+        
     }
 
     bindInitProduction(handler) {
@@ -68,7 +76,7 @@ class VideoSystemView {
     */
     showCategoriesInMenu(categories) {
         let li = $(`<li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navCats" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-has-popup="true">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navCats" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-has-popup="true">
 		                    Categorías
 		                </a>
 		            </li>`);
@@ -76,7 +84,7 @@ class VideoSystemView {
         let container = $('<div class="dropdown-menu" aria-labelledby="navCats" id="category-list-menu"></div>');
 
         for (let category of categories) {
-            container.append(`<a data-category="${category.name}" class="dropdown-item" href="#">
+            container.append(`<a data-category="${category.name}" class="dropdown-item collapse-link" href="#">
                                 ${category.name}
                             </a>`);
         }
@@ -181,23 +189,31 @@ class VideoSystemView {
 
     //Si selecciona una categoria, mostras todas las producciones del dicho categoria
     listProductions(productions, category) {
-        this.main.empty(); //borramos el contenido del main
+        // this.main.children()[1].remove(); //borramos el contenido del main
+        this.main.empty();
+        let contanierPrincipal = $('<div></div>');
+        contanierPrincipal.addClass('container');
 
-        let contanier = $(`<h1>${category.name}</h1><p>${category.description}</p>`);
+        contanierPrincipal.append(`<h1>${category.name}</h1><p>${category.description}</p>`);
 
         let contanierProduciones = $('<div id="productions" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
 
-        this.main.append(contanier);
         for (let production of productions) {
             // let contanier = $(`<h1>${production.title}</h1>`);
             contanierProduciones.append(`<a data-produccion="${production.title}" href='#'><div class="card" style="width: 18rem;">
                          <img src="${production.image}" class="card-img-top" alt="${production.title}">
                              <div class="card-body">
                                  <h5 class="card-title">${production.title}</h5>
+                                 <p class="card-text"><small class="text-muted">${production.publication.getFullYear()}</small></p>
                              </div>
                         </div ></a>`);
         }
-        this.main.append(contanierProduciones);
+        contanierPrincipal.append(contanierProduciones);
+        this.main.append(contanierPrincipal);
+
+        let lengthArray = contanierProduciones.children().length;
+        let positionRan = (Math.floor(Math.random() * lengthArray) + 0);
+        console.log(positionRan);
     }
 
     //Eventos para cuando pulse una categoria tanto en main o en el menu
@@ -213,7 +229,7 @@ class VideoSystemView {
     }
 
     /**
-     * Al hacer click en una produccion, mostrar la ficha de la produccion
+     * FICHA DE LA PRODUCCION 
      */
     showProduction(production, castIterator, directorIterator) {
         this.main.empty();
@@ -313,11 +329,13 @@ class VideoSystemView {
     showPersonsList(persons, type) {
         this.main.empty();
 
-        let contanier = $(`<h1>${type}es</h1>`);
+        let contanierPrincipal = $('<div></div>');
+        contanierPrincipal.addClass('container');
+
+        contanierPrincipal.append(`<h1>${type}es</h1>`);
 
         let contanierPerson = $(`<div id="${type}Id" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>`);
 
-        this.main.append(contanier);
         for (let person of persons) {
             contanierPerson.append(`<a data-${type}="${person.name}/${person.lastname1}" href='#' ><div class="card" style="width: 18rem;">
                          <img src="${person.picture}" class="card-img-top" alt="${person.name}">
@@ -326,7 +344,8 @@ class VideoSystemView {
                              </div>
                         </div ></a>`);
         }
-        this.main.append(contanierPerson);
+        contanierPrincipal.append(contanierPerson);
+        this.main.append(contanierPrincipal);
 
     }
 
