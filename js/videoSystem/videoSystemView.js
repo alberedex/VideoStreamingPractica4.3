@@ -24,21 +24,23 @@ class VideoSystemView {
     init(categories) {
         this.main.empty(); //Vaciamos el main
 
-        let contanier = $('<div id="category-list" class="container"></div>');
+        let contanier = $('<div id="category-list" class=""></div>');
         let titleCategories = $('<h2>Categorias:</h2>');
-        titleCategories.addClass('mt-5 mb-3');
+        titleCategories.addClass('mt-5 mb-3 p-5');
 
         contanier.append(titleCategories);
-        
+
         let contanierCategoria = $('<div class="d-flex flex-row flex-wrap justify-content-evenly"></div>');
         //iterar cada categoria 
         for (let categoria of categories) {
 
             contanierCategoria.append(`<div class="card">
-            <div class="card-body"><a data-category="${categoria.name}" href="#categorylist">
-                                            <h1 class="h2">${categoria.name}</h1>
-                                        </a> </div>
-                                        </div>`);
+                                        <div class="card-body">
+                                            <a data-category="${categoria.name}" href="#">
+                                                <h1 class="h2">${categoria.name}</h1>
+                                            </a>
+                                        </div>
+                                     </div>`);
 
             contanier.append(contanierCategoria);
         }
@@ -54,10 +56,10 @@ class VideoSystemView {
             handler();
         });
         //Evento cuando tenga el menu collapse, al hacer click , oculte la nav despelgada
-        $('.collapse-link').click(function() {
+        $('.collapse-link').click(function () {
             $('.navbar-collapse').collapse('hide');
-          });
-        
+        });
+
     }
 
     bindInitProduction(handler) {
@@ -102,6 +104,27 @@ class VideoSystemView {
         });
     }
 
+    showActorsMenu() {
+        this.menu.append(`<li class="nav-item">
+                            <a class="nav-link active collapse-link" aria-current="page" href="#" data-nav='Actores'>Actores</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active collapse-link" aria-current="page" href="#" data-nav='Directores'>Directores</a>
+                        </li>`);
+    }
+
+    bindNavActors(handler) {
+        this.menu.find('a[data-nav="Actores"]').click(function (event) {
+            handler(this.dataset.nav);
+        });
+    }
+
+    bindNavDirectors(handler) {
+        this.menu.find('a[data-nav="Directores"]').click(function (event) {
+            handler(this.dataset.nav);
+        });
+    }
+
     /**
      * Mostrar 3 producciones de forma aleatoria 
      */
@@ -133,10 +156,10 @@ class VideoSystemView {
 
             carouselInner.append(`<div class="carousel-item ">
             
-            <div style='background-image:url(${produccion.image});' class=""  alt="${produccion.title}"></div>
+            <div style='background-image:url(${produccion.image});' alt="${produccion.title}"></div>
             <div class="carousel-caption d-md-block">
                 <h5>${produccion.title}</h5>
-                <a data-produccion="${produccion.title}" href='#' class="btn btn-primary">Más información</a>
+                <a data-produccion="${produccion.title}" href='#' class="btn btn-primary">Más info</a>
             </div>
           </div>`);
             //d-none
@@ -153,13 +176,13 @@ class VideoSystemView {
         // carousel.append(contanierProduciones);
         carousel.append(carouselInner);
         carousel.append(` <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>`);
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Next</span>
+                        </button>`);
         //prepend al principio al main principal del html
         this.main.prepend(carousel);
     }
@@ -168,23 +191,27 @@ class VideoSystemView {
     listProductionsType(productions, type) {
         this.main.empty(); //borramos el contenido del main
 
-        let contanier = $(`<h1>${type}s</h1>`);
+        let contanierPrincipal = $('<div></div>');
+        contanierPrincipal.addClass('container');
+        contanierPrincipal.append(`<h1>${type}s</h1>`);
 
         let contanierProduciones = $('<div id="productions" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
 
-        this.main.append(contanier);
         for (let production of productions) {
-            if(production.constructor.name === type){
+            if (production.constructor.name === type) {
                 // let contanier = $(`<h1>${production.title}</h1>`);
-                contanierProduciones.append(`<a data-produccion="${production.title}" href='#'><div class="card" style="width: 18rem;">
-                             <img src="${production.image}" class="card-img-top" alt="${production.title}">
-                                 <div class="card-body">
-                                     <h5 class="card-title">${production.title}</h5>
-                                 </div>
-                            </div ></a>`);
+                contanierProduciones.append(`<a data-produccion="${production.title}" href='#'>
+                                                <div class="card" style="width: 18rem;">
+                                                    <img src="${production.image}" class="card-img-top" alt="${production.title}">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">${production.title}</h5>
+                                                    </div>
+                                                </div>
+                                            </a>`);
             }
         }
-        this.main.append(contanierProduciones);
+        contanierPrincipal.append(contanierProduciones);
+        this.main.append(contanierPrincipal);
     }
 
     //Si selecciona una categoria, mostras todas las producciones del dicho categoria
@@ -200,17 +227,20 @@ class VideoSystemView {
 
         for (let production of productions) {
             // let contanier = $(`<h1>${production.title}</h1>`);
-            contanierProduciones.append(`<a data-produccion="${production.title}" href='#'><div class="card" style="width: 18rem;">
-                         <img src="${production.image}" class="card-img-top" alt="${production.title}">
-                             <div class="card-body">
-                                 <h5 class="card-title">${production.title}</h5>
-                                 <p class="card-text"><small class="text-muted">${production.publication.getFullYear()}</small></p>
-                             </div>
-                        </div ></a>`);
+            contanierProduciones.append(`<a data-produccion="${production.title}" href='#'>
+                                          <div class="card" style="width: 18rem;">
+                                            <img src="${production.image}" class="card-img-top" alt="${production.title}">
+                                                 <div class="card-body">
+                                                     <h5 class="card-title">${production.title}</h5>
+                                                     <p class="card-text"><small class="text-muted">${production.publication.getFullYear()}</small></p>
+                                                 </div>
+                                            </div></a>`);
         }
         contanierPrincipal.append(contanierProduciones);
         this.main.append(contanierPrincipal);
-
+        /**
+         * PREGUNTAR
+         */
         let lengthArray = contanierProduciones.children().length;
         let positionRan = (Math.floor(Math.random() * lengthArray) + 0);
         console.log(positionRan);
@@ -249,10 +279,10 @@ class VideoSystemView {
                                         </div>
                                         <p class="card-text">${production.synopsis}</p>
                                         <div id='infoPersons' class='d-flex gap-5 justify-content-evenly flex-wrap'>
-                                            <div id="directorId">
+                                            <div id="DirectoresId">
                                                 <h5>Director:</h5>
                                             </div>
-                                            <div id="actorId">
+                                            <div id="ActoresId">
                                                 <h5>Cast:</h5>
                                             </div>
                                         </div>
@@ -270,11 +300,11 @@ class VideoSystemView {
 
 
         for (const director of directorIterator) {
-            directors.append(`<a data-director='${director.name}/${director.lastname1}' href='#'>${director.name} ${director.lastname1} ${director.lastname2}</a><br>`);
+            directors.append(`<a data-directores='${director.name}/${director.lastname1}' href='#'>${director.name} ${director.lastname1} ${director.lastname2}</a><br>`);
         }
 
         for (const actor of castIterator) {
-            cast.append(`<a data-actor='${actor.name}/${actor.lastname1}' href='#'>${actor.name} ${actor.lastname1} ${actor.lastname2}</a><br>`);
+            cast.append(`<a data-actores='${actor.name}/${actor.lastname1}' href='#'>${actor.name} ${actor.lastname1} ${actor.lastname2}</a><br>`);
         }
 
         //mostramos contenido segun si es serie o pelicula
@@ -284,8 +314,9 @@ class VideoSystemView {
             info.append(production.seasons + " temporadas");
 
             let table = $(`<table class="table table-hover"><tbody></tbody></table>`);
+            let indice = 0;
+            for (let chapter of production.resources) {
 
-            for (let [indice, chapter] of production.resources.entries()) {
                 table.append(`<tr>
                                 <th>${++indice}</th>
                                 <td>${chapter.link}</td>
@@ -298,41 +329,23 @@ class VideoSystemView {
 
             //En caso que sea pelicula
             let info = $('#infoProduction');
-            info.append(production.resource.duration + " min");
+            info.append(this.#convertMinToHours(production.resource.duration));
         }
     }
 
-    showActorsMenu() {
-        this.menu.append(`<li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#" data-nav='Actores'>Actores</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#" data-nav='Directores'>Directores</a>
-                        </li>`);
-    }
 
-    bindNavActors(handler) {
-        this.menu.find('a[data-nav="Actores"]').click(function (event) {
-            console.log(this.dataset.nav);
-            handler(this.dataset.nav);
-        });
-    }
-
-    bindNavDirectors(handler) {
-        this.menu.find('a[data-nav="Directores"]').click(function (event) {
-            console.log(this.dataset.nav);
-            handler(this.dataset.nav);
-        });
-    }
-
-
+    /**
+     * Mostrar la lista de todos los actores/directores registrados
+     * @param {*} persons Iterator de Person
+     * @param {*} type Filtrar por Actor o Director
+     */
     showPersonsList(persons, type) {
         this.main.empty();
 
         let contanierPrincipal = $('<div></div>');
         contanierPrincipal.addClass('container');
 
-        contanierPrincipal.append(`<h1>${type}es</h1>`);
+        contanierPrincipal.append(`<h1>${type}</h1>`);
 
         let contanierPerson = $(`<div id="${type}Id" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>`);
 
@@ -351,21 +364,25 @@ class VideoSystemView {
 
     //Eventos para cuando pulse en un actor o actriz
     bindActors(handler) {
-        $('#actorId').find('a').click(function (event) {
+        $('#ActoresId').find('a').click(function (event) {
             console.log("hola");
-            handler(this.dataset.actor);
+            handler(this.dataset.actores);
         });
     }
 
     //Eventos para cuando pulse en un director
     bindDirectores(handler) {
-        $('#directorId').find('a').click(function (event) {
+        $('#DirectoresId').find('a').click(function (event) {
             console.log("hola");
-            handler(this.dataset.director);
+            handler(this.dataset.directores);
         });
     }
 
-    //Donde muestra la ficha del actor
+    /**
+     * Donde muestra la ficha del actor
+     * @param {*} actor Objeto Person
+     * @param {*} producciones Iterator de las producciones realizadas por el actor/actriz
+     */
     showFichaActor(actor, producciones) {
         this.main.empty();
 
@@ -409,7 +426,12 @@ class VideoSystemView {
         contanier.append(produccionesContanier);
     }
 
-    //Donde muestra la ficha del director
+
+    /**
+    * Donde muestra la ficha del director
+    * @param {*} director Objeto Person
+    * @param {*} producciones Iterator de las producciones realizadas por el director/a
+    */
     showFichaDirector(director, producciones) {
         this.main.empty();
 

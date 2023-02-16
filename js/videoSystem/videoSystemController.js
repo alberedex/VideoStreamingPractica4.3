@@ -255,13 +255,13 @@ class VideoSystemController {
         this.#videoSystemView.bindDirectores(this.handleDirector);
     }
 
-    handleActoresList = () => {
-        this.#videoSystemView.showPersonsList(this.#videoSystemModel.actors, "actor");
+    handleActoresList = (type) => {
+        this.#videoSystemView.showPersonsList(this.#videoSystemModel.actors, type);
         this.#videoSystemView.bindActors(this.handleActor);
     }
 
-    handleDirectoresList = () => {
-        this.#videoSystemView.showPersonsList(this.#videoSystemModel.directors, "director");
+    handleDirectoresList = (type) => {
+        this.#videoSystemView.showPersonsList(this.#videoSystemModel.directors, type);
         this.#videoSystemView.bindDirectores(this.handleDirector);
     }
 
