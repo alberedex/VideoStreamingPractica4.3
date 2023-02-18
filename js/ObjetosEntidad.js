@@ -8,7 +8,7 @@ import {
 
 //Elementos comunes para los objetos 
 const DATE_EXPR = /^(([0-2]{1}\d{1})|(3{1}[0-1]{1}))\/(([0]{1}[1-9]{1})|(1{1}[0-2]{1}))\/\d{4}$/;
-const RUTA_EXPR = /^(\/[a-zA-Z0-9_.$%._\+~#]+){1,}(\/[a-zA-Z0-9_.$%._\+~#]+){1,}\.[a-zA-Z0-9]{2,4}$/;
+const RUTA_EXPR = /^([a-zA-Z0-9_.$%._\+~#]+){1,}(\/[a-zA-Z0-9_.$%._\+~#]+){1,}\.[a-zA-Z0-9]{2,4}$/;
 
 //Elementos para el objeto User
 const EXPR_EMAIL = /^\w{1,}\@{1}\w{1,}\.{1}\w{2,}$/;

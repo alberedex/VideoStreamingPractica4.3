@@ -188,7 +188,7 @@ class VideoSystemView {
         let contanierProduciones = $('<div id="productions" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
 
         for (let production of productions) {
-            // let contanier = $(`<h1>${production.title}</h1>`);
+
             contanierProduciones.append(`<a data-produccion="${production.title}" href='#'>
                                           <div class="card" style="width: 18rem;">
                                             <img src="${production.image}" class="card-img-top" alt="${production.title}">
