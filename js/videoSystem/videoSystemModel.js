@@ -822,6 +822,24 @@ let VideoSystem = (function () {
                 return user;
 
             }
+            
+            //Metodo donde devuelve la produccion
+            getProduction(title) {
+                //Validar datos de entrada, antes de realizar la busqueda
+                if (!title) throw new InvalidValueException("title", title);
+
+                let position = this.#productions.findIndex((proElement) => proElement.title === title);
+
+                let production = 0;
+
+                if (position !== -1) {
+
+                    //En caso que exista, devolver
+                    production = this.#productions[position];
+                }
+                //Devolvemos el objeto
+                return production;
+            }
 
             //getCast
             //Devuelve todos los actores que tiene una relacion con una produccion

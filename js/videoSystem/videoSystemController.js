@@ -47,7 +47,7 @@ class VideoSystemController {
         let category2 = this.#videoSystemModel.getCategory("Terror", "Al espectador sensaciones de pavor, terror, miedo, disgusto, repugnancia, horror, incomodidad o preocupación.");
         let category3 = this.#videoSystemModel.getCategory("Románticas", "es un género cinematográfico que se caracteriza por retratar argumentos construidos de eventos y personajes relacionados con la expresión del amor y las relaciones románticas.");
 
-        let movie1 = this.#videoSystemModel.getMovie("Los crímenes de la academia", "USA", "23/12/2022", "Un veterano detective", "/image/cartel/portada.png", new Resource(85, "/movie/CrimenesDeLaAcademia.mp4"));
+        let movie1 = this.#videoSystemModel.getMovie("Los crímenes de la academia", "USA", "23/12/2022", "Historia ambientada en 1830 sobre un veterano detective, Augustus Landor, que intenta resolver unos asesinatos cometidos en West Point con la ayuda de un joven cadete al que el mundo conocería luego como Edgar Allan Poe.", "/image/cartel/portada.png", new Resource(85, "/movie/CrimenesDeLaAcademia.mp4"));
         let movie2 = this.#videoSystemModel.getMovie("Murder Mystery", "USA", "14/06/2019", "Un policía de Nueva York y su mujer se van de vacaciones a Europa pero terminan acusados de asesinato", "/image/cartel/murderMystery.png", new Resource(97, "/movie/movieMurderM.mp4"));
         let movie3 = this.#videoSystemModel.getMovie("Deadpool", "USA", "12/02/2016", "Wade Wilson, tras ser sometido a un cruel experimento científico, adquiere poderes especiales", "/image/cartel/DeadpoolCartel.png", new Resource(109, "/movie/dealpool.mp4"));
 
@@ -92,24 +92,27 @@ class VideoSystemController {
         this.#videoSystemModel.addProduction(serie5);
 
 
-        // this.#videoSystemModel.addActor(actor1);
-        // this.#videoSystemModel.addActor(actor2);
-        // this.#videoSystemModel.addActor(actor3);
-        // this.#videoSystemModel.addActor(actor4);
-        // this.#videoSystemModel.addActor(actor5);
-        // this.#videoSystemModel.addActor(actor6);
-        // this.#videoSystemModel.addActor(actor7);
-        // this.#videoSystemModel.addActor(actor8);
-        // this.#videoSystemModel.addActor(actor9);
-        // this.#videoSystemModel.addActor(actor10);
-        // this.#videoSystemModel.addActor(actor11);
-        // this.#videoSystemModel.addActor(actor12);
-        // this.#videoSystemModel.addActor(actor13);
-        // this.#videoSystemModel.addActor(actor14);
-        // this.#videoSystemModel.addActor(actor18);
-        // this.#videoSystemModel.addActor(actor19);
-        // this.#videoSystemModel.addActor(actor20);
-        // this.#videoSystemModel.addActor(actor21);
+        this.#videoSystemModel.addActor(actor1);
+        this.#videoSystemModel.addActor(actor2);
+        this.#videoSystemModel.addActor(actor3);
+        this.#videoSystemModel.addActor(actor4);
+        this.#videoSystemModel.addActor(actor5);
+        this.#videoSystemModel.addActor(actor6);
+        this.#videoSystemModel.addActor(actor7);
+        this.#videoSystemModel.addActor(actor8);
+        this.#videoSystemModel.addActor(actor9);
+        this.#videoSystemModel.addActor(actor10);
+        this.#videoSystemModel.addActor(actor11);
+        this.#videoSystemModel.addActor(actor12);
+        this.#videoSystemModel.addActor(actor13);
+        this.#videoSystemModel.addActor(actor14);
+        this.#videoSystemModel.addActor(actor15);
+        this.#videoSystemModel.addActor(actor16);
+        this.#videoSystemModel.addActor(actor17);
+        this.#videoSystemModel.addActor(actor18);
+        this.#videoSystemModel.addActor(actor19);
+        this.#videoSystemModel.addActor(actor20);
+        this.#videoSystemModel.addActor(actor21);
 
         let director1 = this.#videoSystemModel.getDirector("Scott", "Cooper", "", "20/05/1970", "/image/director/fotoScott.jpg");
         let director2 = this.#videoSystemModel.getDirector("Nacho", "Vigalondo", "Palacios", "06/04/1977", "/image/director/fotoNacho.jpg");
@@ -204,20 +207,16 @@ class VideoSystemController {
         this.onInit();
 
         this.#videoSystemView.bindInit(this.handleInit);
-        this.#videoSystemView.bindInitProduction(this.handleProductionsTypeList);
     }
 
     //Carga inicial de la aplicacion
     onLoad = () => {
         this.#loadVideoSystemObjects();
         this.#videoSystemView.showCategoriesInMenu(this.#videoSystemModel.categories);
-
         
-        this.#videoSystemView.showActorsMenu();
-        this.#videoSystemView.bindNavActors(this.handleActoresList);
-        this.#videoSystemView.bindNavDirectors(this.handleDirectoresList);
-
-        
+        this.#videoSystemView.showPersonsMenu();
+        this.#videoSystemView.bindActorsList(this.handleActoresList);
+        this.#videoSystemView.bindDirectorsList(this.handleDirectoresList);
     }
 
     //En respuesta a un cambio de datos
@@ -233,11 +232,6 @@ class VideoSystemController {
         this.onInit();
     }
 
-    handleProductionsTypeList = (type) => {
-        this.#videoSystemView.listProductionsType(this.#videoSystemModel.productions,type);
-        this.#videoSystemView.bindProductions(this.handleProduction);
-    }
-
     //Cuando pulsa una categoria
     handleProductionsCategoryList = (category) => {
         let category1 = this.#videoSystemModel.getCategory(category);
@@ -249,7 +243,7 @@ class VideoSystemController {
     //Cuando pulsa una produccion
     handleProduction = (production) => {
 
-        let production1 = this.#videoSystemModel.getSerie(production);
+        let production1 = this.#videoSystemModel.getProduction(production);
         this.#videoSystemView.showProduction((production1), this.#videoSystemModel.getCast(production1), this.#videoSystemModel.getDirectorsProdutions(production1));
         this.#videoSystemView.bindActors(this.handleActor);
         this.#videoSystemView.bindDirectores(this.handleDirector);
@@ -269,8 +263,8 @@ class VideoSystemController {
     handleActor = (actorSelec) => {
         actorSelec = actorSelec.split('/');
         let actor = this.#videoSystemModel.getActor(actorSelec[0], actorSelec[1]);
-        console.log(actor);
-        this.#videoSystemView.showFichaActor(actor, this.#videoSystemModel.getProdutionsActor(actor));
+
+        this.#videoSystemView.showFichaPerson(actor, this.#videoSystemModel.getProdutionsActor(actor));
 
         this.#videoSystemView.bindProductions(this.handleProduction);
     }
@@ -279,8 +273,8 @@ class VideoSystemController {
     handleDirector = (directorSelec) => {
         directorSelec = directorSelec.split('/');
         let director = this.#videoSystemModel.getDirector(directorSelec[0], directorSelec[1]);
-        console.log(director);
-        this.#videoSystemView.showFichaDirector(director, this.#videoSystemModel.getProductionsDirector(director));
+
+        this.#videoSystemView.showFichaPerson(director, this.#videoSystemModel.getProductionsDirector(director));
 
         this.#videoSystemView.bindProductions(this.handleProduction);
     }
