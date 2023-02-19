@@ -217,6 +217,8 @@ class VideoSystemController {
         this.#videoSystemView.showPersonsMenu();
         this.#videoSystemView.bindActorsList(this.handleActoresList);
         this.#videoSystemView.bindDirectorsList(this.handleDirectoresList);
+        this.#videoSystemView.showButtonCloseWindowsMenu();
+        this.#videoSystemView.bindClose(this.handleClose);
     }
 
     //En respuesta a un cambio de datos
@@ -247,6 +249,15 @@ class VideoSystemController {
         this.#videoSystemView.showProduction((production1), this.#videoSystemModel.getCast(production1), this.#videoSystemModel.getDirectorsProdutions(production1));
         this.#videoSystemView.bindActors(this.handleActor);
         this.#videoSystemView.bindDirectores(this.handleDirector);
+
+        this.#videoSystemView.bindShowFichaInNewWindow(this.handleProductionNewWindow);
+    }
+
+    handleProductionNewWindow = (production) => {
+        let production1 = this.#videoSystemModel.getProduction(production);
+        this.#videoSystemView.showProductionWindow((production1), this.#videoSystemModel.getCast(production1), this.#videoSystemModel.getDirectorsProdutions(production1));
+        this.#videoSystemView.bindActors(this.handleActor);
+        this.#videoSystemView.bindDirectores(this.handleDirector);
     }
 
     handleActoresList = (type) => {
@@ -267,6 +278,7 @@ class VideoSystemController {
         this.#videoSystemView.showFichaPerson(actor, this.#videoSystemModel.getProdutionsActor(actor));
 
         this.#videoSystemView.bindProductions(this.handleProduction);
+        this.#videoSystemView.bindShowFichaInNewWindow(this.handleActorNewWindow);
     }
 
     //Cuando pulse en un director
@@ -277,6 +289,36 @@ class VideoSystemController {
         this.#videoSystemView.showFichaPerson(director, this.#videoSystemModel.getProductionsDirector(director));
 
         this.#videoSystemView.bindProductions(this.handleProduction);
+
+        this.#videoSystemView.bindShowFichaInNewWindow(this.handleDirectorNewWindow);
+    }
+
+    //Actor nueva ventana
+    handleActorNewWindow = (actorSelec) => {
+        actorSelec = actorSelec.split('/');
+        let actor = this.#videoSystemModel.getActor(actorSelec[0], actorSelec[1]);
+
+        this.#videoSystemView.showFichaPersonNewWindow(actor, this.#videoSystemModel.getProdutionsActor(actor));
+
+        this.#videoSystemView.bindProductions(this.handleProduction);
+    }
+
+    //Director nueva ventana
+    handleDirectorNewWindow = (directorSelec) => {
+        directorSelec = directorSelec.split('/');
+        let director = this.#videoSystemModel.getDirector(directorSelec[0], directorSelec[1]);
+
+        this.#videoSystemView.showFichaPersonNewWindow(director, this.#videoSystemModel.getProductionsDirector(director));
+
+        this.#videoSystemView.bindProductions(this.handleProduction);
+    }
+
+    handleClose = () => {
+        this.#videoSystemView.closeWindows();
+    }
+
+    handlePersonNewWindow = (id, person) => {
+        this.#videoSystemView.showFichaPersonNewWindow(director, this.#videoSystemModel.getProdutionsActor(actor))
     }
 
 }
