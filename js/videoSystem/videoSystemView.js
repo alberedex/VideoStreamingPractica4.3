@@ -17,6 +17,15 @@ class VideoSystemView {
         return result;
     }
 
+    #excecuteHandler(handler, handlerArguments, scrollElement, data, url, event){
+		handler(...handlerArguments);
+		$(scrollElement).get(0).scrollIntoView();
+		history.pushState(data, null, url);
+		event.preventDefault();
+	}
+
+    
+
     constructor() {
         this.main = $('main');
         this.menu = $('.navbar-nav');
@@ -90,13 +99,13 @@ class VideoSystemView {
     //Eventos Init 
     bindInit(handler) {
         $('#home').click((event) => {
-            handler();
+            this.#excecuteHandler(handler, [], 'body', { action: 'init' }, '#', event);
         });
         $('#logo').click((event) => {
-            handler();
+            this.#excecuteHandler(handler, [], 'body', { action: 'init' }, '#', event);
         });
         $('#homeFooter').click((event) => {
-            handler();
+            this.#excecuteHandler(handler, [], 'body', { action: 'init' }, '#', event);
         });
         //Evento cuando tenga el menu para resoluciones pequeñas, al hacer click a un item, oculte la nav despelgada
         $('.collapse-link').click(function () {
@@ -107,24 +116,36 @@ class VideoSystemView {
 
     //Eventos para cuando pulse una categoria tanto en main o en el menu
     bindCategoriesList(handler) {
-        $('#category-list').find('a').click(function (event) {
-            handler(this.dataset.category);
+        $('#category-list').find('a').click((event) => {
+            let category = $(event.target).closest($('a')).get(0).dataset.category;
+            
+            this.#excecuteHandler(handler, [category], 'main', { action: 'ListProductionsCategory',category: category}, '#CategoriaList', event);
+            
         });
-        $('#category-list-menu').find('a').click(function (event) {
-            handler(this.dataset.category);
+        $('#category-list-menu').find('a').click((event) => {
+            let category = $(event.target).closest($('a')).get(0).dataset.category;
+
+            this.#excecuteHandler(handler, [category], 'body', { action: 'ListProductionsCategory',category: category }, '#CategoriaList', event);
+            
         });
     }
     
 
     bindActorsList(handler) {
-        this.menu.find('a[id="actor-menu"]').click(function (event) {
-            handler(this.dataset.nav);
+        this.menu.find('a[id="actor-menu"]').click((event) => {
+            // handler(this.dataset.nav);
+            let nav = $(event.target).closest($('a')).get(0).dataset.nav;
+
+            this.#excecuteHandler(handler, [nav], 'body', { action: 'ListActores',nav: nav}, '#ListActors', event);
         });
     }
 
     bindDirectorsList(handler) {
-        this.menu.find('a[id="director-menu"]').click(function (event) {
-            handler(this.dataset.nav);
+        this.menu.find('a[id="director-menu"]').click((event) => {
+            // handler(this.dataset.nav);
+            let nav = $(event.target).closest($('a')).get(0).dataset.nav;
+
+            this.#excecuteHandler(handler, [nav], 'body', { action: 'ListDirectores',nav: nav}, '#ListDirectores', event);
         });
     }
 
@@ -481,22 +502,33 @@ class VideoSystemView {
 
     //Eventos para cuando pulse una categoria tanto en main o en el menu
     bindProductions(handler) {
-        $('#productions').find('a').click(function (event) {
-            handler(this.dataset.produccion);
+        $('#productions').find('a').click((event) => {
+            // handler(this.dataset.produccion);
+            let produccion = $(event.target).closest($('a')).get(0).dataset.produccion;
+
+            this.#excecuteHandler(handler, [produccion], 'main', { action: 'showProduction',produccion: produccion}, '#Production', event);
         });
     }    
 
     //Eventos para cuando pulse en un actor o actriz
     bindActors(handler) {
-        $('#ActoresId').find('a').click(function (event) {
-            handler(this.dataset.person);
+        $('#ActoresId').find('a').click((event) => {
+            // handler(this.dataset.person);
+
+            let person = $(event.target).closest($('a')).get(0).dataset.person;
+
+            this.#excecuteHandler(handler, [person], 'main', { action: 'showActor', person: person }, '#showActor', event);
         });
     }
 
     //Eventos para cuando pulse en un director
     bindDirectores(handler) {
-        $('#DirectoresId').find('a').click(function (event) {
-            handler(this.dataset.person);
+        $('#DirectoresId').find('a').click((event) => {
+            // handler(this.dataset.person);
+            
+            let person = $(event.target).closest($('a')).get(0).dataset.person;
+
+            this.#excecuteHandler(handler, [person], 'main', { action: 'showDirector', person: person }, '#showDirector', event);
         });
     }
 
