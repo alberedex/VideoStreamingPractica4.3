@@ -217,6 +217,7 @@ class VideoSystemController {
         this.#videoSystemView.showPersonsMenu();
         this.#videoSystemView.bindActorsList(this.handleActoresList);
         this.#videoSystemView.bindDirectorsList(this.handleDirectoresList);
+        
         this.#videoSystemView.showButtonCloseWindowsMenu();
         this.#videoSystemView.bindClose(this.handleClose);
     }
@@ -255,9 +256,9 @@ class VideoSystemController {
 
     handleProductionNewWindow = (production) => {
         let production1 = this.#videoSystemModel.getProduction(production);
-        this.#videoSystemView.showProductionWindow((production1), this.#videoSystemModel.getCast(production1), this.#videoSystemModel.getDirectorsProdutions(production1));
-        this.#videoSystemView.bindActors(this.handleActor);
-        this.#videoSystemView.bindDirectores(this.handleDirector);
+        this.#videoSystemView.showProductionWindow(production1, this.#videoSystemModel.getCast(production1), this.#videoSystemModel.getDirectorsProdutions(production1));
+        // this.#videoSystemView.bindActors(this.handleActor);
+        // this.#videoSystemView.bindDirectores(this.handleDirector);
     }
 
     handleActoresList = (type) => {
@@ -300,7 +301,7 @@ class VideoSystemController {
 
         this.#videoSystemView.showFichaPersonNewWindow(actor, this.#videoSystemModel.getProdutionsActor(actor));
 
-        this.#videoSystemView.bindProductions(this.handleProduction);
+        // this.#videoSystemView.bindProductions(this.handleProduction);
     }
 
     //Director nueva ventana
@@ -310,7 +311,7 @@ class VideoSystemController {
 
         this.#videoSystemView.showFichaPersonNewWindow(director, this.#videoSystemModel.getProductionsDirector(director));
 
-        this.#videoSystemView.bindProductions(this.handleProduction);
+        // this.#videoSystemView.bindProductions(this.handleProduction);
     }
 
     handleClose = () => {

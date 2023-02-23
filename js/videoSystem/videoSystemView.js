@@ -36,6 +36,7 @@ class VideoSystemView {
     //Metodo donde carga las categorias en el contenido inicial
     init(categories) {
         this.main.empty(); //Vaciamos el main
+        console.log("hola")
 
         let contanier = $('<div id="category-list"></div>');
         let titleCategories = $('<h2>Categorias:</h2>');
@@ -98,6 +99,7 @@ class VideoSystemView {
 
     //Eventos Init 
     bindInit(handler) {
+
         $('#home').click((event) => {
             this.#excecuteHandler(handler, [], 'body', { action: 'init' }, '#', event);
         });
@@ -117,14 +119,13 @@ class VideoSystemView {
     //Eventos para cuando pulse una categoria tanto en main o en el menu
     bindCategoriesList(handler) {
         $('#category-list').find('a').click((event) => {
-            let category = $(event.target).closest($('a')).get(0).dataset.category;
-            
+            let category = event.currentTarget.dataset.category;
             this.#excecuteHandler(handler, [category], 'main', { action: 'ListProductionsCategory',category: category}, '#CategoriaList', event);
             
         });
         $('#category-list-menu').find('a').click((event) => {
-            let category = $(event.target).closest($('a')).get(0).dataset.category;
 
+            let category = event.currentTarget.dataset.category;
             this.#excecuteHandler(handler, [category], 'body', { action: 'ListProductionsCategory',category: category }, '#CategoriaList', event);
             
         });
@@ -134,8 +135,8 @@ class VideoSystemView {
     bindActorsList(handler) {
         this.menu.find('a[id="actor-menu"]').click((event) => {
             // handler(this.dataset.nav);
-            let nav = $(event.target).closest($('a')).get(0).dataset.nav;
 
+            let nav = event.currentTarget.dataset.nav;
             this.#excecuteHandler(handler, [nav], 'body', { action: 'ListActores',nav: nav}, '#ListActors', event);
         });
     }
@@ -143,8 +144,8 @@ class VideoSystemView {
     bindDirectorsList(handler) {
         this.menu.find('a[id="director-menu"]').click((event) => {
             // handler(this.dataset.nav);
-            let nav = $(event.target).closest($('a')).get(0).dataset.nav;
 
+            let nav = event.currentTarget.dataset.nav;
             this.#excecuteHandler(handler, [nav], 'body', { action: 'ListDirectores',nav: nav}, '#ListDirectores', event);
         });
     }
@@ -458,6 +459,7 @@ class VideoSystemView {
      * @param {*} producciones Iterator de las producciones realizadas por el actor/actriz o director
      */
     showFichaPersonNewWindow(person, producciones) {
+        console.log(this.fichaWindow)
         let main = $(this.fichaWindow.document).find('main');
 
         let contanier = $('<div class="container h-50"></div>');
@@ -504,9 +506,10 @@ class VideoSystemView {
     bindProductions(handler) {
         $('#productions').find('a').click((event) => {
             // handler(this.dataset.produccion);
-            let produccion = $(event.target).closest($('a')).get(0).dataset.produccion;
 
-            this.#excecuteHandler(handler, [produccion], 'main', { action: 'showProduction',produccion: produccion}, '#Production', event);
+            let produccion = event.currentTarget.dataset.produccion;
+            
+            this.#excecuteHandler(handler, [produccion], 'body', { action: 'showProduction',produccion: produccion}, '#Production', event);
         });
     }    
 
@@ -515,9 +518,9 @@ class VideoSystemView {
         $('#ActoresId').find('a').click((event) => {
             // handler(this.dataset.person);
 
-            let person = $(event.target).closest($('a')).get(0).dataset.person;
+            let person = event.currentTarget.dataset.person;
 
-            this.#excecuteHandler(handler, [person], 'main', { action: 'showActor', person: person }, '#showActor', event);
+            this.#excecuteHandler(handler, [person], 'body', { action: 'showActor', person: person }, '#showActor', event);
         });
     }
 
@@ -526,19 +529,42 @@ class VideoSystemView {
         $('#DirectoresId').find('a').click((event) => {
             // handler(this.dataset.person);
             
-            let person = $(event.target).closest($('a')).get(0).dataset.person;
+            let person = event.currentTarget.dataset.person;
 
-            this.#excecuteHandler(handler, [person], 'main', { action: 'showDirector', person: person }, '#showDirector', event);
+            this.#excecuteHandler(handler, [person], 'body', { action: 'showDirector', person: person }, '#showDirector', event);
         });
     }
 
+    /**
+     * Evento al pulsar el boton de abrir en una nueva ventana la ficha
+     * @param {} handler 
+     */
     bindShowFichaInNewWindow(handler) {
         $('#b-open').click((event) => {
-            this.fichaWindow = window.open("auxWindow.html", `ficha-${event.target.dataset.id}/${this.fichaWindowRegistry.length}`, "width=800, height=600, top=250, left=250, titlebar=yes, toolbar=no, menubar=no, location=no");
-            this.fichaWindow.addEventListener('DOMContentLoaded', () => {
-                handler(event.target.dataset.id);
-            });
-            this.fichaWindowRegistry.push(this.fichaWindow);
+            let title = event.target.dataset.id;
+            let existe = false;
+            let i = 0;
+            //recorremos el array de las ventanas en caso que este 
+            while(this.fichaWindowRegistry.length > i && !existe){
+
+                if(this.fichaWindowRegistry[i].name === title && !(this.fichaWindowRegistry[i].closed)){
+                    this.fichaWindowRegistry[i].focus(); //En caso que exista, hacemos el focus a esa ventana
+                    existe = true; //Salimos del bucle
+                }
+                i++;
+            }
+            //En caso que no exista la ventana, la creamos
+            if(!existe){
+                this.fichaWindow = window.open("auxWindow.html", `${event.target.dataset.id}`, "width=800, height=600, top=250, left=250, titlebar=yes, toolbar=no, menubar=no, location=no");
+                
+                this.fichaWindow.addEventListener('DOMContentLoaded', () => {
+    
+                    handler(event.target.dataset.id);
+               
+                });
+                this.fichaWindowRegistry.push(this.fichaWindow);
+            }
+            
         });
     }
 
@@ -556,10 +582,13 @@ class VideoSystemView {
 
     closeWindows(){
         for (const window of this.fichaWindowRegistry) {
-            window.close();
+            if(!window.closed){
+                window.close();
+            }
         }
 
-        this.fichaWindowRegistry = [];
+
+        this.fichaWindowRegistry = [];  //Una vez cerradas, lo vaciamos la array
     }
 
 
