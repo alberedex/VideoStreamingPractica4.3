@@ -254,18 +254,12 @@ class VideoSystemController {
         this.#videoSystemView.bindShowFichaInNewWindow(this.handleProductionNewWindow);
     }
 
-    handleProductionNewWindow = (production) => {
-        let production1 = this.#videoSystemModel.getProduction(production);
-        this.#videoSystemView.showProductionWindow(production1, this.#videoSystemModel.getCast(production1), this.#videoSystemModel.getDirectorsProdutions(production1));
-        // this.#videoSystemView.bindActors(this.handleActor);
-        // this.#videoSystemView.bindDirectores(this.handleDirector);
-    }
-
+    //lista de los actores
     handleActoresList = (type) => {
         this.#videoSystemView.showPersonsList(this.#videoSystemModel.actors, type);
         this.#videoSystemView.bindActors(this.handleActor);
     }
-
+    //lista de los directores
     handleDirectoresList = (type) => {
         this.#videoSystemView.showPersonsList(this.#videoSystemModel.directors, type);
         this.#videoSystemView.bindDirectores(this.handleDirector);
@@ -294,6 +288,12 @@ class VideoSystemController {
         this.#videoSystemView.bindShowFichaInNewWindow(this.handleDirectorNewWindow);
     }
 
+    //ficha produccion en una nueva ventana
+    handleProductionNewWindow = (production) => {
+        let production1 = this.#videoSystemModel.getProduction(production);
+        this.#videoSystemView.showProductionWindow(production1, this.#videoSystemModel.getCast(production1), this.#videoSystemModel.getDirectorsProdutions(production1));
+    }
+    
     //Actor nueva ventana
     handleActorNewWindow = (actorSelec) => {
         actorSelec = actorSelec.split('/');
@@ -313,14 +313,15 @@ class VideoSystemController {
 
         // this.#videoSystemView.bindProductions(this.handleProduction);
     }
-
+    //Para cerrar todas las ventanas registradas
     handleClose = () => {
         this.#videoSystemView.closeWindows();
     }
 
-    handlePersonNewWindow = (id, person) => {
-        this.#videoSystemView.showFichaPersonNewWindow(director, this.#videoSystemModel.getProdutionsActor(actor))
-    }
+    // //ficha de la persona (actor o Director)
+    // handlePersonNewWindow = (id, person) => {
+    //     this.#videoSystemView.showFichaPersonNewWindow(director, this.#videoSystemModel.getProdutionsActor(actor))
+    // }
 
 }
 

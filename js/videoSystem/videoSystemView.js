@@ -36,7 +36,6 @@ class VideoSystemView {
     //Metodo donde carga las categorias en el contenido inicial
     init(categories) {
         this.main.empty(); //Vaciamos el main
-        console.log("hola")
 
         let contanier = $('<div id="category-list"></div>');
         let titleCategories = $('<h2>Categorias:</h2>');
@@ -226,6 +225,9 @@ class VideoSystemView {
         this.main.append(contanierPrincipal);
     }
 
+    /**
+     * Mostrar la ficha de produccion en una nueva ventana
+     */
     showProductionWindow(production, castIterator, directorIterator){
         let main = $(this.fichaWindow.document).find('main');
 
@@ -454,12 +456,12 @@ class VideoSystemView {
 
     
     /**
-     * Donde muestra la ficha del actor/director
+     * Donde muestra la ficha del actor/director en una nueva ventana
      * @param {*} person Objeto Person
      * @param {*} producciones Iterator de las producciones realizadas por el actor/actriz o director
      */
     showFichaPersonNewWindow(person, producciones) {
-        console.log(this.fichaWindow)
+
         let main = $(this.fichaWindow.document).find('main');
 
         let contanier = $('<div class="container h-50"></div>');
@@ -542,48 +544,53 @@ class VideoSystemView {
     bindShowFichaInNewWindow(handler) {
         $('#b-open').click((event) => {
             let title = event.target.dataset.id;
-            let existe = false;
-            let i = 0;
-            //recorremos el array de las ventanas en caso que este 
-            while(this.fichaWindowRegistry.length > i && !existe){
+            //Buscamos por titlo con el target de la ventana y que este abierta, devuelve la referencia de la ventana
+            let existe = this.fichaWindowRegistry.find((windowR) => windowR.name === title && !(windowR.closed));
 
-                if(this.fichaWindowRegistry[i].name === title && !(this.fichaWindowRegistry[i].closed)){
-                    this.fichaWindowRegistry[i].focus(); //En caso que exista, hacemos el focus a esa ventana
-                    existe = true; //Salimos del bucle
-                }
-                i++;
-            }
             //En caso que no exista la ventana, la creamos
-            if(!existe){
-                this.fichaWindow = window.open("auxWindow.html", `${event.target.dataset.id}`, "width=800, height=600, top=250, left=250, titlebar=yes, toolbar=no, menubar=no, location=no");
-                
+            if (!existe) {
+                this.fichaWindow = window.open("auxWindow.html", `${title}`, "width=800, height=600, top=250, left=250, titlebar=yes, toolbar=no, menubar=no, location=no");
+
                 this.fichaWindow.addEventListener('DOMContentLoaded', () => {
-    
+
                     handler(event.target.dataset.id);
-               
+
                 });
                 this.fichaWindowRegistry.push(this.fichaWindow);
+            } else {
+                //En caso que exista, la mostramos en la vista
+                existe.focus();
             }
-            
+
         });
     }
-
+    /**
+     * Mostramos la opcion de eliminar las ventanas que tengan la referencias en la barra 
+     * de navegacion de la pagina inicial
+     */
     showButtonCloseWindowsMenu() {
         this.menu.append(`<li class="nav-item">
-                            <a class="nav-link active collapse-link" aria-current="page" href="#" id='b-closeW' data-nav='Actores'>Cerrar</a>
+                            <button type='button' id='b-closeW' class="nav-link collapse-link active btn btn-link" href="" >Cerrar Ventanas</button>
                         </li>`);
-    }
+    } 
 
+    /**
+     * el evento 
+     */
     bindClose(handler){
         $('#b-closeW').click(function (event) {
             handler();
         });
     }
-
+    
+    /**
+     * Metodo donde comprueba esta abierto y lo cierra
+     * Una vez hecho, vaciamos la array de las ventanas
+     */
     closeWindows(){
-        for (const window of this.fichaWindowRegistry) {
-            if(!window.closed){
-                window.close();
+        for (const windowA of this.fichaWindowRegistry) {
+            if(!windowA.closed){
+                windowA.close();
             }
         }
 
