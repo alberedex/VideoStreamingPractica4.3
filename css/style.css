@@ -1,3 +1,7 @@
+main{
+    min-height: 70vh;
+}
+
 .carousel-item>div:first-child {
     height: 600px;
     background-repeat: no-repeat;

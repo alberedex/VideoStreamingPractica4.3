@@ -38,8 +38,8 @@ class VideoSystemView {
         this.main.empty(); //Vaciamos el main
 
         let contanier = $('<div id="category-list"></div>');
-        let titleCategories = $('<h2>Categorias:</h2>');
-        titleCategories.addClass('mt-5 mb-3');
+        let titleCategories = $('<h2>Categorias</h2>');
+        titleCategories.addClass('mt-2 mb-3 text-center bg-dark-subtle p-3 text-uppercase');
 
         contanier.append(titleCategories);
 
@@ -207,7 +207,7 @@ class VideoSystemView {
         contanierPrincipal.addClass('container');
 
         contanierPrincipal.append(`<h1>${category.name}</h1><p>${category.description}</p>`);
-
+        contanierPrincipal.addClass("text-center");
         let contanierProduciones = $('<div id="productions" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
 
         for (let production of productions) {
@@ -388,6 +388,7 @@ class VideoSystemView {
         contanierPrincipal.addClass('container');
 
         contanierPrincipal.append(`<h1>${type}</h1>`);
+        contanierPrincipal.addClass("text-center");
 
         let contanierPerson = $(`<div id="${type}Id" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>`);
 
@@ -436,8 +437,8 @@ class VideoSystemView {
         //Mostrar las producciones de la persona
         let produccionesContanier = $('<div class="row col-md-12"></div>');
         produccionesContanier.append('<h2 class="col">Producciones: </h2>');
-
         let produccionesCont = $('<div id="productions" class="d-flex gap-5 flex-row flex-wrap"></div>');
+        produccionesCont.addClass("text-center");
 
         for (const production of producciones) {
             produccionesCont.append(`<a data-produccion="${production.title}" href='#'>
