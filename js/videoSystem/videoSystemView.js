@@ -122,11 +122,14 @@ class VideoSystemView {
             this.#excecuteHandler(handler, [category], 'main', { action: 'ListProductionsCategory',category: category}, '#CategoriaList', event);
             
         });
+        
+    }
+
+    bindCategoriesListMenu(handler){
         $('#category-list-menu').find('a').click((event) => {
 
             let category = event.currentTarget.dataset.category;
             this.#excecuteHandler(handler, [category], 'body', { action: 'ListProductionsCategory',category: category }, '#CategoriaList', event);
-            
         });
     }
     
@@ -265,12 +268,12 @@ class VideoSystemView {
 
         //Mostrar los directores de la produccion
         for (const director of directorIterator) {
-            directors.append(`<a data-person='${director.name}/${director.lastname1}' href='#'>${director.name} ${director.lastname1} ${director.lastname2}</a><br>`);
+            directors.append(`<p>${director.name} ${director.lastname1} ${director.lastname2}</p>`);
         }
 
         //Mostrar el cast de la produccion
         for (const actor of castIterator) {
-            cast.append(`<a data-person='${actor.name}/${actor.lastname1}' href='#'>${actor.name} ${actor.lastname1} ${actor.lastname2}</a><br>`);
+            cast.append(`<p>${actor.name} ${actor.lastname1} ${actor.lastname2}</p>`);
         }
 
         let info = $(this.fichaWindow.document).find('#infoProduction');
@@ -491,13 +494,13 @@ class VideoSystemView {
         let produccionesCont = $('<div id="productions" class="d-flex gap-5 flex-row flex-wrap"></div>');
 
         for (const production of producciones) {
-            produccionesCont.append(`<a data-produccion="${production.title}" href='#'>
+            produccionesCont.append(`
             <div class="card" style="width: 18rem;">
                 <img src="${production.image}" class="card-img-top img-fluid" alt="${production.title}">
                     <div class="card-body">
                         <h5 class="card-title">${production.title}</h5>
                     </div>
-           </div></a>`);
+           </div>`);
         }
 
         produccionesContanier.append(produccionesCont);
@@ -550,7 +553,7 @@ class VideoSystemView {
 
             //En caso que no exista la ventana, la creamos
             if (!existe) {
-                this.fichaWindow = window.open("auxWindow.html", `${title}`, "width=800, height=600, top=250, left=250, titlebar=yes, toolbar=no, menubar=no, location=no");
+                this.fichaWindow = window.open("auxWindow.html", `${title}`, "width=800, height=600, top=250, left=350, titlebar=yes, toolbar=no, menubar=no, location=no");
 
                 this.fichaWindow.addEventListener('DOMContentLoaded', () => {
 
@@ -594,7 +597,6 @@ class VideoSystemView {
                 windowA.close();
             }
         }
-
 
         this.fichaWindowRegistry = [];  //Una vez cerradas, lo vaciamos la array
     }

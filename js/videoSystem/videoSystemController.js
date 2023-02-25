@@ -217,7 +217,7 @@ class VideoSystemController {
         this.#videoSystemView.showPersonsMenu();
         this.#videoSystemView.bindActorsList(this.handleActoresList);
         this.#videoSystemView.bindDirectorsList(this.handleDirectoresList);
-        
+        this.#videoSystemView.bindCategoriesListMenu(this.handleProductionsCategoryList);
         this.#videoSystemView.showButtonCloseWindowsMenu();
         this.#videoSystemView.bindClose(this.handleClose);
     }
