@@ -213,19 +213,22 @@ class VideoSystemController {
     onLoad = () => {
         this.#loadVideoSystemObjects();
         this.#videoSystemView.showCategoriesInMenu(this.#videoSystemModel.categories);
-        
+
         this.#videoSystemView.showPersonsMenu();
         this.#videoSystemView.bindActorsList(this.handleActoresList);
         this.#videoSystemView.bindDirectorsList(this.handleDirectoresList);
         this.#videoSystemView.bindCategoriesListMenu(this.handleProductionsCategoryList);
         this.#videoSystemView.showButtonCloseWindowsMenu();
         this.#videoSystemView.bindClose(this.handleClose);
+
+        this.#videoSystemView.showAdminMenu();
+        this.#videoSystemView.bindAdmin(this.handlerNewCategory);
     }
 
     //En respuesta a un cambio de datos
     onInit = () => {
-        this.#videoSystemView.init(this.#videoSystemModel.categories, this.#videoSystemModel);
         this.#videoSystemView.showProductionsInit(this.#videoSystemModel.productions);
+        this.#videoSystemView.init(this.#videoSystemModel.categories);
         this.#videoSystemView.bindCategoriesList(this.handleProductionsCategoryList);
 
         this.#videoSystemView.bindProductions(this.handleProduction);
@@ -293,7 +296,7 @@ class VideoSystemController {
         let production1 = this.#videoSystemModel.getProduction(production);
         this.#videoSystemView.showProductionWindow(production1, this.#videoSystemModel.getCast(production1), this.#videoSystemModel.getDirectorsProdutions(production1));
     }
-    
+
     //Actor nueva ventana
     handleActorNewWindow = (actorSelec) => {
         actorSelec = actorSelec.split('/');
@@ -322,6 +325,35 @@ class VideoSystemController {
     // handlePersonNewWindow = (id, person) => {
     //     this.#videoSystemView.showFichaPersonNewWindow(director, this.#videoSystemModel.getProdutionsActor(actor))
     // }
+
+    handlerNewCategory = () => {
+        this.#videoSystemView.showModalAddCategory();
+
+        this.#videoSystemView.bindNewCategoryForm(this.handleCreateCategory);
+    }
+
+    handleCreateCategory = (title, description) => {
+        let categ = this.#videoSystemModel.getCategory(title, description);
+        console.log(categ);
+        let done, error;
+        try {
+            this.#videoSystemModel.addCategory(categ);
+            done = true;
+        } catch (exception) {
+            done = false;
+            error = exception;
+        }
+        this.#videoSystemView.showNewCategoryMessage(done, categ, error);
+        this.onAddCategory();
+    }
+
+    onAddCategory = () => {
+        this.#videoSystemView.showCategoriesInMenu(this.#videoSystemModel.categories);
+        this.#videoSystemView.bindCategoriesListMenu(this.handleProductionsCategoryList);
+        
+        this.#videoSystemView.init(this.#videoSystemModel.categories);
+        this.#videoSystemView.bindCategoriesList(this.handleProductionsCategoryList);
+    }
 
 }
 

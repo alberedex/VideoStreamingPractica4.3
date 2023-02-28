@@ -1,3 +1,5 @@
+import { showFeedBack, defaultCheckElement, newCategoryValidation } from './validation.js';
+
 class VideoSystemView {
     /**
      * Metodo donde convierte [minutos] del Recurso a [horas,minutos] para facilitar al usuario la duracion
@@ -17,14 +19,12 @@ class VideoSystemView {
         return result;
     }
 
-    #excecuteHandler(handler, handlerArguments, scrollElement, data, url, event){
-		handler(...handlerArguments);
-		$(scrollElement).get(0).scrollIntoView();
-		history.pushState(data, null, url);
-		event.preventDefault();
-	}
-
-    
+    #excecuteHandler(handler, handlerArguments, scrollElement, data, url, event) {
+        handler(...handlerArguments);
+        $(scrollElement).get(0).scrollIntoView();
+        history.pushState(data, null, url);
+        event.preventDefault();
+    }
 
     constructor() {
         this.main = $('main');
@@ -35,7 +35,9 @@ class VideoSystemView {
 
     //Metodo donde carga las categorias en el contenido inicial
     init(categories) {
-        this.main.empty(); //Vaciamos el main
+
+        let listCategory = $('#category-list');
+        if (listCategory.children().length > 0) listCategory.remove();
 
         let contanier = $('<div id="category-list"></div>');
         let titleCategories = $('<h2>Categorias</h2>');
@@ -67,21 +69,30 @@ class VideoSystemView {
     * 
     */
     showCategoriesInMenu(categories) {
-        let li = $(`<li class="nav-item dropdown">
+        let menu = $('#category-list-menu');
+
+        if (menu.length === 0) {
+            let li = $(`<li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="navCats" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-has-popup="true">
 		                    Categorías
 		                </a>
 		            </li>`);
 
-        let container = $('<div class="dropdown-menu" aria-labelledby="navCats" id="category-list-menu"></div>');
+            menu = $('<div class="dropdown-menu" aria-labelledby="navCats" id="category-list-menu"></div>');
+            li.append(menu);
+            this.menu.append(li);
+        } else {
+            //En caso que haya elementos, eliminamos la lista para poner los nuevo
+            menu.children().remove();
+        }
 
         for (let category of categories) {
-            container.append(`<a data-category="${category.name}" class="dropdown-item collapse-link" href="#">
+            menu.append(`<a data-category="${category.name}" class="dropdown-item collapse-link" href="#">
                                 ${category.name}
                             </a>`);
         }
-        li.append(container);
-        this.menu.append(li);
+
+
     }
 
     /**
@@ -113,33 +124,33 @@ class VideoSystemView {
             $('.navbar-collapse').collapse('hide');
         });
 
-    }    
+    }
 
     //Eventos para cuando pulse una categoria tanto en main o en el menu
     bindCategoriesList(handler) {
         $('#category-list').find('a').click((event) => {
             let category = event.currentTarget.dataset.category;
-            this.#excecuteHandler(handler, [category], 'main', { action: 'ListProductionsCategory',category: category}, '#CategoriaList', event);
-            
+            this.#excecuteHandler(handler, [category], 'main', { action: 'ListProductionsCategory', category: category }, '#CategoriaList', event);
+
         });
-        
+
     }
 
-    bindCategoriesListMenu(handler){
+    bindCategoriesListMenu(handler) {
         $('#category-list-menu').find('a').click((event) => {
 
             let category = event.currentTarget.dataset.category;
-            this.#excecuteHandler(handler, [category], 'body', { action: 'ListProductionsCategory',category: category }, '#CategoriaList', event);
+            this.#excecuteHandler(handler, [category], 'body', { action: 'ListProductionsCategory', category: category }, '#CategoriaList', event);
         });
     }
-    
+
 
     bindActorsList(handler) {
         this.menu.find('a[id="actor-menu"]').click((event) => {
             // handler(this.dataset.nav);
 
             let nav = event.currentTarget.dataset.nav;
-            this.#excecuteHandler(handler, [nav], 'body', { action: 'ListActores',nav: nav}, '#ListActors', event);
+            this.#excecuteHandler(handler, [nav], 'body', { action: 'ListActores', nav: nav }, '#ListActors', event);
         });
     }
 
@@ -148,7 +159,7 @@ class VideoSystemView {
             // handler(this.dataset.nav);
 
             let nav = event.currentTarget.dataset.nav;
-            this.#excecuteHandler(handler, [nav], 'body', { action: 'ListDirectores',nav: nav}, '#ListDirectores', event);
+            this.#excecuteHandler(handler, [nav], 'body', { action: 'ListDirectores', nav: nav }, '#ListDirectores', event);
         });
     }
 
@@ -157,8 +168,9 @@ class VideoSystemView {
      */
     showProductionsInit(producciones) {
         //Creamos el contenedor principal
+        this.main.empty();
         let carousel = $('<div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel"></div>');
-        
+
         let carouselInner = $(`<div class="carousel-inner" id="productions"></div>`);
         //Generaramos numero aleatorios
         let produccionesA = Array.from(producciones);
@@ -231,7 +243,7 @@ class VideoSystemView {
     /**
      * Mostrar la ficha de produccion en una nueva ventana
      */
-    showProductionWindow(production, castIterator, directorIterator){
+    showProductionWindow(production, castIterator, directorIterator) {
         let main = $(this.fichaWindow.document).find('main');
 
         let contanier = $('<div class="d-flex flex-column container"></div>');
@@ -458,7 +470,7 @@ class VideoSystemView {
         contanier.append(produccionesContanier);
     }
 
-    
+
     /**
      * Donde muestra la ficha del actor/director en una nueva ventana
      * @param {*} person Objeto Person
@@ -514,10 +526,10 @@ class VideoSystemView {
             // handler(this.dataset.produccion);
 
             let produccion = event.currentTarget.dataset.produccion;
-            
-            this.#excecuteHandler(handler, [produccion], 'body', { action: 'showProduction',produccion: produccion}, '#Production', event);
+
+            this.#excecuteHandler(handler, [produccion], 'body', { action: 'showProduction', produccion: produccion }, '#Production', event);
         });
-    }    
+    }
 
     //Eventos para cuando pulse en un actor o actriz
     bindActors(handler) {
@@ -534,7 +546,7 @@ class VideoSystemView {
     bindDirectores(handler) {
         $('#DirectoresId').find('a').click((event) => {
             // handler(this.dataset.person);
-            
+
             let person = event.currentTarget.dataset.person;
 
             this.#excecuteHandler(handler, [person], 'body', { action: 'showDirector', person: person }, '#showDirector', event);
@@ -576,30 +588,118 @@ class VideoSystemView {
         this.menu.append(`<li class="nav-item">
                             <button type='button' id='b-closeW' class="nav-link collapse-link active btn btn-link" href="" >Cerrar Ventanas</button>
                         </li>`);
-    } 
+    }
 
     /**
      * el evento 
      */
-    bindClose(handler){
+    bindClose(handler) {
         $('#b-closeW').click(function (event) {
             handler();
         });
     }
-    
+
     /**
      * Metodo donde comprueba esta abierto y lo cierra
      * Una vez hecho, vaciamos la array de las ventanas
      */
-    closeWindows(){
+    closeWindows() {
         for (const windowA of this.fichaWindowRegistry) {
-            if(!windowA.closed){
+            if (!windowA.closed) {
                 windowA.close();
             }
         }
 
         this.fichaWindowRegistry = [];  //Una vez cerradas, lo vaciamos la array
     }
+
+    showAdminMenu() {
+        let li = $(`<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="AdminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-has-popup="true">
+                            Admin
+                        </a>
+                    </li>`);
+
+        let container = $('<div class="dropdown-menu" aria-labelledby="AdminMenu" id="category-list-menu"></div>');
+
+        container.append(`<a id="newCategory" class="dropdown-item collapse-link" href="#" >
+                Nueva Categoria
+            </a>`);
+
+        li.append(container);
+        this.menu.append(li);
+    }
+
+    showModalAddCategory() {
+        $('body').append(`<div class="modal fade" id="formAddCategory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Nueva Categoria</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form name="formNewCategory" role="form" novalidate>
+                <div class="modal-body" id='formBody'>
+                    <div class="mb-3">
+                        <label for="nombreCategoria" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="nombreCategoria" name="nombreCategoria" aria-describedby="nombre Categoria" required>
+                        <div class="invalid-feedback">El nombre es obligatorio.</div>
+                        <div class="valid-feedback">Correcto.</div>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" placeholder="description" id="description" name="description" style="height: 100px"></textarea>
+                        <label for="description">Description</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" id='buttonClose' class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary">Crear nueva categoria</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>`);
+
+        let myModal = new bootstrap.Modal(document.getElementById('formAddCategory'), {
+            keyboard: false
+        });
+
+        myModal.show();
+
+        // console.log(form);
+        // myModal.addEventListener('reset',function(){
+        //     myModal.dispose();
+        // })
+
+    }
+
+    bindAdmin(handlerNewCategory) {
+        $('#newCategory').click((event) => {
+            handlerNewCategory();
+        });
+    }
+
+
+    bindNewCategoryForm(handler) {
+        console.log("hola");
+        newCategoryValidation(handler);
+    }
+
+    showNewCategoryMessage(done, categ, error) {
+        let form = $('#formBody');
+        if (form.children().length > 2) form.children()[2].remove();
+        if (done) {
+            form.append(`<div class="alert alert-success" role="alert">
+                            Ha registrado la nueva categoria ${categ.name}
+                        </div>`);
+        } else {
+            form.append(`<div class="alert alert-danger" role="alert">
+                          Ha producido un error: ${error.message}
+                        </div>`);
+        }
+    }
+
 
 
 }
