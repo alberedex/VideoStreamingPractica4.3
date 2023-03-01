@@ -1,4 +1,4 @@
-import { showFeedBack, defaultCheckElement, newCategoryValidation } from './validation.js';
+import { showFeedBack, defaultCheckElement, newCategoryValidation, newProductionValidation } from './validation.js';
 
 class VideoSystemView {
     /**
@@ -523,8 +523,6 @@ class VideoSystemView {
     //Eventos para cuando pulse una categoria tanto en main o en el menu
     bindProductions(handler) {
         $('#productions').find('a').click((event) => {
-            // handler(this.dataset.produccion);
-
             let produccion = event.currentTarget.dataset.produccion;
 
             this.#excecuteHandler(handler, [produccion], 'body', { action: 'showProduction', produccion: produccion }, '#Production', event);
@@ -534,8 +532,6 @@ class VideoSystemView {
     //Eventos para cuando pulse en un actor o actriz
     bindActors(handler) {
         $('#ActoresId').find('a').click((event) => {
-            // handler(this.dataset.person);
-
             let person = event.currentTarget.dataset.person;
 
             this.#excecuteHandler(handler, [person], 'body', { action: 'showActor', person: person }, '#showActor', event);
@@ -545,8 +541,6 @@ class VideoSystemView {
     //Eventos para cuando pulse en un director
     bindDirectores(handler) {
         $('#DirectoresId').find('a').click((event) => {
-            // handler(this.dataset.person);
-
             let person = event.currentTarget.dataset.person;
 
             this.#excecuteHandler(handler, [person], 'body', { action: 'showDirector', person: person }, '#showDirector', event);
@@ -622,9 +616,27 @@ class VideoSystemView {
 
         let container = $('<div class="dropdown-menu" aria-labelledby="AdminMenu" id="category-list-menu"></div>');
 
-        container.append(`<a id="newCategory" class="dropdown-item collapse-link" href="#" >
-                Nueva Categoria
-            </a>`);
+        container.append(`<a id="newProduccion" class="dropdown-item collapse-link" href="#" >
+                            Nueva producción
+                        </a>
+                        <a id="delProduccion" class="dropdown-item collapse-link" href="#" >
+                            Eliminar producción
+                        </a>
+                        <a id="newCategory" class="dropdown-item collapse-link" href="#" >
+                            Nueva Categoria
+                        </a>
+                        <a id="delCategory" class="dropdown-item collapse-link" href="#" >
+                            Eliminar Categoria
+                        </a>
+                        <a id="asigProducion" class="dropdown-item collapse-link" href="#" >
+                            Asignar/desasignar actores/directores de la producción
+                        </a>
+                        <a id="newPerson" class="dropdown-item collapse-link" href="#" >
+                            Nueva Persona
+                        </a>
+                        <a id="delPerson" class="dropdown-item collapse-link" href="#" >
+                            Eliminar Persona
+                        </a>`);
 
         li.append(container);
         this.menu.append(li);
@@ -670,25 +682,58 @@ class VideoSystemView {
         // console.log(form);
         // myModal.addEventListener('reset',function(){
         //     myModal.dispose();
-        // })
-
+        // });
     }
 
-    bindAdmin(handlerNewCategory) {
+    bindAdmin(handlerNewProduccion, handlerDelProduccion, handlerNewCategory, handlerDelCategory) {
+        $('#newProduccion').click((event) => {
+            handlerNewProduccion();
+        });
+        $('#delProduccion').click((event) => {
+            handlerDelProduccion();
+        });
         $('#newCategory').click((event) => {
             handlerNewCategory();
+        });
+        $('#delCategory').click((event) => {
+            handlerDelCategory();
+        });
+    }
+
+    bindCloseModal(){
+        $('#buttonClose').click((event) => {
+            $('body .modal').remove();
         });
     }
 
 
     bindNewCategoryForm(handler) {
-        console.log("hola");
         newCategoryValidation(handler);
+    }
+
+    bindDelCategoryForm(handler) {
+        $('#formBody').find('button').click(function (event) {
+            handler(this.dataset.category);
+            $(this).closest('div.row').remove();
+        })
+    }
+
+    bindDelProductionForm(handler) {
+        $('#formBody').find('button').click(function (event) {
+            handler(this.dataset.produccion);
+            $(this).closest('div.row').remove();
+        });
+    }
+
+    bindNewProductionForm(handler) {
+        newProductionValidation(handler);
     }
 
     showNewCategoryMessage(done, categ, error) {
         let form = $('#formBody');
-        if (form.children().length > 2) form.children()[2].remove();
+        let formAlert = form.find('.alert');
+
+        if (formAlert.length > 0) formAlert.remove();
         if (done) {
             form.append(`<div class="alert alert-success" role="alert">
                             Ha registrado la nueva categoria ${categ.name}
@@ -700,6 +745,220 @@ class VideoSystemView {
         }
     }
 
+    showModalAddProduction(actorIterator, directorIterator, categoriesIterator) {
+        $('body').append(`<div class="modal fade" id="formAddProduction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Produccion</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form name="formNewProduction" role="form" novalidate>
+                        <div class="modal-body" id='formBody'>
+                            <div class="col-md-12">
+                                <label for="Ptitle" class="form-label">Titulo</label>
+                                <input type="text" class="form-control" id="Ptitle" name='Ptitle' required>
+                                <div class="invalid-feedback">El titulo es obligatorio.</div>
+                                <div class="valid-feedback">Correcto.</div>
+                            </div>
+                            <div class='row'>
+                            <div class="col-md-6">
+                                <label for="Nacionalidad" class="form-label">Nacionalidad</label>
+                                <input type="text" class="form-control" id="Nacionalidad" name='Nacionalidad'>
+                                <div class="invalid-feedback">La nacionalidad es obligatorio.</div>
+                                <div class="valid-feedback">Correcto.</div>
+                            </div>
+                            <div class="col-6">
+                                <label for="Pdate" class="form-label">Fecha de publicacion</label>
+                                <input type="date" class="form-control" id="Pdate" required pattern="\d{2}/\d{2}/\d{4}">
+                                <div class="invalid-feedback">La fecha es obligatorio.</div>
+                                <div class="valid-feedback">Correcto.</div>
+                            </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="PSynopsis" class="form-label">Synopsis</label>
+                                <textarea class="form-control" id="PSynopsis" name="PSynopsis" aria-describedby="Synopsis" rows="4"></textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="Pimage" class="form-label">Imagen</label>
+                                <input type="file" class="form-control" id="Pimage" name='Pimage' required>
+                                <div class="invalid-feedback">La imagen es obligatorio.</div>
+                                <div class="valid-feedback">Correcto.</div>
+                            </div>
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id='buttonClose' class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Crear nueva categoria</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>`);
+
+        let formProduc = $('#formBody');
+        //Categorias
+        let contanierSelectCategory = $('<div class="col-md-12">');
+        contanierSelectCategory.append('<label for="newproCategories" class="form-label">Categorias</label>');
+
+        let categoriesSelectCategory = $(`<select class="form-select" multiple aria-label="multiple select Categorias" id="newproCategories" name="newproCategories" aria-describedby="category" required></select>`);
+
+        for (let category of categoriesIterator) {
+            categoriesSelectCategory.append(`<option value="${category.name}">${category.name}</option>`);
+        }
+
+        contanierSelectCategory.append(categoriesSelectCategory);
+        formProduc.append(contanierSelectCategory);
+
+        //Person
+        let contanierPerson = $('<div class="row">');
+
+        let contanierSelectPerson = $('<div class="col-md-6">');
+        contanierSelectPerson.append('<label for="newproDirector" class="form-label">Director</label>');
+
+        let categoriesSelect = $(`<select class="form-select" multiple aria-label="multiple select Directores" id="newproDirector" name="newproDirector" aria-describedby="director" required></select>`);
+
+        for (let director of directorIterator) {
+            categoriesSelect.append(`<option value="${director.name}/${director.lastname1}">${director.name} ${director.lastname1}</option>`);
+        }
+
+        contanierSelectPerson.append(categoriesSelect);
+        contanierPerson.append(contanierSelectPerson);
+
+        let contanierSelectActor = $('<div class="col-md-6">');
+        contanierSelectActor.append('<label for="newproActor" class="form-label">Actor</label>');
+
+        let categoriesSelectActor = $(`<select class="form-select" multiple aria-label="multiple select Actores" id="newproActor" name="newproActor" aria-describedby="actor" required></select>`);
+
+        for (let actor of actorIterator) {
+            categoriesSelectActor.append(`<option value="${actor.name}/${actor.lastname1}">${actor.name} ${actor.lastname1}</option>`);
+        }
+
+        contanierSelectActor.append(categoriesSelectActor);
+        contanierPerson.append(contanierSelectActor);
+
+        formProduc.append(contanierPerson);
+
+        let radioType = $(`<label class="form-check-label p-3" for="">
+                         Tipo de produccion:   
+                        </label>
+                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+
+                              <input type="radio" class="btn-check" name="radioTypeP" id="Movie" autocomplete="off">
+                              <label class="btn btn-outline-primary" for="Movie">Pelicula</label>
+
+                              <input type="radio" class="btn-check" name="radioTypeP" id="Serie" autocomplete="off">
+                              <label class="btn btn-outline-primary" for="Serie">Serie</label>
+
+                              <div class="invalid-feedback">Debe seleccionar que tipo de produccion es.</div>
+                              <div class="valid-feedback">Correcto.</div>
+                        </div>`);
+
+        formProduc.append(radioType);
+
+
+        let myModal = new bootstrap.Modal(document.getElementById('formAddProduction'), {
+            keyboard: false
+        });
+
+        myModal.show();
+
+        $('#buttonClose').click((event) => {
+            // myModal.dispose();
+            $('body .modal').remove();
+        });
+    }
+
+
+    showModalRemoveCategory(categoriasIterator) {
+        $('body').append(`<div class="modal fade" id="formRemCategory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminar Categoria</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <div class="modal-body" id='formBody'>
+
+                </div>
+                <div class="modal-footer">
+                <button type="button" id='buttonClose' class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+          </div>
+        </div>
+      </div>`);
+
+        let formBody = $('#formBody');
+
+        for (let categoria of categoriasIterator) {
+            formBody.append(`<div class='row pt-3'>
+                                <div class='col'>
+                                    <p>${categoria.name}</p>
+                                </div>
+                                <div class='col'>
+                                    <button class="btn btn-primary" data-category="${categoria.name}" type='button'>Eliminar</button>
+                                </div>
+                        </div>`);
+        }
+
+
+
+        let myModal = new bootstrap.Modal(document.getElementById('formRemCategory'), {
+            keyboard: false
+        });
+
+        myModal.show();
+
+        $('#buttonClose').click((event) => {
+            // myModal.dispose();
+            $('body .modal').remove();
+        });
+
+    }
+
+    showModalRemoveProductions(productionsIterator) {
+        $('body').append(`<div class="modal fade" id="formRemProduction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminar Produccion</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <div class="modal-body" id='formBody'>
+
+                </div>
+                <div class="modal-footer">
+                <button type="button" id='buttonClose' class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+          </div>
+        </div>
+      </div>`);
+
+        let formBody = $('#formBody');
+
+        for (let prod of productionsIterator) {
+            formBody.append(`<div class='d-flex align-items-center row border border-secondary border border-1 rounded'>
+                                <div class='col'>
+                                    <img src="${prod.image}" class="img-fluid w-10" alt="${prod.title}">
+                                </div>
+                                <div class='col'>
+                                    <p>${prod.title}</p>
+                                </div>
+                                <div class='col'>
+                                    <button class="btn btn-primary" data-produccion="${prod.title}" type='button'>Eliminar</button>
+                                </div>
+                        </div>`);
+        }
+
+        let myModal = new bootstrap.Modal(document.getElementById('formRemProduction'), {
+            keyboard: false
+        });
+
+        myModal.show();
+
+        
+
+    }
 
 
 }

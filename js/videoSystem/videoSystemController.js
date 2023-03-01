@@ -222,7 +222,12 @@ class VideoSystemController {
         this.#videoSystemView.bindClose(this.handleClose);
 
         this.#videoSystemView.showAdminMenu();
-        this.#videoSystemView.bindAdmin(this.handlerNewCategory);
+        this.#videoSystemView.bindAdmin(
+            this.handlerNewProduccionForm,
+            this.handlerDelProduccionForm,
+            this.handlerNewCategoryForm,
+            this.handlerDelCategoryForm
+        );
     }
 
     //En respuesta a un cambio de datos
@@ -326,10 +331,11 @@ class VideoSystemController {
     //     this.#videoSystemView.showFichaPersonNewWindow(director, this.#videoSystemModel.getProdutionsActor(actor))
     // }
 
-    handlerNewCategory = () => {
+    handlerNewCategoryForm = () => {
         this.#videoSystemView.showModalAddCategory();
 
         this.#videoSystemView.bindNewCategoryForm(this.handleCreateCategory);
+        this.#videoSystemView.bindCloseModal();
     }
 
     handleCreateCategory = (title, description) => {
@@ -347,14 +353,86 @@ class VideoSystemController {
         this.onAddCategory();
     }
 
+
     onAddCategory = () => {
         this.#videoSystemView.showCategoriesInMenu(this.#videoSystemModel.categories);
         this.#videoSystemView.bindCategoriesListMenu(this.handleProductionsCategoryList);
-        
-        this.#videoSystemView.init(this.#videoSystemModel.categories);
-        this.#videoSystemView.bindCategoriesList(this.handleProductionsCategoryList);
+
+        // this.#videoSystemView.init(this.#videoSystemModel.categories);
+        // this.#videoSystemView.bindCategoriesList(this.handleProductionsCategoryList);
     }
 
+    handlerDelCategoryForm = () => {
+        this.#videoSystemView.showModalRemoveCategory(this.#videoSystemModel.categories);
+
+        this.#videoSystemView.bindDelCategoryForm(this.handleDelCategory);
+        this.#videoSystemView.bindCloseModal();
+    }
+
+    handleDelCategory = (category) => {
+        let cat = this.#videoSystemModel.getCategory(category);
+        
+        let done,error;
+
+        try{
+            this.#videoSystemModel.removeCategory(cat);
+            done = true;
+        }catch (exception){
+            done = false;
+            error = exception;
+        }
+
+        this.#videoSystemView.showNewCategoryMessage(done, cat, error);
+        this.onAddCategory();
+    }
+
+    handlerNewProduccionForm = () => {
+        this.#videoSystemView.showModalAddProduction(this.#videoSystemModel.actors, this.#videoSystemModel.directors, this.#videoSystemModel.categories);
+
+        this.#videoSystemView.bindNewProductionForm(this.handleCreateProduction);
+        this.#videoSystemView.bindCloseModal();
+    }
+
+    handlerDelProduccionForm = () => {
+        this.#videoSystemView.showModalRemoveProductions(this.#videoSystemModel.productions);
+
+        this.#videoSystemView.bindDelProductionForm(this.handleDelProduction);
+        this.#videoSystemView.bindCloseModal();
+    }
+
+    handleCreateProduction = (title, nationality, publication, synopsis, image) => {
+        let prod = this.#videoSystemModel.getMovie(title, nationality, publication, synopsis, image);
+
+        console.log(prod);
+        // let categ = this.#videoSystemModel.getCategory(title, description);
+        // console.log(categ);
+        // let done, error;
+        // try {
+        //     this.#videoSystemModel.addCategory(categ);
+        //     done = true;
+        // } catch (exception) {
+        //     done = false;
+        //     error = exception;
+        // }
+        // this.#videoSystemView.showNewCategoryMessage(done, categ, error);
+        // this.onAddCategory();
+    }
+
+    handleDelProduction = (production) => {
+        let prod = this.#videoSystemModel.getProduction(production);
+        
+        let done,error;
+
+        try{
+            this.#videoSystemModel.removeProduction(prod);
+            done = true;
+        }catch (exception){
+            done = false;
+            error = exception;
+        }
+
+        // this.#videoSystemView.showNewCategoryMessage(done, cat, error);
+    }
 }
 
 export default VideoSystemController;
