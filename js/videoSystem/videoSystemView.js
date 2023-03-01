@@ -622,15 +622,16 @@ class VideoSystemView {
                         <a id="delProduccion" class="dropdown-item collapse-link" href="#" >
                             Eliminar producción
                         </a>
+                        <a id="asigProducion" class="dropdown-item collapse-link" href="#" >
+                            Asignar/desasignar actores/directores de la producción
+                        </a>
                         <a id="newCategory" class="dropdown-item collapse-link" href="#" >
                             Nueva Categoria
                         </a>
                         <a id="delCategory" class="dropdown-item collapse-link" href="#" >
                             Eliminar Categoria
                         </a>
-                        <a id="asigProducion" class="dropdown-item collapse-link" href="#" >
-                            Asignar/desasignar actores/directores de la producción
-                        </a>
+                        
                         <a id="newPerson" class="dropdown-item collapse-link" href="#" >
                             Nueva Persona
                         </a>
@@ -685,12 +686,15 @@ class VideoSystemView {
         // });
     }
 
-    bindAdmin(handlerNewProduccion, handlerDelProduccion, handlerNewCategory, handlerDelCategory) {
+    bindAdmin(handlerNewProduccion, handlerDelProduccion, handlerAsigProducion, handlerNewCategory, handlerDelCategory) {
         $('#newProduccion').click((event) => {
             handlerNewProduccion();
         });
         $('#delProduccion').click((event) => {
             handlerDelProduccion();
+        });
+        $('#asigProducion').click((event) => {
+            handlerAsigProducion();
         });
         $('#newCategory').click((event) => {
             handlerNewCategory();
@@ -700,7 +704,7 @@ class VideoSystemView {
         });
     }
 
-    bindCloseModal(){
+    bindCloseModal() {
         $('#buttonClose').click((event) => {
             $('body .modal').remove();
         });
@@ -753,7 +757,7 @@ class VideoSystemView {
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Produccion</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form name="formNewProduction" role="form" novalidate>
+                    <form name="formNewProduction" role="form" enctype="multipart/form-data" novalidate>
                         <div class="modal-body" id='formBody'>
                             <div class="col-md-12">
                                 <label for="Ptitle" class="form-label">Titulo</label>
@@ -789,7 +793,7 @@ class VideoSystemView {
                         </div>
                         <div class="modal-footer">
                             <button type="button" id='buttonClose' class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary">Crear nueva categoria</button>
+                            <button type="submit" class="btn btn-primary">Crear nueva produccion</button>
                         </div>
                     </form>
                 </div>
@@ -956,9 +960,89 @@ class VideoSystemView {
 
         myModal.show();
 
-        
+    }
+
+
+    showModalAssignProductions(productionsIterator,directorIterator,actorIterator) {
+        $('body').append(`<div class="modal fade" id="formAssignProduction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Asignar Actores/Directores a la Produccion</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form name="formNewProduction" role="form" novalidate>
+                        <div class="modal-body" id='formBody'>
+                            
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id='buttonClose' class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Asignar a la produccion</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>`);
+
+        let bodyForm = $('#formBody');
+
+        let select = $(`<select class="form-select" aria-label="Default select example">`);
+
+        select.append(`<option value="">Seleccione una produccion</option>`);
+        for (let prod of productionsIterator) {
+            select.append(`<option value="${prod.title}">${prod.title}</option>`);
+        }
+
+        bodyForm.append(select);
+
+
+        select.change(function (event) {
+
+            console.log(this.value);
+            let fila = $('#formBody .row');
+            if(fila.children().length > 0) fila.remove();
+
+            //Person
+            let contanierPerson = $('<div class="row">');
+
+            let contanierSelectPerson = $('<div class="col-md-6">');
+            contanierSelectPerson.append('<label for="newproDirector" class="form-label">Director</label>');
+
+            let categoriesSelect = $(`<select class="form-select" multiple aria-label="multiple select Directores" id="newproDirector" name="newproDirector" aria-describedby="director" required></select>`);
+
+            for (let director of directorIterator) {
+                categoriesSelect.append(`<option value="${director.name}/${director.lastname1}">${director.name} ${director.lastname1}</option>`);
+            }
+
+            contanierSelectPerson.append(categoriesSelect);
+            contanierPerson.append(contanierSelectPerson);
+
+            let contanierSelectActor = $('<div class="col-md-6">');
+            contanierSelectActor.append('<label for="newproActor" class="form-label">Actor</label>');
+
+            let categoriesSelectActor = $(`<select class="form-select" multiple aria-label="multiple select Actores" id="newproActor" name="newproActor" aria-describedby="actor" required></select>`);
+
+            for (let actor of actorIterator) {
+                categoriesSelectActor.append(`<option value="${actor.name}/${actor.lastname1}">${actor.name} ${actor.lastname1}</option>`);
+            }
+
+            contanierSelectActor.append(categoriesSelectActor);
+            contanierPerson.append(contanierSelectActor);
+
+            bodyForm.append(contanierPerson);
+        });
+
+
+
+        let myModal = new bootstrap.Modal(document.getElementById('formAssignProduction'), {
+            keyboard: false
+        });
+
+        myModal.show();
 
     }
+
 
 
 }

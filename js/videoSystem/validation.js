@@ -54,70 +54,113 @@ function newProductionValidation(handler) {
     $(form).attr('novalidate', true);
     $(form).addClass('needs-validation');
 
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function (event) {
         let isValid = true;
         let firstInvalidElement = null;
         let typePro;
         let newDate;
+        let imagentemp;
 
-        if(this.radioTypeP.value){
+        if (this.radioTypeP.value) {
             console.log("dentro");
-            
-            if(this.radioTypeP[0].checked){
+
+            if (this.radioTypeP[0].checked) {
                 console.log("peli");
                 typePro = "Movie";
-                
-            }else{
+
+            } else {
                 console.log("serie");
                 typePro = "Serie";
 
             }
             showFeedBack($(this.radioTypeP), true);
-        }else{
+        } else {
             showFeedBack($(this.radioTypeP), false);
         }
 
-        if(!this.Pimage.checkValidity()){
+        if(!this.newproCategories.checkValidity()){
+            isValid = false;
+            firstInvalidElement = this.newproCategories;
+
+            showFeedBack($(this.newproCategories), false);
+        }else{
+            showFeedBack($(this.newproCategories), true);
+        }
+
+
+
+        if (!this.Pimage.checkValidity()) {
             isValid = false;
             firstInvalidElement = this.Pimage;
 
-            showFeedBack($(this.Pimage),false);
-        }else{
-            showFeedBack($(this.Pimage),true);
+            showFeedBack($(this.Pimage), false);
+        } else {
+            showFeedBack($(this.Pimage), true);
+
         }
 
-        if(this.Pdate.checkValidity()){
+        if (this.Pdate.checkValidity()) {
             // let PdateTrans = Pdate.value 
             let date = new Date(this.Pdate.value).toLocaleDateString();
             date = date.split('/');
-            if(date[0] <= 9) date[0]="0"+date[0]; 
-            if(date[1] <= 9) date[1]="0"+date[1];
+            if (date[0] <= 9) date[0] = "0" + date[0];
+            if (date[1] <= 9) date[1] = "0" + date[1];
             newDate = date.join('/');
 
-            showFeedBack($(this.Pdate),true);
-        }else{
+            showFeedBack($(this.Pdate), true);
+        } else {
             isValid = false;
             firstInvalidElement = this.Pdate;
-            showFeedBack($(this.Pdate),false);
+            showFeedBack($(this.Pdate), false);
         }
 
         $(form.newproActor).change(defaultCheckElement);
         $(form.newproActor).change(defaultCheckElement);
         $(form.newproDirector).change(defaultCheckElement);
-        $(form.newproCategories).change(defaultCheckElement);
+
         $(form.PSynopsis).change(defaultCheckElement);
 
         $(form.Nacionalidad).change(defaultCheckElement);
         $(form.Ptitle).change(defaultCheckElement);
 
 
-        console.log(form.Pimage.files[0]);
+        $(form.Pimage).change(function (event) {
+            const selectedFile = event.target.files[0];
+            console.log("holaddd");
+            // Mostrar una vista previa de la imagen
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                // const previewImage = document.createElement("img");
+                // previewImage.src = event.target.result;
+
+                // let prueba = $('body');
+
+                // prueba.append(`<img src='${event.target.result}'>`);
+
+                imagentemp = event.target.result;
+                // document.body.appendChild(previewImage);
+            };
+            reader.readAsDataURL(selectedFile);
+        });
 
         if (!isValid) {
             firstInvalidElement.focus();
         } else {
-            //title, nationality, publication, synopsis, image
-            handler(this.Ptitle.value, this.Nacionalidad.value,newDate ,this.PSynopsis.value,this.Pimage.value);
+            let categorias = [...this.newproCategories.selectedOptions].map(function (option){
+				return option.value;
+			});
+            console.log(categorias);
+
+            let directores = [...this.newproDirector.selectedOptions].map(function (option){
+				return option.value;
+			});
+
+            let actores = [...this.newproActor.selectedOptions].map(function (option){
+				return option.value;
+			});
+
+ 
+            handler(this.Ptitle.value, this.Nacionalidad.value, newDate, this.PSynopsis.value, imagentemp,categorias,directores,actores,typePro);
         }
         event.preventDefault();
         event.stopPropagation();

@@ -225,6 +225,7 @@ class VideoSystemController {
         this.#videoSystemView.bindAdmin(
             this.handlerNewProduccionForm,
             this.handlerDelProduccionForm,
+            this.handlerAsigProducionForm,
             this.handlerNewCategoryForm,
             this.handlerDelCategoryForm
         );
@@ -371,13 +372,13 @@ class VideoSystemController {
 
     handleDelCategory = (category) => {
         let cat = this.#videoSystemModel.getCategory(category);
-        
-        let done,error;
 
-        try{
+        let done, error;
+
+        try {
             this.#videoSystemModel.removeCategory(cat);
             done = true;
-        }catch (exception){
+        } catch (exception) {
             done = false;
             error = exception;
         }
@@ -400,38 +401,72 @@ class VideoSystemController {
         this.#videoSystemView.bindCloseModal();
     }
 
-    handleCreateProduction = (title, nationality, publication, synopsis, image) => {
-        let prod = this.#videoSystemModel.getMovie(title, nationality, publication, synopsis, image);
+    handleCreateProduction = (title, nationality, publication, synopsis, image, categorias, directores, actores, typePro) => {
+        let prod;
+        if (typePro == 'Movie') {
+            prod = this.#videoSystemModel.getMovie(title, nationality, publication, synopsis, image);
+
+        } else if (typePro == 'Serie') {
+            prod = this.#videoSystemModel.getSerie(title, nationality, publication, synopsis, image);
+        }
+
 
         console.log(prod);
-        // let categ = this.#videoSystemModel.getCategory(title, description);
-        // console.log(categ);
-        // let done, error;
-        // try {
-        //     this.#videoSystemModel.addCategory(categ);
-        //     done = true;
-        // } catch (exception) {
-        //     done = false;
-        //     error = exception;
-        // }
-        // this.#videoSystemView.showNewCategoryMessage(done, categ, error);
+
+        let done, error;
+        try {
+            //Introducimos la produccion en el sistema
+            this.#videoSystemModel.addProduction(prod);
+
+            //Asignamos la categoria con la produccion 
+            for (const categoria of categorias) {
+                let categoryAs = this.#videoSystemModel.getCategory(categoria);
+                this.#videoSystemModel.assignCategory(categoryAs, prod);
+            }
+
+            //Asignamos el director con la produccion 
+            for (const director of directores) {
+                let directorSelec = director.split('/');
+
+                let directorAs = this.#videoSystemModel.getDirector(directorSelec[0], directorSelec[1]);
+                this.#videoSystemModel.assignDirector(directorAs, prod);
+            }
+
+            //Asignamos el actor con la produccion 
+            for (const actor of actores) {
+                let actorSelec = actor.split('/');
+
+                let actorAs = this.#videoSystemModel.getActor(actorSelec[0], actorSelec[1]);
+                this.#videoSystemModel.assignActor(actorAs, prod);
+            }
+
+            done = true;
+        } catch (exception) {
+            done = false;
+            error = exception;
+        }
+        this.#videoSystemView.showNewCategoryMessage(done, prod, error);
         // this.onAddCategory();
     }
 
     handleDelProduction = (production) => {
         let prod = this.#videoSystemModel.getProduction(production);
-        
-        let done,error;
 
-        try{
+        let done, error;
+
+        try {
             this.#videoSystemModel.removeProduction(prod);
             done = true;
-        }catch (exception){
+        } catch (exception) {
             done = false;
             error = exception;
         }
 
         // this.#videoSystemView.showNewCategoryMessage(done, cat, error);
+    }
+
+    handlerAsigProducionForm = () => {
+        this.#videoSystemView.showModalAssignProductions(this.#videoSystemModel.productions, this.#videoSystemModel.directors, this.#videoSystemModel.actors);
     }
 }
 
