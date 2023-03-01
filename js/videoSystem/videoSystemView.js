@@ -649,7 +649,7 @@ class VideoSystemView {
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="staticBackdropLabel">Nueva Categoria</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close buttonClose" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form name="formNewCategory" role="form" novalidate>
                 <div class="modal-body" id='formBody'>
@@ -666,7 +666,7 @@ class VideoSystemView {
                     </div>
                 </div>
                 <div class="modal-footer">
-                <button type="button" id='buttonClose' class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary">Crear nueva categoria</button>
                 </div>
             </form>
@@ -686,7 +686,7 @@ class VideoSystemView {
         // });
     }
 
-    bindAdmin(handlerNewProduccion, handlerDelProduccion, handlerAsigProducion, handlerNewCategory, handlerDelCategory) {
+    bindAdmin(handlerNewProduccion, handlerDelProduccion, handlerAsigProducion, handlerNewCategory, handlerDelCategory, handlerNewPerson) {
         $('#newProduccion').click((event) => {
             handlerNewProduccion();
         });
@@ -702,10 +702,13 @@ class VideoSystemView {
         $('#delCategory').click((event) => {
             handlerDelCategory();
         });
+        $('#newPerson').click((event) => {
+            handlerNewPerson();
+        });
     }
 
     bindCloseModal() {
-        $('#buttonClose').click((event) => {
+        $('.buttonClose').click((event) => {
             $('body .modal').remove();
         });
     }
@@ -755,7 +758,7 @@ class VideoSystemView {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Produccion</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close buttonClose" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form name="formNewProduction" role="form" enctype="multipart/form-data" novalidate>
                         <div class="modal-body" id='formBody'>
@@ -792,7 +795,7 @@ class VideoSystemView {
                             
                         </div>
                         <div class="modal-footer">
-                            <button type="button" id='buttonClose' class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
                             <button type="submit" class="btn btn-primary">Crear nueva produccion</button>
                         </div>
                     </form>
@@ -867,10 +870,10 @@ class VideoSystemView {
 
         myModal.show();
 
-        $('#buttonClose').click((event) => {
-            // myModal.dispose();
-            $('body .modal').remove();
-        });
+        // $('#buttonClose').click((event) => {
+        //     // myModal.dispose();
+        //     $('body .modal').remove();
+        // });
     }
 
 
@@ -880,13 +883,13 @@ class VideoSystemView {
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminar Categoria</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close buttonClose" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
                 <div class="modal-body" id='formBody'>
 
                 </div>
                 <div class="modal-footer">
-                <button type="button" id='buttonClose' class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
                 </div>
           </div>
         </div>
@@ -913,10 +916,10 @@ class VideoSystemView {
 
         myModal.show();
 
-        $('#buttonClose').click((event) => {
-            // myModal.dispose();
-            $('body .modal').remove();
-        });
+        // $('#buttonClose').click((event) => {
+        //     // myModal.dispose();
+        //     $('body .modal').remove();
+        // });
 
     }
 
@@ -926,13 +929,13 @@ class VideoSystemView {
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminar Produccion</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close buttonClose" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
                 <div class="modal-body" id='formBody'>
 
                 </div>
                 <div class="modal-footer">
-                <button type="button" id='buttonClose' class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
                 </div>
           </div>
         </div>
@@ -963,22 +966,22 @@ class VideoSystemView {
     }
 
 
-    showModalAssignProductions(productionsIterator,directorIterator,actorIterator) {
+    showModalAssignProductions(productionsIterator, directorIterator, actorIterator) {
         $('body').append(`<div class="modal fade" id="formAssignProduction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Asignar Actores/Directores a la Produccion</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close buttonClose" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form name="formNewProduction" role="form" novalidate>
+                    <form name="formAssignDesProd" role="form" novalidate>
                         <div class="modal-body" id='formBody'>
                             
                             
                         </div>
                         <div class="modal-footer">
-                            <button type="button" id='buttonClose' class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary">Asignar a la produccion</button>
+                            <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
+                            
                         </div>
                     </form>
                 </div>
@@ -987,7 +990,7 @@ class VideoSystemView {
 
         let bodyForm = $('#formBody');
 
-        let select = $(`<select class="form-select" aria-label="Default select example">`);
+        let select = $(`<select class="form-select mb-4" id='selectProd' aria-label="Default select example">`);
 
         select.append(`<option value="">Seleccione una produccion</option>`);
         for (let prod of productionsIterator) {
@@ -997,50 +1000,160 @@ class VideoSystemView {
         bodyForm.append(select);
 
 
-        select.change(function (event) {
-
-            console.log(this.value);
-            let fila = $('#formBody .row');
-            if(fila.children().length > 0) fila.remove();
-
-            //Person
-            let contanierPerson = $('<div class="row">');
-
-            let contanierSelectPerson = $('<div class="col-md-6">');
-            contanierSelectPerson.append('<label for="newproDirector" class="form-label">Director</label>');
-
-            let categoriesSelect = $(`<select class="form-select" multiple aria-label="multiple select Directores" id="newproDirector" name="newproDirector" aria-describedby="director" required></select>`);
-
-            for (let director of directorIterator) {
-                categoriesSelect.append(`<option value="${director.name}/${director.lastname1}">${director.name} ${director.lastname1}</option>`);
-            }
-
-            contanierSelectPerson.append(categoriesSelect);
-            contanierPerson.append(contanierSelectPerson);
-
-            let contanierSelectActor = $('<div class="col-md-6">');
-            contanierSelectActor.append('<label for="newproActor" class="form-label">Actor</label>');
-
-            let categoriesSelectActor = $(`<select class="form-select" multiple aria-label="multiple select Actores" id="newproActor" name="newproActor" aria-describedby="actor" required></select>`);
-
-            for (let actor of actorIterator) {
-                categoriesSelectActor.append(`<option value="${actor.name}/${actor.lastname1}">${actor.name} ${actor.lastname1}</option>`);
-            }
-
-            contanierSelectActor.append(categoriesSelectActor);
-            contanierPerson.append(contanierSelectActor);
-
-            bodyForm.append(contanierPerson);
-        });
-
-
-
         let myModal = new bootstrap.Modal(document.getElementById('formAssignProduction'), {
             keyboard: false
         });
 
         myModal.show();
 
+    }
+
+    bindShowAssignsProd(handler) {
+
+        $('#formBody>select').change(function (event) {
+            console.log(this.value);
+            handler(this.value);
+        });
+    }
+
+    bindAssignDesProduction(handlerDirectors,handlerActors,prod) {
+        let form = document.forms.formAssignDesProd;
+
+        $('.directorButton').click(function (event) {
+
+            let directorAssign = [...form.Director.selectedOptions].map(function (option) {
+                return option.value;
+            });
+
+            let directorDeassign = [...form.DirectorProd.selectedOptions].map(function (option) {
+                return option.value;
+            });
+            handlerDirectors(directorAssign,directorDeassign,prod);       
+        });
+
+        $('.actorButton').click(function (event) {
+            let actorAssign = [...form.Actor.selectedOptions].map(function (option) {
+                return option.value;
+            });
+
+            let actorDeassign = [...form.ActorProd.selectedOptions].map(function (option) {
+                return option.value;
+            });
+
+            handlerActors(actorAssign,actorDeassign,prod);            
+        });
+    }
+
+    showAssignProductionPrueba(directorIterator, actorIterator, production, getCast, getProductionsDirector) {
+        let bodyForm = $('#formBody');
+
+        let fila = $('#formBody .row');
+        if (fila.children().length > 0) fila.remove();
+
+        //Person
+        let contanierPerson = $('<div class="row">');
+        
+        let contanierSelectPerson = $('<div class="col-md-5">');
+        contanierSelectPerson.append('<label for="Director" class="form-label">Directores disponibles</label>');
+
+        let categoriesSelect = $(`<select class="form-select" multiple aria-label="multiple select Directores" id="Director" name="Director" aria-describedby="director"></select>`);
+        let directores = Array.from(directorIterator);
+        let directorProd = Array.from(getProductionsDirector);
+
+        let filtrado = directores.filter((element) => !directorProd.includes(element));
+
+        for (let director of filtrado) {
+            categoriesSelect.append(`<option value="${director.name}/${director.lastname1}">${director.name} ${director.lastname1}</option>`);
+
+        }
+
+        contanierSelectPerson.append(categoriesSelect);
+        contanierPerson.append(contanierSelectPerson);
+
+        contanierPerson.append(`<div class="col-md-2 d-flex justify-content-center align-items-center">
+          <button type="button" class="btn btn-primary directorButton">
+          <i class="bi bi-arrow-left-right"></i></button>
+        </div>`);
+
+        let contanierSelectPerson2 = $('<div class="col-md-5">');
+        contanierSelectPerson2.append(`<label for="DirectorProd" class="form-label">Directores asignados</label>`);
+        let assignDirector = $(`<select class="form-select" multiple aria-label="multiple select Directores" id="DirectorProd" name="DirectorProd" aria-describedby="director"></select>`);
+
+        for (let director of directorProd) {
+            console.log(director);
+            assignDirector.append(`<option value="${director.name}/${director.lastname1}">${director.name} ${director.lastname1}</option>`);
+        }
+
+        contanierSelectPerson2.append(assignDirector)
+        contanierPerson.append(contanierSelectPerson2);
+
+        let contanierPersonActor = $('<div class="row mt-4">');
+        
+        
+        let contanierSelectPersonActor = $('<div class="col-md-5">');
+        contanierSelectPersonActor.append('<label for="Actor" class="form-label">Actores disponibles</label>');
+
+        let categoriesSelectActor = $(`<select class="form-select" multiple aria-label="multiple select actor" id="Actor" name="Actor" aria-describedby="director"></select>`);
+
+        for (let actor of actorIterator) {
+            categoriesSelectActor.append(`<option value="${actor.name}/${actor.lastname1}">${actor.name} ${actor.lastname1}</option>`);
+        }
+        contanierSelectPersonActor.append(categoriesSelectActor);
+        contanierPersonActor.append(contanierSelectPersonActor);
+
+        contanierPersonActor.append(`<div class="col-md-2 d-flex gap-2 flex-column justify-content-center align-items-center">
+          <button type="button" class="btn btn-primary actorButton">
+          <i class="bi bi-arrow-left-right"></i></button>
+          <button type="button" class="btn btn-primary" id='deselectActors'>
+          Deselect</button>
+        </div>`);
+
+        let contanierSelectPersonActor2 = $('<div class="col-md-5">');
+        contanierSelectPersonActor2.append(`<label for="ActorProd" class="form-label">Actores asignados:</label>`);
+        let assignActor = $(`<select class="form-select" multiple aria-label="multiple select Actores" id="ActorProd" name="ActorProd" aria-describedby="director"></select>`);
+
+        for (let actor of getCast) {
+
+            assignActor.append(`<option value="${actor.name}/${actor.lastname1}">${actor.name} ${actor.lastname1}</option>`);
+        }
+
+        contanierSelectPersonActor2.append(assignActor);
+        contanierPersonActor.append(contanierSelectPersonActor2);
+        bodyForm.append(contanierPerson);
+        bodyForm.append(contanierPersonActor);
+    }
+
+    showModalAddPerson() {
+        $('body').append(`<div class="modal fade" id="formAddProduction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Produccion</h1>
+                        <button type="button" class="btn-close buttonClose" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form name="formNewProduction" role="form" enctype="multipart/form-data" novalidate>
+                        
+                        <div class="modal-footer">
+                            <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Crear nueva produccion</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>`);
+
+
+
+        let myModal = new bootstrap.Modal(document.getElementById('formAddProduction'), {
+            keyboard: false
+        });
+
+        myModal.show();
+
+        // $('#buttonClose').click((event) => {
+        //     // myModal.dispose();
+        //     $('body .modal').remove();
+        // });
     }
 
 

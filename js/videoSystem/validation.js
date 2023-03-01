@@ -124,24 +124,7 @@ function newProductionValidation(handler) {
         $(form.Ptitle).change(defaultCheckElement);
 
 
-        $(form.Pimage).change(function (event) {
-            const selectedFile = event.target.files[0];
-            console.log("holaddd");
-            // Mostrar una vista previa de la imagen
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                // const previewImage = document.createElement("img");
-                // previewImage.src = event.target.result;
-
-                // let prueba = $('body');
-
-                // prueba.append(`<img src='${event.target.result}'>`);
-
-                imagentemp = event.target.result;
-                // document.body.appendChild(previewImage);
-            };
-            reader.readAsDataURL(selectedFile);
-        });
+        
 
         if (!isValid) {
             firstInvalidElement.focus();
@@ -174,6 +157,26 @@ function newProductionValidation(handler) {
         let inputs = $(this).find('input');
         inputs.removeClass('is-valid is-invalid');
     }));
+
+    $(form.Pimage).change(function (event) {
+        const selectedFile = event.target.files[0];
+        console.log("holaddd");
+        // Mostrar una vista previa de la imagen
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            // const previewImage = document.createElement("img");
+            // previewImage.src = event.target.result;
+
+            // let prueba = $('body');
+
+            // prueba.append(`<img src='${event.target.result}'>`);
+
+            imagentemp = event.target.result;
+            console.log(event.target.result);
+            // document.body.appendChild(previewImage);
+        };
+        reader.readAsDataURL(selectedFile);
+    });
 
 
 }

@@ -227,7 +227,8 @@ class VideoSystemController {
             this.handlerDelProduccionForm,
             this.handlerAsigProducionForm,
             this.handlerNewCategoryForm,
-            this.handlerDelCategoryForm
+            this.handlerDelCategoryForm,
+            this.handlerNewPerson
         );
     }
 
@@ -404,6 +405,7 @@ class VideoSystemController {
     handleCreateProduction = (title, nationality, publication, synopsis, image, categorias, directores, actores, typePro) => {
         let prod;
         if (typePro == 'Movie') {
+            console.log(image);
             prod = this.#videoSystemModel.getMovie(title, nationality, publication, synopsis, image);
 
         } else if (typePro == 'Serie') {
@@ -467,6 +469,63 @@ class VideoSystemController {
 
     handlerAsigProducionForm = () => {
         this.#videoSystemView.showModalAssignProductions(this.#videoSystemModel.productions, this.#videoSystemModel.directors, this.#videoSystemModel.actors);
+
+        // let prod = this.#videoSystemModel.getProduction("El vecino");
+        // console.log(prod);
+        this.#videoSystemView.bindShowAssignsProd(this.handlerShowAssignProduction);
+    }
+
+    handlerShowAssignProduction = (production) => {
+        let prod = this.#videoSystemModel.getProduction(production);
+
+        this.#videoSystemView.showAssignProductionPrueba(this.#videoSystemModel.directors, this.#videoSystemModel.actors, prod, this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod));
+        this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector,this.handleAssingDesProdActor, prod);
+    }
+
+    handlerNewPerson = () => {
+        this.#videoSystemView.showModalAddPerson();
+
+        this.#videoSystemView.bindCloseModal();
+    }
+
+    handleAssingDesProdDirector = (directoresAssign, directoresDeassign, prod) => {
+        for (let director of directoresAssign) {
+
+            let directorSplit = director.split('/');
+            let objDirector = this.#videoSystemModel.getDirector(directorSplit[0], directorSplit[1]);
+            this.#videoSystemModel.assignDirector(objDirector, prod);
+        }
+
+        for (let director of directoresDeassign) {
+
+            let directorSplit = director.split('/');
+            let objDirector = this.#videoSystemModel.getDirector(directorSplit[0], directorSplit[1]);
+            this.#videoSystemModel.deassignDirector(objDirector, prod);
+        }
+
+        //Reiniciamos la formulario 
+        this.#videoSystemView.showAssignProductionPrueba(this.#videoSystemModel.directors, this.#videoSystemModel.actors, prod, this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod));
+        this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector,this.handleAssingDesProdActor, prod);
+    }
+
+    handleAssingDesProdActor = (actoresAssign, actoresDeassign, prod) => {
+        for (let actor of actoresAssign) {
+
+            let actorSplit = actor.split('/');
+            let objActor = this.#videoSystemModel.getActor(actorSplit[0], actorSplit[1]);
+            this.#videoSystemModel.assignActor(objActor, prod);
+        }
+
+        for (let actor of actoresDeassign) {
+
+            let actorSplit = actor.split('/');
+            let objActor = this.#videoSystemModel.getActor(actorSplit[0], actorSplit[1]);
+            this.#videoSystemModel.deassignActor(objActor, prod);
+        }
+
+        //Reiniciamos la formulario 
+        this.#videoSystemView.showAssignProductionPrueba(this.#videoSystemModel.directors, this.#videoSystemModel.actors, prod, this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod));
+        this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector,this.handleAssingDesProdActor, prod);
     }
 }
 
