@@ -5,7 +5,7 @@ import VideoSystemView from "./videoSystemView.js";
 
 let VideoSystemApp;
 
-$(function(){
+$(function () {
     VideoSystemApp = new VideoSystemController(
         VideoSystem.getInstance("videoS"), new VideoSystemView()
     );
@@ -20,8 +20,8 @@ const historyActions = {
     ListActores: (event) => VideoSystemApp.handleActoresList(event.state.nav),
     ListDirectores: (event) => VideoSystemApp.handleDirectoresList(event.state.nav),
     showProduction: (event) => VideoSystemApp.handleProduction(event.state.produccion),
-    showActor:(event) => VideoSystemApp.handleActor(event.state.person),
-    showDirector:(event) => VideoSystemApp.handleDirector(event.state.person)
+    showActor: (event) => VideoSystemApp.handleActor(event.state.person),
+    showDirector: (event) => VideoSystemApp.handleDirector(event.state.person)
 };
 
 /**
@@ -29,13 +29,13 @@ const historyActions = {
  * Es lanzado cada vez que el historial cambia
  */
 window.addEventListener('popstate', function (event) {
-    // console.log(event.state);
+
     if (event.state) {
         historyActions[event.state.action](event);
     }
 });
 
-history.replaceState({action: 'init'}, null); //Primer history init
+history.replaceState({ action: 'init' }, null); //Primer history init
 
 
 export default VideoSystemApp;

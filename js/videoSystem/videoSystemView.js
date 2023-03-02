@@ -1,4 +1,4 @@
-import { showFeedBack, defaultCheckElement, newCategoryValidation, newProductionValidation } from './validation.js';
+import { showFeedBack, defaultCheckElement, newCategoryValidation, newProductionValidation, newPersonValidation } from './validation.js';
 
 class VideoSystemView {
     /**
@@ -663,6 +663,8 @@ class VideoSystemView {
                     <div class="form-floating mb-3">
                         <textarea class="form-control" placeholder="description" id="description" name="description" style="height: 100px"></textarea>
                         <label for="description">Description</label>
+                        <div class="invalid-feedback">El nombre es obligatorio.</div>
+                        <div class="valid-feedback">Correcto.</div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -674,19 +676,9 @@ class VideoSystemView {
         </div>
       </div>`);
 
-        let myModal = new bootstrap.Modal(document.getElementById('formAddCategory'), {
-            keyboard: false
-        });
-
-        myModal.show();
-
-        // console.log(form);
-        // myModal.addEventListener('reset',function(){
-        //     myModal.dispose();
-        // });
     }
 
-    bindAdmin(handlerNewProduccion, handlerDelProduccion, handlerAsigProducion, handlerNewCategory, handlerDelCategory, handlerNewPerson) {
+    bindAdmin(handlerNewProduccion, handlerDelProduccion, handlerAsigProducion, handlerNewCategory, handlerDelCategory, handlerNewPerson, handlerDelPerson) {
         $('#newProduccion').click((event) => {
             handlerNewProduccion();
         });
@@ -705,17 +697,31 @@ class VideoSystemView {
         $('#newPerson').click((event) => {
             handlerNewPerson();
         });
+        $('#delPerson').click((event) => {
+            handlerDelPerson();
+        });
     }
 
     bindCloseModal() {
+        let myModal = new bootstrap.Modal(document.getElementsByClassName('modal')[0], {
+            keyboard: false
+        });
+
+        myModal.show();
+
         $('.buttonClose').click((event) => {
             $('body .modal').remove();
+            // myModal.dispose()
         });
     }
 
 
     bindNewCategoryForm(handler) {
         newCategoryValidation(handler);
+    }
+
+    bindNewPersonForm(handler) {
+        newPersonValidation(handler);
     }
 
     bindDelCategoryForm(handler) {
@@ -736,20 +742,69 @@ class VideoSystemView {
         newProductionValidation(handler);
     }
 
-    showNewCategoryMessage(done, categ, error) {
-        let form = $('#formBody');
-        let formAlert = form.find('.alert');
+    showMessageAction(done, categ, feedback) {
 
-        if (formAlert.length > 0) formAlert.remove();
         if (done) {
-            form.append(`<div class="alert alert-success" role="alert">
-                            Ha registrado la nueva categoria ${categ.name}
-                        </div>`);
+            $('body').append(`<div class="modal fade" id="messageModal" style="z-index: 1900" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content" style='background-color:#d1e7dd'>
+                <div class="modal-header gap-2 alert-primary" >
+                  <i class="bi bi-check-circle"></i>
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Exito</h1>
+                  <button type="button" class="btn-close buttonCloseM" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  ${feedback}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-dark buttonCloseM" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>`);
         } else {
-            form.append(`<div class="alert alert-danger" role="alert">
-                          Ha producido un error: ${error.message}
-                        </div>`);
+            $('body').append(`<div class="modal fade" id="messageModal" style="z-index: 1900" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content" style='background-color:#f8d7da'>
+                <div class="modal-header gap-2" >
+                  <i class="bi bi-x-circle"></i>
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Error</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  ${feedback.message}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-dark buttonCloseM" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+              </div>
+            </div>
+          </div>`);
         }
+
+        let myModal = new bootstrap.Modal(document.getElementById('messageModal'), {
+            keyboard: false
+        });
+
+        myModal.show();
+
+        $('.buttonCloseM').click((event) => {
+            $('#messageModal').remove();
+            // myModal.dispose()
+        });
+        // let form = $('#formBody');
+        // let formAlert = form.find('.alert');
+
+        // if (formAlert.length > 0) formAlert.remove();
+        // if (done) {
+        //     form.append(`<div class="alert alert-success" role="alert">
+        //                     Ha registrado la nueva categoria ${categ.name}
+        //                 </div>`);
+        // } else {
+        //     form.append(`<div class="alert alert-danger" role="alert">
+        //                   Ha producido un error: ${error.message}
+        //                 </div>`);
+        // }
     }
 
     showModalAddProduction(actorIterator, directorIterator, categoriesIterator) {
@@ -846,34 +901,14 @@ class VideoSystemView {
 
         formProduc.append(contanierPerson);
 
-        let radioType = $(`<label class="form-check-label p-3" for="">
-                         Tipo de produccion:   
-                        </label>
-                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-
-                              <input type="radio" class="btn-check" name="radioTypeP" id="Movie" autocomplete="off">
-                              <label class="btn btn-outline-primary" for="Movie">Pelicula</label>
-
-                              <input type="radio" class="btn-check" name="radioTypeP" id="Serie" autocomplete="off">
-                              <label class="btn btn-outline-primary" for="Serie">Serie</label>
-
-                              <div class="invalid-feedback">Debe seleccionar que tipo de produccion es.</div>
-                              <div class="valid-feedback">Correcto.</div>
-                        </div>`);
-
-        formProduc.append(radioType);
-
-
-        let myModal = new bootstrap.Modal(document.getElementById('formAddProduction'), {
-            keyboard: false
-        });
-
-        myModal.show();
-
-        // $('#buttonClose').click((event) => {
-        //     // myModal.dispose();
-        //     $('body .modal').remove();
-        // });
+        formProduc.append(`<label class="form-check-label pt-3" for="selectType">Tipo de produccion:</label>
+                        <select class="form-select" aria-label="Default select example" id='selectType' name='selectType' required>
+                        <option value="" selected>Seleccione el tipo de produccion</option>
+                        <option value="Movie">Pelicula</option>
+                        <option value="Serie">Serie</option>
+                      </select>
+                      <div class="invalid-feedback">Debe seleccionar que tipo de produccion es.</div>
+                    <div class="valid-feedback">Correcto.</div>`);
     }
 
 
@@ -907,20 +942,6 @@ class VideoSystemView {
                                 </div>
                         </div>`);
         }
-
-
-
-        let myModal = new bootstrap.Modal(document.getElementById('formRemCategory'), {
-            keyboard: false
-        });
-
-        myModal.show();
-
-        // $('#buttonClose').click((event) => {
-        //     // myModal.dispose();
-        //     $('body .modal').remove();
-        // });
-
     }
 
     showModalRemoveProductions(productionsIterator) {
@@ -956,13 +977,6 @@ class VideoSystemView {
                                 </div>
                         </div>`);
         }
-
-        let myModal = new bootstrap.Modal(document.getElementById('formRemProduction'), {
-            keyboard: false
-        });
-
-        myModal.show();
-
     }
 
 
@@ -998,14 +1012,6 @@ class VideoSystemView {
         }
 
         bodyForm.append(select);
-
-
-        let myModal = new bootstrap.Modal(document.getElementById('formAssignProduction'), {
-            keyboard: false
-        });
-
-        myModal.show();
-
     }
 
     bindShowAssignsProd(handler) {
@@ -1016,7 +1022,7 @@ class VideoSystemView {
         });
     }
 
-    bindAssignDesProduction(handlerDirectors,handlerActors,prod) {
+    bindAssignDesProduction(handlerDirectors, handlerActors, prod) {
         let form = document.forms.formAssignDesProd;
 
         $('.directorButton').click(function (event) {
@@ -1028,7 +1034,7 @@ class VideoSystemView {
             let directorDeassign = [...form.DirectorProd.selectedOptions].map(function (option) {
                 return option.value;
             });
-            handlerDirectors(directorAssign,directorDeassign,prod);       
+            handlerDirectors(directorAssign, directorDeassign, prod);
         });
 
         $('.actorButton').click(function (event) {
@@ -1040,7 +1046,7 @@ class VideoSystemView {
                 return option.value;
             });
 
-            handlerActors(actorAssign,actorDeassign,prod);            
+            handlerActors(actorAssign, actorDeassign, prod);
         });
     }
 
@@ -1052,7 +1058,7 @@ class VideoSystemView {
 
         //Person
         let contanierPerson = $('<div class="row">');
-        
+
         let contanierSelectPerson = $('<div class="col-md-5">');
         contanierSelectPerson.append('<label for="Director" class="form-label">Directores disponibles</label>');
 
@@ -1088,8 +1094,8 @@ class VideoSystemView {
         contanierPerson.append(contanierSelectPerson2);
 
         let contanierPersonActor = $('<div class="row mt-4">');
-        
-        
+
+
         let contanierSelectPersonActor = $('<div class="col-md-5">');
         contanierSelectPersonActor.append('<label for="Actor" class="form-label">Actores disponibles</label>');
 
@@ -1124,36 +1130,133 @@ class VideoSystemView {
     }
 
     showModalAddPerson() {
-        $('body').append(`<div class="modal fade" id="formAddProduction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
+        $('body').append(`<div class="modal fade" id="formAddPerson" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Produccion</h1>
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Nueva Persona</h1>
                         <button type="button" class="btn-close buttonClose" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form name="formNewProduction" role="form" enctype="multipart/form-data" novalidate>
-                        
+                    <form name="formNewPerson" role="form" enctype="multipart/form-data" novalidate>
+                    <div class="modal-body" id='formBody'>
+                    <div class="col-md-12">
+                    <label for="selectType" class="form-label">Tipo de persona*</label>
+                      <select class="form-select" aria-label="Default select example" id='selectType' name='selectType' required>
+                        <option value="" selected>Seleccione el tipo de persona</option>
+                        <option value="Director">Director</option>
+                        <option value="Actor">Actor</option>
+                      </select>
+                        <div class="invalid-feedback">El tipo es obligatorio.</div>
+                        <div class="valid-feedback">Correcto.</div>
+                    </div>
+                    <div class='row'>
+                        <div class="col-md-5 p-3">
+                            <label for="PersonName" class="form-label">Nombre*</label>
+                            <input type="text" class="form-control" id="PersonName" name='PersonName' required>
+                            <div class="invalid-feedback">El nombre es obligatorio.</div>
+                            <div class="valid-feedback">Correcto.</div>
+                        </div>
+                        <div class="col-md-4 p-3">
+                            <label for="PersonLastName1" class="form-label">Primer Apellido*</label>
+                            <input type="text" class="form-control" id="PersonLastName1" name='PersonLastName1' required>
+                            <div class="invalid-feedback">El primer apellido es obligatorio.</div>
+                            <div class="valid-feedback">Correcto.</div>
+                        </div>
+                        <div class="col-md-3 p-3">
+                            <label for="PersonLastName2" class="form-label">Segundo Apellido</label>
+                            <input type="text" class="form-control" id="PersonLastName2" name='PersonLastName2'>
+                            <div class="valid-feedback">Correcto.</div>
+                        </div>
+                    </div>
+                    <div class='row'>
+                    <div class="col-md-6 p-3">
+                        <label for="Pdate" class="form-label">Fecha de nacimiento</label>
+                        <input type="date" class="form-control" id="Pdate" required pattern="\d{2}/\d{2}/\d{4}">
+                        <div class="invalid-feedback">La fecha es obligatorio.</div>
+                        <div class="valid-feedback">Correcto.</div>
+                    </div>
+                    <div class="col-md-6 p-3">
+                        <label for="Pimage" class="form-label">Imagen</label>
+                        <input type="file" class="form-control" id="Pimage" name='Pimage'>
+                        <div class="invalid-feedback">La imagen es obligatorio.</div>
+                        <div class="valid-feedback">Correcto.</div>
+                    </div>
+                    </div>
+                </div>
                         <div class="modal-footer">
                             <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary">Crear nueva produccion</button>
+                            <button type="submit" class="btn btn-primary">Crear nueva persona</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>`);
+    }
+
+    showModalRemovePerson(directorIterator, actorIterator) {
+        $('body').append(`<div class="modal fade" id="formRemPerson" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminar Persona</h1>
+              <button type="button" class="btn-close buttonClose" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <div class="modal-body" id='formBody'>
+                <div class="container text-center">
+                <div class="row row-cols-2">
+                  <div class="col"><strong>Directores</strong></div>
+                  <div class="col"><strong>Actores</strong></div>
+                  <div class="col overflow-auto" id='listDirector' style='height: 500px'></div>
+                  <div class="col overflow-auto" id='listActores'  style='height: 500px'></div>
+                </div>
+              </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+          </div>
+        </div>
+      </div>`);
+
+        let columnD = $(`#listDirector`);
 
 
+        for (let director of directorIterator) {
+            columnD.append(`<div class='row pt-3'>
+                                <div class='col'>
+                                    <p>${director.name} ${director.lastname1}</p>
+                                </div>
+                                <div class='col'>
+                                    <button class="btn btn-primary" data-person="${director.name}/${director.lastname1}" type='button'>Eliminar</button>
+                                </div>
+                        </div>`);
+        }
 
-        let myModal = new bootstrap.Modal(document.getElementById('formAddProduction'), {
-            keyboard: false
+
+        let column = $(`#listActores`);
+
+        for (let actor of actorIterator) {
+            column.append(`<div class='row pt-3'>
+                                <div class='col'>
+                                    <p>${actor.name} ${actor.lastname1}</p>
+                                </div>
+                                <div class='col'>
+                                    <button class="btn btn-primary" data-person="${actor.name}/${actor.lastname1}" type='button'>Eliminar</button>
+                                </div>
+                        </div>`);
+        }
+    }
+
+    bindDelPersonForm(handlerDirector, handlerActor) {
+        $('#listDirector').find('button').click(function (event) {
+            handlerDirector(this.dataset.person);
+            $(this).closest('div.row').remove();
         });
 
-        myModal.show();
-
-        // $('#buttonClose').click((event) => {
-        //     // myModal.dispose();
-        //     $('body .modal').remove();
-        // });
+        $('#listActores').find('button').click(function (event) {
+            handlerActor(this.dataset.person);
+            $(this).closest('div.row').remove();
+        });
     }
 
 

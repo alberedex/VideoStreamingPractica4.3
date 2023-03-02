@@ -228,7 +228,8 @@ class VideoSystemController {
             this.handlerAsigProducionForm,
             this.handlerNewCategoryForm,
             this.handlerDelCategoryForm,
-            this.handlerNewPerson
+            this.handlerNewPersonForm,
+            this.handlerDelPersonForm
         );
     }
 
@@ -351,7 +352,7 @@ class VideoSystemController {
             done = false;
             error = exception;
         }
-        this.#videoSystemView.showNewCategoryMessage(done, categ, error);
+        this.#videoSystemView.showMessageAction(done, categ, error);
         this.onAddCategory();
     }
 
@@ -384,7 +385,7 @@ class VideoSystemController {
             error = exception;
         }
 
-        this.#videoSystemView.showNewCategoryMessage(done, cat, error);
+        this.#videoSystemView.showMessageAction(done, cat, error);
         this.onAddCategory();
     }
 
@@ -447,7 +448,7 @@ class VideoSystemController {
             done = false;
             error = exception;
         }
-        this.#videoSystemView.showNewCategoryMessage(done, prod, error);
+        this.#videoSystemView.showMessageAction(done, prod, error);
         // this.onAddCategory();
     }
 
@@ -464,29 +465,26 @@ class VideoSystemController {
             error = exception;
         }
 
-        // this.#videoSystemView.showNewCategoryMessage(done, cat, error);
+        this.#videoSystemView.showMessageAction(done, cat, error);
     }
 
     handlerAsigProducionForm = () => {
         this.#videoSystemView.showModalAssignProductions(this.#videoSystemModel.productions, this.#videoSystemModel.directors, this.#videoSystemModel.actors);
 
-        // let prod = this.#videoSystemModel.getProduction("El vecino");
-        // console.log(prod);
+
         this.#videoSystemView.bindShowAssignsProd(this.handlerShowAssignProduction);
+        this.#videoSystemView.bindCloseModal();
     }
 
     handlerShowAssignProduction = (production) => {
         let prod = this.#videoSystemModel.getProduction(production);
 
         this.#videoSystemView.showAssignProductionPrueba(this.#videoSystemModel.directors, this.#videoSystemModel.actors, prod, this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod));
-        this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector,this.handleAssingDesProdActor, prod);
+        this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
     }
 
-    handlerNewPerson = () => {
-        this.#videoSystemView.showModalAddPerson();
 
-        this.#videoSystemView.bindCloseModal();
-    }
+
 
     handleAssingDesProdDirector = (directoresAssign, directoresDeassign, prod) => {
         for (let director of directoresAssign) {
@@ -505,27 +503,121 @@ class VideoSystemController {
 
         //Reiniciamos la formulario 
         this.#videoSystemView.showAssignProductionPrueba(this.#videoSystemModel.directors, this.#videoSystemModel.actors, prod, this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod));
-        this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector,this.handleAssingDesProdActor, prod);
+        this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
     }
 
     handleAssingDesProdActor = (actoresAssign, actoresDeassign, prod) => {
-        for (let actor of actoresAssign) {
+        let done, error;
+        let obj;
+        try {
+            for (let actor of actoresAssign) {
 
-            let actorSplit = actor.split('/');
-            let objActor = this.#videoSystemModel.getActor(actorSplit[0], actorSplit[1]);
-            this.#videoSystemModel.assignActor(objActor, prod);
+                let actorSplit = actor.split('/');
+                let objActor = this.#videoSystemModel.getActor(actorSplit[0], actorSplit[1]);
+                this.#videoSystemModel.assignActor(objActor, prod);
+            }
+
+            for (let actor of actoresDeassign) {
+
+                let actorSplit = actor.split('/');
+                let objActor = this.#videoSystemModel.getActor(actorSplit[0], actorSplit[1]);
+                this.#videoSystemModel.deassignActor(objActor, prod);
+            }
+            done = true;
+            error= `Ha sido un exito el proceso solicitado`;
+        } catch (exception) {
+            done = false;
+            error = exception;
         }
 
-        for (let actor of actoresDeassign) {
-
-            let actorSplit = actor.split('/');
-            let objActor = this.#videoSystemModel.getActor(actorSplit[0], actorSplit[1]);
-            this.#videoSystemModel.deassignActor(objActor, prod);
-        }
-
+        this.#videoSystemView.showMessageAction(done, obj, error);
         //Reiniciamos la formulario 
         this.#videoSystemView.showAssignProductionPrueba(this.#videoSystemModel.directors, this.#videoSystemModel.actors, prod, this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod));
-        this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector,this.handleAssingDesProdActor, prod);
+        this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
+    }
+
+    handlerNewPersonForm = () => {
+        this.#videoSystemView.showModalAddPerson();
+
+        this.#videoSystemView.bindNewPersonForm(this.handleCreatePerson);
+        this.#videoSystemView.bindCloseModal();
+    }
+
+    handleCreatePerson = (name, lastname1, lastname2, born, picture, typePerson) => {
+        let done, error;
+        let obj;
+        if (typePerson == "Director") {
+            let obj = this.#videoSystemModel.getDirector(name, lastname1, lastname2, born, picture);
+
+            try {
+                this.#videoSystemModel.addDirector(obj);
+                done = true;
+                error = `Ha sido añadido el nuevo director <strong>${name} ${lastname1}<strong>`;
+            } catch (exception) {
+                done = false;
+                error = exception;
+            }
+
+
+        } else if (typePerson == 'Actor') {
+            let obj = this.#videoSystemModel.getActor(name, lastname1, lastname2, born, picture);
+
+            try {
+                this.#videoSystemModel.addActor(obj);
+                done = true;
+                error = `Ha sido añadido el nuevo actor <strong>${name} ${lastname1}<strong>`;
+            } catch (exception) {
+                done = false;
+                error = exception;
+            }
+
+        }
+        //Mensaje de exito
+        this.#videoSystemView.showMessageAction(done, obj, error);
+    }
+
+
+    handlerDelPersonForm = () => {
+        this.#videoSystemView.showModalRemovePerson(this.#videoSystemModel.directors, this.#videoSystemModel.actors);
+
+        this.#videoSystemView.bindDelPersonForm(this.handlerDelDirector, this.handleDelActor);
+        this.#videoSystemView.bindCloseModal();
+    }
+
+    handlerDelDirector = (director) => {
+        let directorSplit = director.split('/');
+        let ObjDirector = this.#videoSystemModel.getDirector(directorSplit[0], directorSplit[1]);
+
+        let done, error;
+
+        try {
+            this.#videoSystemModel.removeDirector(ObjDirector);
+            done = true;
+            error = `Ha sido eliminado el director ${ObjDirector.name} ${ObjDirector.lastname1}`;
+        } catch (exception) {
+            done = false;
+            error = exception;
+        }
+
+        this.#videoSystemView.showMessageAction(done, ObjDirector, error);
+    }
+
+    handleDelActor = (actor) => {
+        let actorSplit = actor.split('/');
+        let ObjActor = this.#videoSystemModel.getActor(actorSplit[0], actorSplit[1]);
+
+        let done, error;
+
+        try {
+            this.#videoSystemModel.removeActor(ObjActor);
+            done = true;
+            error = `Ha sido eliminado el actor ${ObjActor.name} ${ObjActor.lastname1}`;
+        } catch (exception) {
+            done = false;
+            error = exception;
+        }
+
+        this.#videoSystemView.showMessageAction(done, cat, error);
     }
 }
 
