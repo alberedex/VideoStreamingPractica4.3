@@ -24,17 +24,17 @@ function newCategoryValidation(handler) {
 
     $(form).attr('novalidate', true);
     // $(form).addClass('needs-validation');
-    form.addEventListener('submit', function (event) {
+    $(form).submit(function (event) {
         let isValid = true;
         let firstInvalidElement = null;
 
         if (this.nombreCategoria.checkValidity()) {
 
-            // showFeedBack($(this.nombreCategoria), true);
+            showFeedBack($(this.nombreCategoria), true);
         } else {
             isValid = false;
             firstInvalidElement = this.nombreCategoria;
-            // showFeedBack($(this.nombreCategoria), false);
+            showFeedBack($(this.nombreCategoria), false);
         }
 
         if (isValid) {
@@ -47,8 +47,7 @@ function newCategoryValidation(handler) {
 
         event.preventDefault();
         event.stopPropagation();
-        form.classList.add('was-validated');
-    }, false);
+    });
 
     form.addEventListener('reset', (function (event) {
         let feedDivs = $(this).find('div.valid-feedback, div.invalid-feedback');
@@ -58,7 +57,7 @@ function newCategoryValidation(handler) {
     }));
 
     $(form.nombreCategoria).change(defaultCheckElement);
-    $(form.description).change(defaultCheckElement);
+    // $(form.description).change(defaultCheckElement);
 
 }
 
@@ -73,11 +72,11 @@ function DateFormat(Pdate) {
 
 function newProductionValidation(handler) {
     let form = document.forms.formNewProduction;
-
+    console.log("hola")
     $(form).attr('novalidate', true);
     $(form).addClass('needs-validation');
 
-    form.addEventListener('submit', function (event) {
+    $(form).submit(function (event) {
         let isValid = true;
         let firstInvalidElement = null;
 
@@ -88,17 +87,19 @@ function newProductionValidation(handler) {
 
             showFeedBack($(this.radioTypeP), true);
         } else {
+            isValid = false;
+            firstInvalidElement = this.radioTypeP;
             showFeedBack($(this.radioTypeP), false);
         }
 
-        // if (!this.newproCategories.checkValidity()) {
-        //     isValid = false;
-        //     firstInvalidElement = this.newproCategories;
+        if (!this.newproCategories.checkValidity()) {
+            isValid = false;
+            firstInvalidElement = this.newproCategories;
 
-        //     showFeedBack($(this.newproCategories), false);
-        // } else {
-        //     showFeedBack($(this.newproCategories), true);
-        // }
+            showFeedBack($(this.newproCategories), false);
+        } else {
+            showFeedBack($(this.newproCategories), true);
+        }
 
         if (!this.Pimage.checkValidity()) {
             isValid = false;
@@ -107,9 +108,8 @@ function newProductionValidation(handler) {
             showFeedBack($(this.Pimage), false);
         } else {
             showFeedBack($(this.Pimage), true);
-
         }
-
+        console.log(form.Pimage);
         // $(form.Pimage).change(function (event) {
         //     const selectedFile = event.target.files[0];
         //     console.log("holaddd");
@@ -140,11 +140,7 @@ function newProductionValidation(handler) {
             showFeedBack($(this.Pdate), false);
         }
 
-        // $(form.newproActor).change(defaultCheckElement);
-        // $(form.newproActor).change(defaultCheckElement);
-        // $(form.newproDirector).change(defaultCheckElement);
 
-        // $(form.PSynopsis).change(defaultCheckElement);
         if (this.Nacionalidad.checkValidity()) {
 
             showFeedBack($(this.Nacionalidad), true);
@@ -154,17 +150,14 @@ function newProductionValidation(handler) {
             showFeedBack($(this.Nacionalidad), false);
         }
 
-        if (this.Ptitle.checkValidity()) {
-
-            showFeedBack($(this.Ptitle), true);
-        } else {
+        if (!this.Ptitle.checkValidity()) {
             isValid = false;
             firstInvalidElement = this.Ptitle;
             showFeedBack($(this.Ptitle), false);
-        }
+        } else {
+            showFeedBack($(this.Ptitle), true);
 
-        $(form.Nacionalidad).change(defaultCheckElement);
-        $(form.Ptitle).change(defaultCheckElement);
+        }
 
         if (!isValid) {
             firstInvalidElement.focus();
@@ -184,12 +177,12 @@ function newProductionValidation(handler) {
 
 
             handler(this.Ptitle.value, this.Nacionalidad.value, newDate, this.PSynopsis.value, imagentemp, categorias, directores, actores, this.selectType.value);
+            // form.reset();
         }
         event.preventDefault();
         event.stopPropagation();
 
-        this.classList.add('was-validated');
-    }, false);
+    });
 
     form.addEventListener('reset', (function (event) {
         let feedDivs = $(this).find('div.valid-feedback, div.invalid-feedback');
@@ -198,15 +191,34 @@ function newProductionValidation(handler) {
         inputs.removeClass('is-valid is-invalid');
     }));
 
+    $(form.Nacionalidad).change(defaultCheckElement);
+    $(form.Ptitle).change(defaultCheckElement);
+    $(form.selectType).change(defaultCheckElement);
+    $(form.Pdate).change(defaultCheckElement);
+
+    $(form.Pimage).change(function () {
+        if (!this.checkValidity()) {
+            showFeedBack($(this), false);
+        } else {
+            showFeedBack($(this), true);
+        }
+    });
+
+    // $(form.newproActor).change(defaultCheckElement);
+    // $(form.newproActor).change(defaultCheckElement);
+    // $(form.newproDirector).change(defaultCheckElement);
+
+    // $(form.PSynopsis).change(defaultCheckElement);
+
 }
 
 function newPersonValidation(handler) {
     let form = document.forms.formNewPerson;
     console.log(form);
     $(form).attr('novalidate', true);
-    $(form).addClass('needs-validation');
+    // $(form).addClass('needs-validation');
 
-    form.addEventListener('submit', function (event) {
+    $(form).submit(function (event) {
         let isValid = true;
         let firstInvalidElement = null;
         let newDate;
@@ -221,6 +233,14 @@ function newPersonValidation(handler) {
             showFeedBack($(this.Pdate), false);
         }
 
+        if (this.PersonLastName2.checkValidity()) {
+
+            showFeedBack($(this.PersonLastName2), true);
+        } else {
+            isValid = false;
+            firstInvalidElement = this.PersonLastName2;
+            showFeedBack($(this.PersonLastName2), false);
+        }
         if (this.PersonLastName1.checkValidity()) {
 
             showFeedBack($(this.PersonLastName1), true);
@@ -257,8 +277,14 @@ function newPersonValidation(handler) {
         event.preventDefault();
         event.stopPropagation();
 
-        this.classList.add('was-validated');
+        // this.classList.add('was-validated');
     });
+
+    $(form.selectType).change(defaultCheckElement);
+    $(form.PersonName).change(defaultCheckElement);
+    $(form.PersonLastName1).change(defaultCheckElement);
+    $(form.PersonLastName2).change(defaultCheckElement);
+
 }
 
 export { showFeedBack, defaultCheckElement, newCategoryValidation, newProductionValidation, newPersonValidation }

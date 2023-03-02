@@ -348,6 +348,7 @@ class VideoSystemController {
         try {
             this.#videoSystemModel.addCategory(categ);
             done = true;
+            error = `La categoria <strong>${title}</strong> ha sido añadida correctamente`;
         } catch (exception) {
             done = false;
             error = exception;
@@ -380,6 +381,7 @@ class VideoSystemController {
         try {
             this.#videoSystemModel.removeCategory(cat);
             done = true;
+            error = `La categoria <strong>${category}</strong> ha sido eliminada correctamente`;
         } catch (exception) {
             done = false;
             error = exception;
@@ -444,6 +446,7 @@ class VideoSystemController {
             }
 
             done = true;
+            error= `La produccion <strong>${title}</strong> ha sido añadido`;
         } catch (exception) {
             done = false;
             error = exception;
@@ -460,12 +463,13 @@ class VideoSystemController {
         try {
             this.#videoSystemModel.removeProduction(prod);
             done = true;
+            error = `La produccion  <strong>${production}</strong> ha sido eliminada correctamente`;
         } catch (exception) {
             done = false;
             error = exception;
         }
 
-        this.#videoSystemView.showMessageAction(done, cat, error);
+        this.#videoSystemView.showMessageAction(done, prod, error);
     }
 
     handlerAsigProducionForm = () => {
@@ -617,7 +621,7 @@ class VideoSystemController {
             error = exception;
         }
 
-        this.#videoSystemView.showMessageAction(done, cat, error);
+        this.#videoSystemView.showMessageAction(done, ObjActor, error);
     }
 }
 

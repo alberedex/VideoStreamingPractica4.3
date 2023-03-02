@@ -743,14 +743,27 @@ class VideoSystemView {
     }
 
     showMessageAction(done, categ, feedback) {
+        let styleBackground,title;
 
         if (done) {
-            $('body').append(`<div class="modal fade" id="messageModal" style="z-index: 1900" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            styleBackground = "background-color:#d1e7dd";
+            title = `<i class="bi bi-check-circle"></i>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Exito</h1>`;
+            
+        } else {
+            styleBackground = "background-color:#f8d7da";
+            title = `<i class="bi bi-x-circle"></i>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Error</h1>`;
+            feedback = feedback.message;
+
+        }
+        window.history.forward();
+
+        $('body').append(`<div class="modal fade" id="messageModal" style="z-index: 1900" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-              <div class="modal-content" style='background-color:#d1e7dd'>
+              <div class="modal-content" style='${styleBackground}'>
                 <div class="modal-header gap-2 alert-primary" >
-                  <i class="bi bi-check-circle"></i>
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">Exito</h1>
+                  ${title}
                   <button type="button" class="btn-close buttonCloseM" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -762,25 +775,6 @@ class VideoSystemView {
               </div>
             </div>
           </div>`);
-        } else {
-            $('body').append(`<div class="modal fade" id="messageModal" style="z-index: 1900" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content" style='background-color:#f8d7da'>
-                <div class="modal-header gap-2" >
-                  <i class="bi bi-x-circle"></i>
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">Error</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  ${feedback.message}
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-dark buttonCloseM" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-              </div>
-            </div>
-          </div>`);
-        }
 
         let myModal = new bootstrap.Modal(document.getElementById('messageModal'), {
             keyboard: false
@@ -790,21 +784,8 @@ class VideoSystemView {
 
         $('.buttonCloseM').click((event) => {
             $('#messageModal').remove();
-            // myModal.dispose()
         });
-        // let form = $('#formBody');
-        // let formAlert = form.find('.alert');
 
-        // if (formAlert.length > 0) formAlert.remove();
-        // if (done) {
-        //     form.append(`<div class="alert alert-success" role="alert">
-        //                     Ha registrado la nueva categoria ${categ.name}
-        //                 </div>`);
-        // } else {
-        //     form.append(`<div class="alert alert-danger" role="alert">
-        //                   Ha producido un error: ${error.message}
-        //                 </div>`);
-        // }
     }
 
     showModalAddProduction(actorIterator, directorIterator, categoriesIterator) {
@@ -819,7 +800,7 @@ class VideoSystemView {
                         <div class="modal-body" id='formBody'>
                             <div class="col-md-12">
                                 <label for="Ptitle" class="form-label">Titulo</label>
-                                <input type="text" class="form-control" id="Ptitle" name='Ptitle' required>
+                                <input type="text" class="form-control" id="Ptitle" name='Ptitle'  required>
                                 <div class="invalid-feedback">El titulo es obligatorio.</div>
                                 <div class="valid-feedback">Correcto.</div>
                             </div>
@@ -851,6 +832,7 @@ class VideoSystemView {
                         </div>
                         <div class="modal-footer">
                             <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="reset" class="btn btn-primary">Borrar datos</button>
                             <button type="submit" class="btn btn-primary">Crear nueva produccion</button>
                         </div>
                     </form>
@@ -859,6 +841,10 @@ class VideoSystemView {
         </div>`);
 
         let formProduc = $('#formBody');
+
+        let alertsSelect = $(`<div class="invalid-feedback">Debe seleccionar al menos uno.</div>
+        <div class="valid-feedback">Correcto.</div>`);
+
         //Categorias
         let contanierSelectCategory = $('<div class="col-md-12">');
         contanierSelectCategory.append('<label for="newproCategories" class="form-label">Categorias</label>');
@@ -871,6 +857,7 @@ class VideoSystemView {
 
         contanierSelectCategory.append(categoriesSelectCategory);
         formProduc.append(contanierSelectCategory);
+        contanierSelectCategory.append(alertsSelect);
 
         //Person
         let contanierPerson = $('<div class="row">');
@@ -886,6 +873,8 @@ class VideoSystemView {
 
         contanierSelectPerson.append(categoriesSelect);
         contanierPerson.append(contanierSelectPerson);
+        contanierSelectPerson.append(alertsSelect.clone());
+
 
         let contanierSelectActor = $('<div class="col-md-6">');
         contanierSelectActor.append('<label for="newproActor" class="form-label">Actor</label>');
@@ -899,6 +888,7 @@ class VideoSystemView {
         contanierSelectActor.append(categoriesSelectActor);
         contanierPerson.append(contanierSelectActor);
 
+        contanierSelectActor.append(alertsSelect.clone());
         formProduc.append(contanierPerson);
 
         formProduc.append(`<label class="form-check-label pt-3" for="selectType">Tipo de produccion:</label>
