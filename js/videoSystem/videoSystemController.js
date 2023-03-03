@@ -329,11 +329,6 @@ class VideoSystemController {
         this.#videoSystemView.closeWindows();
     }
 
-    // //ficha de la persona (actor o Director)
-    // handlePersonNewWindow = (id, person) => {
-    //     this.#videoSystemView.showFichaPersonNewWindow(director, this.#videoSystemModel.getProdutionsActor(actor))
-    // }
-
     handlerNewCategoryForm = () => {
         this.#videoSystemView.showModalAddCategory();
 
@@ -343,7 +338,7 @@ class VideoSystemController {
 
     handleCreateCategory = (title, description) => {
         let categ = this.#videoSystemModel.getCategory(title, description);
-        console.log(categ);
+
         let done, error;
         try {
             this.#videoSystemModel.addCategory(categ);
@@ -408,15 +403,11 @@ class VideoSystemController {
     handleCreateProduction = (title, nationality, publication, synopsis, image, categorias, directores, actores, typePro) => {
         let prod;
         if (typePro == 'Movie') {
-            console.log(image);
             prod = this.#videoSystemModel.getMovie(title, nationality, publication, synopsis, image);
 
         } else if (typePro == 'Serie') {
             prod = this.#videoSystemModel.getSerie(title, nationality, publication, synopsis, image);
         }
-
-
-        console.log(prod);
 
         let done, error;
         try {
@@ -446,7 +437,7 @@ class VideoSystemController {
             }
 
             done = true;
-            error= `La produccion <strong>${title}</strong> ha sido añadido`;
+            error = `La produccion <strong>${title}</strong> ha sido añadido`;
         } catch (exception) {
             done = false;
             error = exception;
@@ -473,7 +464,7 @@ class VideoSystemController {
     }
 
     handlerAsigProducionForm = () => {
-        this.#videoSystemView.showModalAssignProductions(this.#videoSystemModel.productions, this.#videoSystemModel.directors, this.#videoSystemModel.actors);
+        this.#videoSystemView.showModalAssignProductions(this.#videoSystemModel.productions);
 
 
         this.#videoSystemView.bindShowAssignsProd(this.handlerShowAssignProduction);
@@ -483,30 +474,38 @@ class VideoSystemController {
     handlerShowAssignProduction = (production) => {
         let prod = this.#videoSystemModel.getProduction(production);
 
-        this.#videoSystemView.showAssignProductionPrueba(this.#videoSystemModel.directors, this.#videoSystemModel.actors, prod, this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod));
+        this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.directors, this.#videoSystemModel.actors, this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod));
         this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
     }
 
-
-
-
     handleAssingDesProdDirector = (directoresAssign, directoresDeassign, prod) => {
-        for (let director of directoresAssign) {
+        let done, error;
+        let obj;
+        try {
 
-            let directorSplit = director.split('/');
-            let objDirector = this.#videoSystemModel.getDirector(directorSplit[0], directorSplit[1]);
-            this.#videoSystemModel.assignDirector(objDirector, prod);
+            for (let director of directoresAssign) {
+
+                let directorSplit = director.split('/');
+                let objDirector = this.#videoSystemModel.getDirector(directorSplit[0], directorSplit[1]);
+                this.#videoSystemModel.assignDirector(objDirector, prod);
+            }
+
+            for (let director of directoresDeassign) {
+
+                let directorSplit = director.split('/');
+                let objDirector = this.#videoSystemModel.getDirector(directorSplit[0], directorSplit[1]);
+                this.#videoSystemModel.deassignDirector(objDirector, prod);
+            }
+            done = true;
+            error = `Ha sido un exito el proceso solicitado para Directores`;
+        } catch (exception) {
+            done = false;
+            error = exception;
         }
 
-        for (let director of directoresDeassign) {
-
-            let directorSplit = director.split('/');
-            let objDirector = this.#videoSystemModel.getDirector(directorSplit[0], directorSplit[1]);
-            this.#videoSystemModel.deassignDirector(objDirector, prod);
-        }
-
+        this.#videoSystemView.showMessageAction(done, obj, error);
         //Reiniciamos la formulario 
-        this.#videoSystemView.showAssignProductionPrueba(this.#videoSystemModel.directors, this.#videoSystemModel.actors, prod, this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod));
+        this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.directors, this.#videoSystemModel.actors, this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod));
         this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
     }
 
@@ -515,20 +514,19 @@ class VideoSystemController {
         let obj;
         try {
             for (let actor of actoresAssign) {
-
                 let actorSplit = actor.split('/');
-                let objActor = this.#videoSystemModel.getActor(actorSplit[0], actorSplit[1]);
-                this.#videoSystemModel.assignActor(objActor, prod);
+                let obj = this.#videoSystemModel.getActor(actorSplit[0], actorSplit[1]);
+                this.#videoSystemModel.assignActor(obj, prod);
             }
 
             for (let actor of actoresDeassign) {
 
                 let actorSplit = actor.split('/');
-                let objActor = this.#videoSystemModel.getActor(actorSplit[0], actorSplit[1]);
-                this.#videoSystemModel.deassignActor(objActor, prod);
+                let obj = this.#videoSystemModel.getActor(actorSplit[0], actorSplit[1]);
+                this.#videoSystemModel.deassignActor(obj, prod);
             }
             done = true;
-            error= `Ha sido un exito el proceso solicitado`;
+            error = `Ha sido un exito el proceso solicitado para Actores`;
         } catch (exception) {
             done = false;
             error = exception;
@@ -536,7 +534,7 @@ class VideoSystemController {
 
         this.#videoSystemView.showMessageAction(done, obj, error);
         //Reiniciamos la formulario 
-        this.#videoSystemView.showAssignProductionPrueba(this.#videoSystemModel.directors, this.#videoSystemModel.actors, prod, this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod));
+        this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.directors, this.#videoSystemModel.actors, this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod));
         this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
     }
 
@@ -584,7 +582,7 @@ class VideoSystemController {
     handlerDelPersonForm = () => {
         this.#videoSystemView.showModalRemovePerson(this.#videoSystemModel.directors, this.#videoSystemModel.actors);
 
-        this.#videoSystemView.bindDelPersonForm(this.handlerDelDirector, this.handleDelActor);
+        this.#videoSystemView.bindDelPersonForm(this.handlerDelDirector, this.handlerDelActor);
         this.#videoSystemView.bindCloseModal();
     }
 
@@ -606,7 +604,7 @@ class VideoSystemController {
         this.#videoSystemView.showMessageAction(done, ObjDirector, error);
     }
 
-    handleDelActor = (actor) => {
+    handlerDelActor = (actor) => {
         let actorSplit = actor.split('/');
         let ObjActor = this.#videoSystemModel.getActor(actorSplit[0], actorSplit[1]);
 

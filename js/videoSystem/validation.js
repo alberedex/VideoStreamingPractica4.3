@@ -72,7 +72,7 @@ function DateFormat(Pdate) {
 
 function newProductionValidation(handler) {
     let form = document.forms.formNewProduction;
-    console.log("hola")
+
     $(form).attr('novalidate', true);
     $(form).addClass('needs-validation');
 
@@ -109,7 +109,7 @@ function newProductionValidation(handler) {
         } else {
             showFeedBack($(this.Pimage), true);
         }
-        console.log(form.Pimage);
+
         // $(form.Pimage).change(function (event) {
         //     const selectedFile = event.target.files[0];
         //     console.log("holaddd");
@@ -165,7 +165,6 @@ function newProductionValidation(handler) {
             let categorias = [...this.newproCategories.selectedOptions].map(function (option) {
                 return option.value;
             });
-            console.log(categorias);
 
             let directores = [...this.newproDirector.selectedOptions].map(function (option) {
                 return option.value;
@@ -214,7 +213,7 @@ function newProductionValidation(handler) {
 
 function newPersonValidation(handler) {
     let form = document.forms.formNewPerson;
-    console.log(form);
+
     $(form).attr('novalidate', true);
     // $(form).addClass('needs-validation');
 

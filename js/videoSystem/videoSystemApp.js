@@ -28,7 +28,6 @@ const historyActions = {
  * Evento popstate
  * Es lanzado cada vez que el historial cambia
  */
-console.log(window);
 window.addEventListener('popstate', function (event) {
 
     if (event.state) {
