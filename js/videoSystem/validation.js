@@ -65,7 +65,7 @@ function DateFormat(Pdate) {
     let date = new Date(Pdate).toLocaleDateString();
     date = date.split('/');
     if (date[0] <= 9) date[0] = "0" + date[0];
-    if (date[1] <= 9) date[1] = "0" + date[1];
+    if (date[1] <= 9) date[1] = "0" + (date[1]);
     let newDate = date.join('/');
     return newDate;
 }
@@ -279,6 +279,13 @@ function newPersonValidation(handler) {
         // this.classList.add('was-validated');
     });
 
+    form.addEventListener('reset', (function (event) {
+        let feedDivs = $(this).find('div.valid-feedback, div.invalid-feedback');
+        feedDivs.removeClass('d-block').addClass('d-none');
+        let inputs = $(this).find('input');
+        inputs.removeClass('is-valid is-invalid');
+    }));
+
     $(form.selectType).change(defaultCheckElement);
     $(form.PersonName).change(defaultCheckElement);
     $(form.PersonLastName1).change(defaultCheckElement);
@@ -286,4 +293,87 @@ function newPersonValidation(handler) {
 
 }
 
-export { showFeedBack, defaultCheckElement, newCategoryValidation, newProductionValidation, newPersonValidation }
+
+function delCategoryValidation(handler) {
+    let form = document.forms.formDelCategory;
+
+    $(form).attr('novalidate', true);
+    // $(form).addClass('needs-validation');
+
+    $(form).submit(function (event) {
+        let isValid = true;
+        let firstInvalidElement = null;
+
+        if (this.selectDelCategory.checkValidity()) {
+
+            showFeedBack($(this.selectDelCategory), true);
+        } else {
+            isValid = false;
+            firstInvalidElement = this.selectDelCategory;
+            showFeedBack($(this.selectDelCategory), false);
+        }
+
+        if (!isValid) {
+            firstInvalidElement.focus();
+        } else {
+
+            handler(this.selectDelCategory.value);
+        }
+        event.preventDefault();
+        event.stopPropagation();
+
+    });
+
+    form.addEventListener('reset', (function (event) {
+        let feedDivs = $(this).find('div.valid-feedback, div.invalid-feedback');
+        feedDivs.removeClass('d-block').addClass('d-none');
+        let inputs = $(this).find('input');
+        inputs.removeClass('is-valid is-invalid');
+    }));
+
+    $(form.selectDelCategory).change(defaultCheckElement);
+
+}
+
+function delProductionValidation(handler) {
+    let form = document.forms.formDelProduction;
+
+    $(form).attr('novalidate', true);
+    // $(form).addClass('needs-validation');
+
+    $(form).submit(function (event) {
+        let isValid = true;
+        let firstInvalidElement = null;
+
+        if (this.selectDelProd.checkValidity()) {
+
+            showFeedBack($(this.selectDelProd), true);
+        } else {
+            isValid = false;
+            firstInvalidElement = this.selectDelProd;
+            showFeedBack($(this.selectDelProd), false);
+        }
+
+        if (!isValid) {
+            firstInvalidElement.focus();
+        } else {
+
+            handler(this.selectDelProd.value);
+        }
+        event.preventDefault();
+        event.stopPropagation();
+
+    });
+
+    form.addEventListener('reset', (function (event) {
+        let feedDivs = $(this).find('div.valid-feedback, div.invalid-feedback');
+        feedDivs.removeClass('d-block').addClass('d-none');
+        let inputs = $(this).find('input');
+        inputs.removeClass('is-valid is-invalid');
+    }));
+
+    $(form.selectDelProd).change(defaultCheckElement);
+
+}
+
+export { showFeedBack, defaultCheckElement, newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation }

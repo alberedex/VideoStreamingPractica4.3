@@ -927,6 +927,38 @@ let VideoSystem = (function () {
                 }
             }
 
+            * getDirectorsAvailableProd(produccion){
+                if (!produccion) throw new InvalidValueException("produccion", null);
+      
+                for (const director of this.#directors) {
+                    let d = director.director;
+                    
+                    let existe = false;
+                    for(let directorAssign of this.getDirectorsProdutions(produccion)){
+                        if(directorAssign.name == d.name && directorAssign.lastname1 == d.lastname1){
+                            existe = true;
+                        }
+                    }
+                    if(!existe) yield d;
+                }
+            }
+
+            * getActorsAvailableProd(produccion){
+            if (!produccion) throw new InvalidValueException("produccion", null);
+  
+            for (const actor of this.#actors) {
+                let a = actor.actor;
+                
+                let existe = false;
+                for(let actorAssign of this.getCast(produccion)){
+                    if(actorAssign.name == a.name && actorAssign.lastname1 == a.lastname1){
+                        existe = true;
+                    }
+                }
+                if(!existe) yield a;
+            }
+        }
+
         }
         let vs = new VideoSystem(name);
         Object.freeze(vs);

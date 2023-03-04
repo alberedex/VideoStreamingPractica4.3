@@ -1,4 +1,4 @@
-import { showFeedBack, defaultCheckElement, newCategoryValidation, newProductionValidation, newPersonValidation } from './validation.js';
+import { showFeedBack, defaultCheckElement, newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation } from './validation.js';
 
 class VideoSystemView {
     /**
@@ -440,7 +440,7 @@ class VideoSystemView {
                                     <h1 class="card-title">${person.name} ${person.lastname1} ${person.lastname2}</h1>
                                     <button id="b-open" data-id="${person.name}/${person.lastname1}" class="btn btn-primary text-uppercase mr-2 px-4">Abrir en nueva ventana</button>
                                     <div class="d-flex gap-5" id='infoProduction'>
-                                        <p><b>Nacimiento: </b>${person.born.getDate()}/${person.born.getMonth()}/${person.born.getFullYear()}</p>
+                                        <p><b>Nacimiento: </b>${person.born.toLocaleDateString()}</p>
                                     </div>
                                 </div>
                             </div>
@@ -490,7 +490,7 @@ class VideoSystemView {
                                 <div>
                                     <h1 class="card-title">${person.name} ${person.lastname1} ${person.lastname2}</h1>
                                     <div class="d-flex gap-5" id='infoProduction'>
-                                        <p><b>Nacimiento: </b>${person.born.getDate()}/${person.born.getMonth()}/${person.born.getFullYear()}</p>
+                                        <p><b>Nacimiento: </b>${person.born.toLocaleDateString()}</p>
                                     </div>
                                 </div>
                             </div>
@@ -692,27 +692,27 @@ class VideoSystemView {
         });
     }
 
-    /**
-     * Se enlaza el evento con el boton de la lista de las categorias para eliminar
-     * @param {*} handler 
-     */
-    bindDelCategoryForm(handler) {
-        $('#formBody').find('button').click(function (event) {
-            handler(this.dataset.category);
-            $(this).closest('div.row').remove();
-        })
-    }
+    // /**
+    //  * Se enlaza el evento con el boton de la lista de las categorias para eliminar
+    //  * @param {*} handler 
+    //  */
+    // bindDelCategoryForm(handler) {
+    //     $('#formBody').find('button').click(function (event) {
+    //         handler(this.dataset.category);
+    //         $(this).closest('div.row').remove();
+    //     })
+    // }
 
-    /**
-     * Se enlaza el evento con el boton de la lista de las producciones para eliminar
-     * @param {*} handler 
-     */
-    bindDelProductionForm(handler) {
-        $('#formBody').find('button').click(function (event) {
-            handler(this.dataset.produccion);
-            $(this).closest('div.row').remove();
-        });
-    }
+    // /**
+    //  * Se enlaza el evento con el boton de la lista de las producciones para eliminar
+    //  * @param {*} handler 
+    //  */
+    // bindDelProductionForm(handler) {
+    //     $('#formBody').find('button').click(function (event) {
+    //         handler(this.dataset.produccion);
+    //         $(this).closest('div.row').remove();
+    //     });
+    // }
 
     /**
     * Evento donde se enlaza con el boton de los listados para eliminar la persona del sistema
@@ -740,11 +740,26 @@ class VideoSystemView {
     }
 
     /**
+     * Vertificar el formulario de eliminar Produccion 
+     * @param {*} handler 
+    */
+    bindDelProductionForm(handler) {
+        delProductionValidation(handler);
+    }
+
+    /**
     * Vertificar el formulario de añadir Categoria 
     * @param {*} handler 
     */
     bindNewCategoryForm(handler) {
         newCategoryValidation(handler);
+    }
+    /**
+    * Vertificar el formulario de eliminar Categoria 
+    * @param {*} handler 
+    */
+    bindDelCategoryForm(handler) {
+        delCategoryValidation(handler);
     }
 
     /**
@@ -754,6 +769,7 @@ class VideoSystemView {
     bindNewPersonForm(handler) {
         newPersonValidation(handler);
     }
+
     /**
      * Una vez hecho una actualizacion en el modelo, mostrar el mensaje al usuario
      * @param {*} done 
@@ -805,6 +821,159 @@ class VideoSystemView {
         });
 
     }
+
+    /**
+     * Estructura modal global para mostrar al usuario de si ha realizado correctamente o no 
+     */
+    showModalAlertAction(done, title, feedback) {
+        let styleBackground = "background-color:#f8d7da";
+        if (done) styleBackground = "background-color:#d1e7dd";
+
+        $('body').append(`<div class="modal fade" id="messageModal" style="z-index: 1900" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content" style='${styleBackground}'>
+                <div class="modal-header gap-2 alert-primary" >
+                  ${title}
+                  <button type="button" class="btn-close buttonCloseM" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  ${feedback}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-dark buttonCloseM" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>`);
+
+        let myModal = new bootstrap.Modal(document.getElementById('messageModal'), {
+            keyboard: false
+        });
+
+        myModal.show();
+
+        $('.buttonCloseM').click((event) => {
+            $('#messageModal').remove();
+        });
+    }
+
+    /**
+     * Una vez hecho una actualizacion en el modelo, mostrar el mensaje al usuario
+     * @param {*} done 
+     * @param {*} categ 
+     * @param {*} feedback 
+     */
+    showMessageActionDelCategory(done, categ, feedback) {
+        let styleBackground, title;
+
+        if (done) {
+            styleBackground = "background-color:#d1e7dd";
+            title = `<i class="bi bi-check-circle"></i>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Exito</h1>`;
+            feedback = `La categoria <strong>${categ.name}</strong> ha sido eliminada correctamente`;
+
+            let divCat = $('#selectDelCategory').find(`option[value="${categ.name}"]`);
+            divCat.remove();
+        } else {
+            styleBackground = "background-color:#f8d7da";
+            title = `<i class="bi bi-x-circle"></i>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Error</h1>`;
+            feedback = feedback.message;
+
+        }
+
+        this.showModalAlertAction(done, title, feedback);
+
+    }
+
+    /**
+     * Una vez hecho una actualizacion en el modelo, mostrar el mensaje al usuario
+     * @param {*} done 
+     * @param {*} categ 
+     * @param {*} feedback 
+     */
+    showMessageActionAddCategory(done, categ, feedback) {
+        let styleBackground, title;
+
+        if (done) {
+            styleBackground = "background-color:#d1e7dd";
+            title = `<i class="bi bi-check-circle"></i>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Exito</h1>`;
+            feedback = `La categoria <strong>${categ.name}</strong> ha sido añadida correctamente`;
+
+            document.formNewCategory.reset();
+
+        } else {
+            styleBackground = "background-color:#f8d7da";
+            title = `<i class="bi bi-x-circle"></i>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Error</h1>`;
+            feedback = feedback.message;
+
+        }
+
+        this.showModalAlertAction(done, title, feedback);
+
+    }
+
+    /**
+     * Una vez hecho una actualizacion en el modelo, mostrar el mensaje al usuario
+     * @param {*} done 
+     * @param {*} categ 
+     * @param {*} feedback 
+     */
+    showMessageActionAddProd(done, prod, feedback) {
+        let styleBackground, title;
+
+        if (done) {
+            styleBackground = "background-color:#d1e7dd";
+            title = `<i class="bi bi-check-circle"></i>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Exito</h1>`;
+            feedback = `La produccion <strong>${prod.title}</strong> ha sido añadido`;
+
+            document.formNewProduction.reset();
+
+        } else {
+            styleBackground = "background-color:#f8d7da";
+            title = `<i class="bi bi-x-circle"></i>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Error</h1>`;
+            feedback = feedback.message;
+
+        }
+
+        this.showModalAlertAction(done, title, feedback);
+
+    }
+
+    /**
+     * Una vez hecho una actualizacion en el modelo, mostrar el mensaje al usuario
+     * @param {*} done 
+     * @param {*} categ 
+     * @param {*} feedback 
+     */
+    showMessageActionDelProd(done, production, feedback) {
+        let styleBackground, title;
+
+        if (done) {
+            styleBackground = "background-color:#d1e7dd";
+            title = `<i class="bi bi-check-circle"></i>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Exito</h1>`;
+            feedback = `La produccion  <strong>${production.title}</strong> ha sido eliminada correctamente`;
+
+            let divCat = $('#selectDelProd').find(`option[value="${production.title}"]`);
+            divCat.remove();
+            document.formDelProduction.reset();
+        } else {
+            styleBackground = "background-color:#f8d7da";
+            title = `<i class="bi bi-x-circle"></i>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Error</h1>`;
+            feedback = feedback.message;
+
+        }
+
+        this.showModalAlertAction(done, title, feedback);
+
+    }
+
     /**
      * Mostrar Modal de añadir una produccion 
      * @param {*} actorIterator 
@@ -974,28 +1143,30 @@ class VideoSystemView {
               <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminar Categoria</h1>
               <button type="button" class="btn-close buttonClose" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <form name="formDelCategory" role="form" id='formDelC' novalidate>
                 <div class="modal-body" id='formBody'>
 
                 </div>
                 <div class="modal-footer">
                 <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary">Eliminar la categoria</button>
                 </div>
+            </form>
           </div>
         </div>
       </div>`);
 
         let formBody = $('#formBody');
 
+        let select = $(`<select class="form-select mb-4" id='selectDelCategory' aria-label="Select eliminar Categoria" required>`);
+        select.append(`<option value="">Seleccione una categoria</option>`);
         for (let categoria of categoriasIterator) {
-            formBody.append(`<div class='row pt-3'>
-                                <div class='col'>
-                                    <p>${categoria.name}</p>
-                                </div>
-                                <div class='col'>
-                                    <button class="btn btn-primary" data-category="${categoria.name}" type='button'>Eliminar</button>
-                                </div>
-                        </div>`);
+            select.append(`<option value="${categoria.name}">${categoria.name}</option>`);
         }
+
+        formBody.append(select);
+        formBody.append(`<div class="invalid-feedback">Debe seleccionar una categoria para eliminar.</div>
+        <div class="valid-feedback">Correcto.</div>`);
     }
 
     /**
@@ -1010,31 +1181,30 @@ class VideoSystemView {
               <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminar Produccion</h1>
               <button type="button" class="btn-close buttonClose" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <form name="formDelProduction" role="form" novalidate>
                 <div class="modal-body" id='formBody'>
 
                 </div>
                 <div class="modal-footer">
                 <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary">Eliminar la produccion</button>
                 </div>
+                </form>
           </div>
         </div>
       </div>`);
 
         let formBody = $('#formBody');
 
+        let select = $(`<select class="form-select mb-4" id='selectDelProd' aria-label="Select eliminar Producciones" required>`);
+        select.append(`<option value="">Seleccione una produccion</option>`);
         for (let prod of productionsIterator) {
-            formBody.append(`<div class='d-flex align-items-center row border border-secondary border border-1 rounded'>
-                                <div class='col'>
-                                    <img src="${prod.image}" class="img-fluid w-10" alt="${prod.title}">
-                                </div>
-                                <div class='col'>
-                                    <p>${prod.title}</p>
-                                </div>
-                                <div class='col'>
-                                    <button class="btn btn-primary" data-produccion="${prod.title}" type='button'>Eliminar</button>
-                                </div>
-                        </div>`);
+            select.append(`<option value="${prod.title}">${prod.title}</option>`);
         }
+
+        formBody.append(select);
+        formBody.append(`<div class="invalid-feedback">Debe seleccionar una produccion para eliminar.</div>
+        <div class="valid-feedback">Correcto.</div>`);
     }
 
     /**
@@ -1127,54 +1297,48 @@ class VideoSystemView {
      * @param {*} getCast 
      * @param {*} getProductionsDirector 
      */
-    showAssignProductionModule(directorIterator, actorIterator, getCast, getProductionsDirector) {
+    showAssignProductionModule(getCast, getProductionsDirector, getDirectorsAvailableProd, getActorsAvailableProd) {
         let bodyForm = $('#formBody');
 
         let fila = $('#formBody .row');
         if (fila.children().length > 0) fila.remove();
 
-        //Person
+        //Person Directores
         let contanierPerson = $('<div class="row">');
-
+        //Primer select que son los directores que estan disponibles
         let contanierSelectPerson = $('<div class="col-md-5">');
         contanierSelectPerson.append('<label for="Director" class="form-label">Directores disponibles</label>');
 
         let categoriesSelect = $(`<select class="form-select" multiple aria-label="multiple select Directores" id="Director" name="Director" aria-describedby="director"></select>`);
-        let directores = Array.from(directorIterator);
-        let directorProd = Array.from(getProductionsDirector);
 
-        let filtrado = directores.filter((element) => !directorProd.includes(element));
-
-        for (let director of filtrado) {
+        for (let director of getDirectorsAvailableProd) {
             categoriesSelect.append(`<option value="${director.name}/${director.lastname1}">${director.name} ${director.lastname1}</option>`);
 
         }
 
         contanierSelectPerson.append(categoriesSelect);
         contanierPerson.append(contanierSelectPerson);
-
+        //boton
         contanierPerson.append(`<div class="col-md-2 d-flex justify-content-center align-items-center">
           <button type="button" class="btn btn-primary directorButton">
           <i class="bi bi-arrow-left-right"></i></button>
         </div>`);
 
+        //Segundo select, que son directores que estan asignados 
         let contanierSelectPerson2 = $('<div class="col-md-5">');
         contanierSelectPerson2.append(`<label for="DirectorProd" class="form-label">Directores asignados</label>`);
         let assignDirector = $(`<select class="form-select" multiple aria-label="multiple select Directores" id="DirectorProd" name="DirectorProd" aria-describedby="director"></select>`);
 
-        for (let director of directorProd) {
-     
+        for (let director of getProductionsDirector) {
+
             assignDirector.append(`<option value="${director.name}/${director.lastname1}">${director.name} ${director.lastname1}</option>`);
         }
 
         contanierSelectPerson2.append(assignDirector)
         contanierPerson.append(contanierSelectPerson2);
+
         //Turno de los actores
-        let actores = Array.from(actorIterator);
-        let actoresProd = Array.from(getCast);
-
-        let filtradoActores = actores.filter((element) => !actoresProd.includes(element));
-
+        //Primer select donde muestra los actores disponibles 
         let contanierPersonActor = $('<div class="row mt-4">');
 
 
@@ -1183,12 +1347,12 @@ class VideoSystemView {
 
         let categoriesSelectActor = $(`<select class="form-select" multiple aria-label="multiple select actor" id="Actor" name="Actor" aria-describedby="director"></select>`);
 
-        for (let actor of filtradoActores) {
+        for (let actor of getActorsAvailableProd) {
             categoriesSelectActor.append(`<option value="${actor.name}/${actor.lastname1}">${actor.name} ${actor.lastname1}</option>`);
         }
         contanierSelectPersonActor.append(categoriesSelectActor);
         contanierPersonActor.append(contanierSelectPersonActor);
-
+        //boton
         contanierPersonActor.append(`<div class="col-md-2 d-flex gap-2 flex-column justify-content-center align-items-center">
           <button type="button" class="btn btn-primary actorButton">
           <i class="bi bi-arrow-left-right"></i></button>
@@ -1197,8 +1361,8 @@ class VideoSystemView {
         let contanierSelectPersonActor2 = $('<div class="col-md-5">');
         contanierSelectPersonActor2.append(`<label for="ActorProd" class="form-label">Actores asignados:</label>`);
         let assignActor = $(`<select class="form-select" multiple aria-label="multiple select Actores" id="ActorProd" name="ActorProd" aria-describedby="director"></select>`);
-
-        for (let actor of actoresProd) {
+        //Segundo selec donde se muestra los actores que estan asociados 
+        for (let actor of getCast) {
 
             assignActor.append(`<option value="${actor.name}/${actor.lastname1}">${actor.name} ${actor.lastname1}</option>`);
         }

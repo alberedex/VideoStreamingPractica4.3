@@ -8,7 +8,7 @@ class VideoSystemController {
     #loadVideoSystemObjects() {
         let actor1 = this.#videoSystemModel.getActor("Christian", "Bale", "Philip", "30/01/1974", "");
         let actor2 = this.#videoSystemModel.getActor("Harry", "Melling", "", "13/04/1989", "image/imagesActor/harryMelling.jpg"); //Los crimenes de la academia
-
+console.log(actor2);
         let actor3 = this.#videoSystemModel.getActor("Paola", "Núñez", "Rivas", "08/04/1978", "image/imagesActor/paolaRivas.jpg"); //Resident Evil
         let actor12 = this.#videoSystemModel.getActor("Ella", "Pascale", "Balinska", "04/10/1996", "image/imagesActor/ellaPascale.jpg"); //Resident Evil
 
@@ -343,12 +343,12 @@ class VideoSystemController {
         try {
             this.#videoSystemModel.addCategory(categ);
             done = true;
-            error = `La categoria <strong>${title}</strong> ha sido añadida correctamente`;
+            
         } catch (exception) {
             done = false;
             error = exception;
         }
-        this.#videoSystemView.showMessageAction(done, categ, error);
+        this.#videoSystemView.showMessageActionAddCategory(done, categ, error);
         this.onAddCategory();
     }
 
@@ -376,13 +376,13 @@ class VideoSystemController {
         try {
             this.#videoSystemModel.removeCategory(cat);
             done = true;
-            error = `La categoria <strong>${category}</strong> ha sido eliminada correctamente`;
+            
         } catch (exception) {
             done = false;
             error = exception;
         }
 
-        this.#videoSystemView.showMessageAction(done, cat, error);
+        this.#videoSystemView.showMessageActionDelCategory(done, cat, error);
         this.onAddCategory();
     }
 
@@ -437,12 +437,12 @@ class VideoSystemController {
             }
 
             done = true;
-            error = `La produccion <strong>${title}</strong> ha sido añadido`;
+            
         } catch (exception) {
             done = false;
             error = exception;
         }
-        this.#videoSystemView.showMessageAction(done, prod, error);
+        this.#videoSystemView.showMessageActionAddProd(done, prod, error);
         // this.onAddCategory();
     }
 
@@ -454,13 +454,13 @@ class VideoSystemController {
         try {
             this.#videoSystemModel.removeProduction(prod);
             done = true;
-            error = `La produccion  <strong>${production}</strong> ha sido eliminada correctamente`;
+            
         } catch (exception) {
             done = false;
             error = exception;
         }
 
-        this.#videoSystemView.showMessageAction(done, prod, error);
+        this.#videoSystemView.showMessageActionDelProd(done, prod, error);
     }
 
     handlerAsigProducionForm = () => {
@@ -474,7 +474,7 @@ class VideoSystemController {
     handlerShowAssignProduction = (production) => {
         let prod = this.#videoSystemModel.getProduction(production);
 
-        this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.directors, this.#videoSystemModel.actors, this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod));
+        this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod),this.#videoSystemModel.getDirectorsAvailableProd(prod),this.#videoSystemModel.getActorsAvailableProd(prod));
         this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
     }
 
@@ -505,7 +505,7 @@ class VideoSystemController {
 
         this.#videoSystemView.showMessageAction(done, obj, error);
         //Reiniciamos la formulario 
-        this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.directors, this.#videoSystemModel.actors, this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod));
+        this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod),this.#videoSystemModel.getDirectorsAvailableProd(prod),this.#videoSystemModel.getActorsAvailableProd(prod));
         this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
     }
 
@@ -533,8 +533,8 @@ class VideoSystemController {
         }
 
         this.#videoSystemView.showMessageAction(done, obj, error);
-        //Reiniciamos la formulario 
-        this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.directors, this.#videoSystemModel.actors, this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod));
+        //Reiniciamos la formulario
+        this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod),this.#videoSystemModel.getDirectorsAvailableProd(prod),this.#videoSystemModel.getActorsAvailableProd(prod));
         this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
     }
 

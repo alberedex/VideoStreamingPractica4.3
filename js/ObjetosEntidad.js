@@ -64,7 +64,9 @@ class Person {
         if(picture){
             //En caso que no sea vacio, validar
             if (!RUTA_EXPR.test(picture)) throw new InvalidValueException("picture", picture);
-        } 
+        }else{
+            picture = `https://via.placeholder.com/1200x1600.jpg?text=${name} ${lastname1}`;
+        }
 
         this.#name = name;
         this.#lastname1 = lastname1;
@@ -220,6 +222,10 @@ class Production {
 
         if (!title) throw new InvalidValueException("title", title);
         if (!(DATE_EXPR.test(publication))) throw new InvalidValueException("publication", publication);
+
+        if(!image){
+            image = `https://via.placeholder.com/667x375.jpg?text=${title}`;
+        }
 
         this.#title = title;
         this.#nationality = nationality;
