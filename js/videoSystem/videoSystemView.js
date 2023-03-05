@@ -610,6 +610,7 @@ class VideoSystemView {
     /**
      * ADMINISTRACIÓN
      */
+    
 
     /**
      * Mostrar en el menu la opcion de Adminstrador
