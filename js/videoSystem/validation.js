@@ -19,6 +19,9 @@ function defaultCheckElement(event) {
     }
 }
 
+/**
+ * Validacion de nueva categoria
+ */
 function newCategoryValidation(handler) {
     let form = document.forms.formNewCategory;
 
@@ -70,11 +73,14 @@ function DateFormat(Pdate) {
     return newDate;
 }
 
+/**
+ * Validacion de nuevo Produccion 
+ */
 function newProductionValidation(handler) {
     let form = document.forms.formNewProduction;
 
     $(form).attr('novalidate', true);
-    $(form).addClass('needs-validation');
+    // $(form).addClass('needs-validation');
 
     $(form).submit(function (event) {
         let isValid = true;
@@ -85,11 +91,11 @@ function newProductionValidation(handler) {
 
         if (this.selectType.value) {
 
-            showFeedBack($(this.radioTypeP), true);
+            showFeedBack($(this.selectType), true);
         } else {
             isValid = false;
-            firstInvalidElement = this.radioTypeP;
-            showFeedBack($(this.radioTypeP), false);
+            firstInvalidElement = this.selectType;
+            showFeedBack($(this.selectType), false);
         }
 
         if (!this.newproCategories.checkValidity()) {
@@ -109,26 +115,6 @@ function newProductionValidation(handler) {
         } else {
             showFeedBack($(this.Pimage), true);
         }
-
-        // $(form.Pimage).change(function (event) {
-        //     const selectedFile = event.target.files[0];
-        //     console.log("holaddd");
-        //     // Mostrar una vista previa de la imagen
-        //     const reader = new FileReader();
-        //     reader.onload = function (event) {
-        //         // const previewImage = document.createElement("img");
-        //         // previewImage.src = event.target.result;
-
-        //         // let prueba = $('body');
-
-        //         // prueba.append(`<img src='${event.target.result}'>`);
-
-        //         imagentemp = event.target.result;
-        //         console.log(imagentemp);
-        //         // document.body.appendChild(previewImage);
-        //     };
-        //     reader.readAsDataURL(selectedFile);
-        // });
 
         if (this.Pdate.checkValidity()) {
             newDate = DateFormat(this.Pdate.value);
@@ -176,7 +162,7 @@ function newProductionValidation(handler) {
 
 
             handler(this.Ptitle.value, this.Nacionalidad.value, newDate, this.PSynopsis.value, imagentemp, categorias, directores, actores, this.selectType.value);
-            // form.reset();
+
         }
         event.preventDefault();
         event.stopPropagation();
@@ -211,6 +197,10 @@ function newProductionValidation(handler) {
 
 }
 
+
+/**
+ * Validacion de nueva persona
+ */
 function newPersonValidation(handler) {
     let form = document.forms.formNewPerson;
 
@@ -293,7 +283,9 @@ function newPersonValidation(handler) {
 
 }
 
-
+/**
+ * Validacion del eliminar una categoria
+ */
 function delCategoryValidation(handler) {
     let form = document.forms.formDelCategory;
 
@@ -335,6 +327,10 @@ function delCategoryValidation(handler) {
 
 }
 
+
+/**
+ * Validacion del eliminar produccion  
+ */
 function delProductionValidation(handler) {
     let form = document.forms.formDelProduction;
 

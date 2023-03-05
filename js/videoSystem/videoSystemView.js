@@ -621,30 +621,29 @@ class VideoSystemView {
                         </a>
                     </li>`);
 
-        let container = $('<div class="dropdown-menu" aria-labelledby="AdminMenu" id="category-list-menu"></div>');
+        let container = $('<div class="dropdown-menu ps-3" aria-labelledby="AdminMenu" id="category-list-menu"></div>');
 
-        container.append(`<a id="newProduccion" class="dropdown-item collapse-link" href="#" >
+        container.append(`<button type='button' id="newProduccion" class="nav-link dropdown-item collapse-link btn btn-link text-black">
                             Nueva producción
-                        </a>
-                        <a id="delProduccion" class="dropdown-item collapse-link" href="#" >
+                        </button>
+                        <button type='button' id="delProduccion" class="nav-link dropdown-item collapse-link btn btn-link text-black">
                             Eliminar producción
-                        </a>
-                        <a id="asigProducion" class="dropdown-item collapse-link" href="#" >
+                        </button>
+                        <button type='button' id="asigProducion" class="nav-link dropdown-item collapse-link btn btn-link text-black">
                             Asignar/desasignar actores/directores de la producción
-                        </a>
-                        <a id="newCategory" class="dropdown-item collapse-link" href="#" >
+                        </button>
+                        <button type='button' id="newCategory" class="nav-link dropdown-item collapse-link btn btn-link text-black">
                             Nueva Categoria
-                        </a>
-                        <a id="delCategory" class="dropdown-item collapse-link" href="#" >
+                        </button>
+                        <button type='button' id="delCategory" class="nav-link dropdown-item collapse-link btn btn-link text-black">
                             Eliminar Categoria
-                        </a>
-                        
-                        <a id="newPerson" class="dropdown-item collapse-link" href="#" >
+                        </button>
+                        <button type='button' id="newPerson" class="nav-link dropdown-item collapse-link btn btn-link text-black">
                             Nueva Persona
-                        </a>
-                        <a id="delPerson" class="dropdown-item collapse-link" href="#" >
+                        </button>
+                        <button type='button' id="delPerson" class="nav-link dropdown-item collapse-link btn btn-link text-black">
                             Eliminar Persona
-                        </a>`);
+                        </button>`);
 
         li.append(container);
         this.menu.append(li);
@@ -692,27 +691,17 @@ class VideoSystemView {
         });
     }
 
-    // /**
-    //  * Se enlaza el evento con el boton de la lista de las categorias para eliminar
-    //  * @param {*} handler 
-    //  */
-    // bindDelCategoryForm(handler) {
-    //     $('#formBody').find('button').click(function (event) {
-    //         handler(this.dataset.category);
-    //         $(this).closest('div.row').remove();
-    //     })
-    // }
+    bindCloseModalAlert(){
+        let myModal = new bootstrap.Modal(document.getElementById('messageModal'), {
+            keyboard: false
+        });
 
-    // /**
-    //  * Se enlaza el evento con el boton de la lista de las producciones para eliminar
-    //  * @param {*} handler 
-    //  */
-    // bindDelProductionForm(handler) {
-    //     $('#formBody').find('button').click(function (event) {
-    //         handler(this.dataset.produccion);
-    //         $(this).closest('div.row').remove();
-    //     });
-    // }
+        myModal.show();
+
+        $('.buttonCloseM').click((event) => {
+            $('#messageModal').remove();
+        });
+    }
 
     /**
     * Evento donde se enlaza con el boton de los listados para eliminar la persona del sistema
@@ -771,64 +760,30 @@ class VideoSystemView {
     }
 
     /**
-     * Una vez hecho una actualizacion en el modelo, mostrar el mensaje al usuario
-     * @param {*} done 
-     * @param {*} categ 
-     * @param {*} feedback 
+     * MENSAJE DE ACCION TRAS DE UNA OPERACION REALIZADA
      */
-    showMessageAction(done, categ, feedback) {
-        let styleBackground, title;
 
-        if (done) {
-            styleBackground = "background-color:#d1e7dd";
-            title = `<i class="bi bi-check-circle"></i>
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Exito</h1>`;
-
-        } else {
-            styleBackground = "background-color:#f8d7da";
-            title = `<i class="bi bi-x-circle"></i>
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Error</h1>`;
-            feedback = feedback.message;
-
-        }
-        // window.history.forward();
-
-        $('body').append(`<div class="modal fade" id="messageModal" style="z-index: 1900" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content" style='${styleBackground}'>
-                <div class="modal-header gap-2 alert-primary" >
-                  ${title}
-                  <button type="button" class="btn-close buttonCloseM" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  ${feedback}
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-dark buttonCloseM" data-bs-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>`);
-
-        let myModal = new bootstrap.Modal(document.getElementById('messageModal'), {
-            keyboard: false
-        });
-
-        myModal.show();
-
-        $('.buttonCloseM').click((event) => {
-            $('#messageModal').remove();
-        });
-
-    }
 
     /**
      * Estructura modal global para mostrar al usuario de si ha realizado correctamente o no 
      */
-    showModalAlertAction(done, title, feedback) {
-        let styleBackground = "background-color:#f8d7da";
-        if (done) styleBackground = "background-color:#d1e7dd";
+    showModalAlertAction(done, feedback) {
+        let styleBackground,title;
+        
+        
+        if (done){
+            //En caso de correcto, mostrar en correcto
+            styleBackground = "background-color:#d1e7dd";
+            title = `<i class="bi bi-check-circle"></i>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Exito</h1>`;
+        }else{
+            //En caso de fallo, mostrar en error
+            styleBackground = "background-color:#f8d7da";
+            title = `<i class="bi bi-x-circle"></i>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Error</h1>`;
+        }
 
+        //Mostrar el modal con la informacion requerida
         $('body').append(`<div class="modal fade" id="messageModal" style="z-index: 1900" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content" style='${styleBackground}'>
@@ -846,15 +801,7 @@ class VideoSystemView {
             </div>
           </div>`);
 
-        let myModal = new bootstrap.Modal(document.getElementById('messageModal'), {
-            keyboard: false
-        });
-
-        myModal.show();
-
-        $('.buttonCloseM').click((event) => {
-            $('#messageModal').remove();
-        });
+        this.bindCloseModalAlert(); //Enlazar el evento para cerrar
     }
 
     /**
@@ -864,26 +811,18 @@ class VideoSystemView {
      * @param {*} feedback 
      */
     showMessageActionDelCategory(done, categ, feedback) {
-        let styleBackground, title;
-
         if (done) {
-            styleBackground = "background-color:#d1e7dd";
-            title = `<i class="bi bi-check-circle"></i>
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Exito</h1>`;
             feedback = `La categoria <strong>${categ.name}</strong> ha sido eliminada correctamente`;
-
+            
+            //Reiniciamos el formulario una vez realizado la operacion
             let divCat = $('#selectDelCategory').find(`option[value="${categ.name}"]`);
             divCat.remove();
         } else {
-            styleBackground = "background-color:#f8d7da";
-            title = `<i class="bi bi-x-circle"></i>
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Error</h1>`;
-            feedback = feedback.message;
 
+            feedback = feedback.message;
         }
 
-        this.showModalAlertAction(done, title, feedback);
-
+        this.showModalAlertAction(done, feedback);
     }
 
     /**
@@ -893,25 +832,19 @@ class VideoSystemView {
      * @param {*} feedback 
      */
     showMessageActionAddCategory(done, categ, feedback) {
-        let styleBackground, title;
 
         if (done) {
-            styleBackground = "background-color:#d1e7dd";
-            title = `<i class="bi bi-check-circle"></i>
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Exito</h1>`;
             feedback = `La categoria <strong>${categ.name}</strong> ha sido añadida correctamente`;
 
+            //Reiniciamos el formulario 
             document.formNewCategory.reset();
 
         } else {
-            styleBackground = "background-color:#f8d7da";
-            title = `<i class="bi bi-x-circle"></i>
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Error</h1>`;
             feedback = feedback.message;
 
         }
-
-        this.showModalAlertAction(done, title, feedback);
+        //Mostrar el mensaje con el modal global con su mensaje
+        this.showModalAlertAction(done, feedback);
 
     }
 
@@ -922,25 +855,18 @@ class VideoSystemView {
      * @param {*} feedback 
      */
     showMessageActionAddProd(done, prod, feedback) {
-        let styleBackground, title;
 
         if (done) {
-            styleBackground = "background-color:#d1e7dd";
-            title = `<i class="bi bi-check-circle"></i>
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Exito</h1>`;
             feedback = `La produccion <strong>${prod.title}</strong> ha sido añadido`;
 
             document.formNewProduction.reset();
 
         } else {
-            styleBackground = "background-color:#f8d7da";
-            title = `<i class="bi bi-x-circle"></i>
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Error</h1>`;
             feedback = feedback.message;
 
         }
 
-        this.showModalAlertAction(done, title, feedback);
+        this.showModalAlertAction(done, feedback);
 
     }
 
@@ -954,25 +880,55 @@ class VideoSystemView {
         let styleBackground, title;
 
         if (done) {
-            styleBackground = "background-color:#d1e7dd";
-            title = `<i class="bi bi-check-circle"></i>
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Exito</h1>`;
-            feedback = `La produccion  <strong>${production.title}</strong> ha sido eliminada correctamente`;
+            feedback = `La produccion <strong>${production.title}</strong> ha sido eliminada correctamente`;
 
             let divCat = $('#selectDelProd').find(`option[value="${production.title}"]`);
             divCat.remove();
             document.formDelProduction.reset();
         } else {
-            styleBackground = "background-color:#f8d7da";
-            title = `<i class="bi bi-x-circle"></i>
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Error</h1>`;
+
             feedback = feedback.message;
 
         }
 
-        this.showModalAlertAction(done, title, feedback);
+        this.showModalAlertAction(done, feedback);
 
     }
+
+    /**
+     * Una vez hecho assignar o desassignar a los directores de una produccion, mostrar el mensaje
+     * @param {} done 
+     * @param {*} director 
+     * @param {*} feedback 
+     */
+    showMessageActionAssignDirector(done, director, feedback) {
+
+        if (done) {
+            feedback = `Ha sido un exito el proceso solicitado para Directores`;
+        } else {
+            feedback = feedback.message;
+        }
+
+        this.showModalAlertAction(done, feedback);
+    }
+
+    /**
+     * Una vez hecho assignar o desassignar a los Actores de una produccion, mostrar el mensaje
+     */
+    showMessageActionAssignActores(done, actor, feedback) {
+
+        if (done) {
+            feedback = `Ha sido un exito el proceso solicitado para Actores`;
+        } else {
+            feedback = feedback.message;
+        }
+
+        this.showModalAlertAction(done, feedback);
+    }
+
+    /**
+     * FORMULARIOS
+     */
 
     /**
      * Mostrar Modal de añadir una produccion 
@@ -1083,14 +1039,14 @@ class VideoSystemView {
         contanierSelectActor.append(alertsSelect.clone());
         formProduc.append(contanierPerson);
 
-        formProduc.append(`<label class="form-check-label pt-3" for="selectType">Tipo de produccion:</label>
+        formProduc.append(`<div class="col-md-6"><label class="form-check-label pt-3" for="selectType">Tipo de produccion:</label>
                         <select class="form-select" aria-label="Default select example" id='selectType' name='selectType' required>
                         <option value="" selected>Seleccione el tipo de produccion</option>
                         <option value="Movie">Pelicula</option>
                         <option value="Serie">Serie</option>
                       </select>
                       <div class="invalid-feedback">Debe seleccionar que tipo de produccion es.</div>
-                    <div class="valid-feedback">Correcto.</div>`);
+                    <div class="valid-feedback">Correcto.</div></div>`);
     }
 
     /**

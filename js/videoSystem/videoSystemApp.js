@@ -33,6 +33,8 @@ window.addEventListener('popstate', function (event) {
     if (event.state) {
         historyActions[event.state.action](event);
     }
+    
+    $('body .show').remove();
 });
 
 history.replaceState({ action: 'init' }, null); //Primer history init

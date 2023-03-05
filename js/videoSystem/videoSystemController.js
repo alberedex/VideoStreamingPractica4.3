@@ -8,7 +8,7 @@ class VideoSystemController {
     #loadVideoSystemObjects() {
         let actor1 = this.#videoSystemModel.getActor("Christian", "Bale", "Philip", "30/01/1974", "");
         let actor2 = this.#videoSystemModel.getActor("Harry", "Melling", "", "13/04/1989", "image/imagesActor/harryMelling.jpg"); //Los crimenes de la academia
-console.log(actor2);
+
         let actor3 = this.#videoSystemModel.getActor("Paola", "Núñez", "Rivas", "08/04/1978", "image/imagesActor/paolaRivas.jpg"); //Resident Evil
         let actor12 = this.#videoSystemModel.getActor("Ella", "Pascale", "Balinska", "04/10/1996", "image/imagesActor/ellaPascale.jpg"); //Resident Evil
 
@@ -383,6 +383,7 @@ console.log(actor2);
         }
 
         this.#videoSystemView.showMessageActionDelCategory(done, cat, error);
+
         this.onAddCategory();
     }
 
@@ -503,7 +504,7 @@ console.log(actor2);
             error = exception;
         }
 
-        this.#videoSystemView.showMessageAction(done, obj, error);
+        this.#videoSystemView.showMessageActionAssignDirector(done, obj, error);
         //Reiniciamos la formulario 
         this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod),this.#videoSystemModel.getDirectorsAvailableProd(prod),this.#videoSystemModel.getActorsAvailableProd(prod));
         this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
@@ -526,13 +527,13 @@ console.log(actor2);
                 this.#videoSystemModel.deassignActor(obj, prod);
             }
             done = true;
-            error = `Ha sido un exito el proceso solicitado para Actores`;
+            
         } catch (exception) {
             done = false;
             error = exception;
         }
 
-        this.#videoSystemView.showMessageAction(done, obj, error);
+        this.#videoSystemView.showMessageActionAssignActores(done, obj, error);
         //Reiniciamos la formulario
         this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod),this.#videoSystemModel.getDirectorsAvailableProd(prod),this.#videoSystemModel.getActorsAvailableProd(prod));
         this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
