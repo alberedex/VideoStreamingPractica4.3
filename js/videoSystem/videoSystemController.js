@@ -1,9 +1,11 @@
 import { Resource, Coordinate } from '../ObjetosEntidad.js';
+import {setCookie,getCookie} from './videoSystemApp.js';
 
 class VideoSystemController {
 
     #videoSystemModel;
     #videoSystemView;
+    #user;
 
     #loadVideoSystemObjects() {
         let actor1 = this.#videoSystemModel.getActor("Christian", "Bale", "Philip", "30/01/1974", "");
@@ -70,7 +72,9 @@ class VideoSystemController {
         let coor3 = new Coordinate(42.5412, -44.5214);
 
         let user1 = this.#videoSystemModel.getUser("alberedex", "2001rs@gmail.com", "pass1234");
+        let userAdmin = this.#videoSystemModel.getUser("admin", "admin@gmail.com", "admin");
         this.#videoSystemModel.addUser(user1);
+        this.#videoSystemModel.addUser(userAdmin);
 
         this.#videoSystemModel.addCategory(category1);
         this.#videoSystemModel.addCategory(category2);
@@ -202,6 +206,8 @@ class VideoSystemController {
     constructor(model, view) {
         this.#videoSystemModel = model;
         this.#videoSystemView = view;
+        this.#user = null;
+        
 
         this.onLoad();
         this.onInit();
@@ -231,6 +237,16 @@ class VideoSystemController {
             this.handlerNewPersonForm,
             this.handlerDelPersonForm
         );
+
+        let userC = getCookie('loginUserCookie');
+        if(userC){
+            //En caso que tiene sesion
+            this.#videoSystemModel.getUser(userC);
+            // this.on
+        }else{
+            //en caso que no tiene sesion
+            this.onCloseSesion();
+        }
     }
 
     //En respuesta a un cambio de datos
@@ -645,6 +661,42 @@ class VideoSystemController {
 
         this.#videoSystemView.showMessageDelPerson(done, ObjActor, error);
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
+    }
+
+    
+    handleLoginForm = () => {
+		this.#videoSystemView.showLogin();
+		this.#videoSystemView.bindLogin(this.handleLogin);
+	}
+
+    handleLogin = (name,pass,chkRecordar) => {
+        //login asignar la cookie
+        let index = Array.from(this.#videoSystemModel.users).findIndex(userRegist => userRegist.username == name && userRegist.password == pass);
+        console.log(index);
+        console.log(name);
+        console.log(pass);
+        if(index >= 0){
+            //es correcto el usuario 
+            this.#user = this.#videoSystemModel.getUser(name,null,pass);
+            this.onInit();
+            console.log("SESION CORRECTA");
+            if(chkRecordar){
+                this.#videoSystemView.setUserCookie(this.#user);
+                console.log("RECORDAR");
+            }
+
+        }else{
+            //no es correcto 
+            console.log("NO ES CORRECTA");
+        }
+    }
+
+    onCloseSesion = () => {
+        this.#user = null;
+        this.#videoSystemView.showLinkLogin();
+        this.#videoSystemView.bindLinkLogin(this.handleLoginForm);
+        this.#videoSystemView.removeAdminMenu();
+        this.#videoSystemView.deleteUserC();
     }
 }
 

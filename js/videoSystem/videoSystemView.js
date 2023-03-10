@@ -1,4 +1,5 @@
 import { showFeedBack, defaultCheckElement, newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation } from './validation.js';
+import {setCookie,getCookie} from './videoSystemApp.js';
 
 class VideoSystemView {
     /**
@@ -617,7 +618,7 @@ class VideoSystemView {
      * Mostrar en el menu la opcion de Adminstrador
      */
     showAdminMenu() {
-        let li = $(`<li class="nav-item dropdown">
+        let li = $(`<li class="nav-item dropdown" id='MenuAdminstrador'>
                         <a class="nav-link dropdown-toggle text-white" href="#" id="AdminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-has-popup="true">
                             Admin
                         </a>
@@ -1484,6 +1485,83 @@ class VideoSystemView {
                                 </div>
                         </div>`);
         }
+    }
+
+    showLinkLogin() {
+        this.menu.append(`<li class="nav-item">
+                            <a id='showLogin' class="nav-link collapse-link active" aria-current="page" href="#">Iniciar Sesion</a>
+                        </li>`);
+
+    }
+
+    bindLinkLogin(handler) {
+        $('#showLogin').click(() => {
+            this.#excecuteHandler(handler, [], 'main', { action: 'login' }, '#', event);
+        });
+    }
+
+
+    showLogin() {
+        this.main.empty();
+        let divLogin = $(`<div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-5">
+                <div class="wrap">
+                    <div class="login-wrap p-4 p-md-5">
+                        <div class="d-flex">
+                            <div class="w-100">
+                                <h3 class="mb-4">Sign In</h3>
+                            </div>
+        </div>
+        <form action="#" class="signin-form" name='formLogin'>
+            <div class="form-group mt-3">
+                <label class="form-control-placeholder" for="username">Username</label>
+                <input type="text" class="form-control" name='username' required>
+            </div>
+            <div class="form-group">
+                <label class="form-control-placeholder" for="password">Password</label>
+                <input id="password-field" name='password' type="password" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <button type="submit" id='btn-login' class="form-control btn btn-primary rounded submit px-3">Iniciar Sesion</button>
+            </div>
+            <div class="form-group d-md-flex">
+            <div class="w-50 text-left">
+            <label class="checkbox-wrap checkbox-primary mb-0">Recuerdame
+            <input type="checkbox" name='recordar'>
+            <span class="checkmark"></span>
+            </label>
+            </div>
+            </div>
+        </form>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>`);
+
+        this.main.append(divLogin);
+    }
+
+    bindLogin(handler) {
+        let form = document.forms.formLogin;
+        $(form).submit(function (event) {
+            handler(form.username.value, form.password.value, form.recordar.checked);
+            event.preventDefault();
+        });
+    }
+
+    removeAdminMenu() {
+        $('#MenuAdminstrador').remove();
+    }
+
+    setUserCookie(user) {
+        console.log("cookie registrado");
+        setCookie('loginUserCookie',user.username,1);
+    }
+
+    deleteUserCookie(){
+        setCookie(loginUserCookie,null,0);
     }
 
 }
