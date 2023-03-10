@@ -612,6 +612,7 @@ class VideoSystemView {
      */
     
 
+
     /**
      * Mostrar en el menu la opcion de Adminstrador
      */
@@ -801,8 +802,6 @@ class VideoSystemView {
               </div>
             </div>
           </div>`);
-
-        this.bindCloseModalAlert(); //Enlazar el evento para cerrar
     }
 
     /**
@@ -818,6 +817,7 @@ class VideoSystemView {
             //Reiniciamos el formulario una vez realizado la operacion
             let divCat = $('#selectDelCategory').find(`option[value="${categ.name}"]`);
             divCat.remove();
+            document.formDelCategory.reset();
         } else {
 
             feedback = feedback.message;
@@ -928,6 +928,35 @@ class VideoSystemView {
     }
 
     /**
+     * Una vez hecho añadir un usuario, mostrar el mensaje
+     */
+    showMessageAddPerson(done, person, feedback) {
+        if (done) {
+
+            feedback = `La persona <strong>${person.name}</strong> ha sido añadido`;
+            document.formNewPerson.reset();
+        } else {
+            feedback = feedback.message;
+        }
+
+        this.showModalAlertAction(done, feedback);
+    }
+
+    /**
+     * Una vez hecho añadir un usuario, mostrar el mensaje
+     */
+    showMessageDelPerson(done, person, feedback) {
+
+        if (done) {
+            feedback = `La persona <strong>${person.name}</strong> ha sido eliminado`;
+        } else {
+            feedback = feedback.message;
+        }
+
+        this.showModalAlertAction(done, feedback);
+    }
+
+    /**
      * FORMULARIOS
      */
 
@@ -998,7 +1027,7 @@ class VideoSystemView {
         let contanierSelectCategory = $('<div class="col-md-12">');
         contanierSelectCategory.append('<label for="newproCategories" class="form-label">Categorias</label>');
 
-        let categoriesSelectCategory = $(`<select class="form-select" multiple aria-label="multiple select Categorias" id="newproCategories" name="newproCategories" aria-describedby="category" required></select>`);
+        let categoriesSelectCategory = $(`<select class="form-select" multiple aria-label="multiple select Categorias" id="newproCategories" name="newproCategories" aria-describedby="newproCategories" required></select>`);
 
         for (let category of categoriesIterator) {
             categoriesSelectCategory.append(`<option value="${category.name}">${category.name}</option>`);
@@ -1041,7 +1070,7 @@ class VideoSystemView {
         formProduc.append(contanierPerson);
 
         formProduc.append(`<div class="col-md-6"><label class="form-check-label pt-3" for="selectType">Tipo de produccion:</label>
-                        <select class="form-select" aria-label="Default select example" id='selectType' name='selectType' required>
+                        <select class="form-select" aria-label="select Produccion" id='selectType' name='selectType' required>
                         <option value="" selected>Seleccione el tipo de produccion</option>
                         <option value="Movie">Pelicula</option>
                         <option value="Serie">Serie</option>
@@ -1114,16 +1143,18 @@ class VideoSystemView {
       </div>`);
 
         let formBody = $('#formBody');
-
-        let select = $(`<select class="form-select mb-4" id='selectDelCategory' aria-label="Select eliminar Categoria" required>`);
-        select.append(`<option value="">Seleccione una categoria</option>`);
+        let group = $(`<div>`);
+        let select = $(`<input class="form-control mb-4" list='DelCategory' id='selectDelCategory' name='selectDelCategory' aria-label="Select eliminar Categoria" placeholder="Escribe para buscar..." required>`);
+        let datalist = $(`<datalist id='DelCategory'>`);
         for (let categoria of categoriasIterator) {
-            select.append(`<option value="${categoria.name}">${categoria.name}</option>`);
+            datalist.append(`<option value="${categoria.name}">`);
         }
+        select.append(datalist);
 
-        formBody.append(select);
-        formBody.append(`<div class="invalid-feedback">Debe seleccionar una categoria para eliminar.</div>
-        <div class="valid-feedback">Correcto.</div>`);
+        group.append(select);
+        group.append(`<div class="invalid-feedback">Debe escribir una categoria existente para eliminar.</div>
+                    <div class="valid-feedback">Correcto.</div>`);
+        formBody.append(group);
     }
 
     /**

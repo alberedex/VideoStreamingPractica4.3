@@ -411,6 +411,10 @@ class User {
         return this.#email;
     }
 
+    get password(){
+        return this.#password;
+    }
+
     //Metodo toString
     toString() {
         return "Username: " + this.#username + ", email: " + this.#email;
