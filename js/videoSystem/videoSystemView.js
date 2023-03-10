@@ -1564,6 +1564,26 @@ class VideoSystemView {
         setCookie(loginUserCookie,null,0);
     }
 
+    deleteUserC(){
+        setCookie('loginUserCookie',null,0);
+    }
+
+    showWelcomeAdmin() {
+        let name = getCookie('loginUserCookie');
+        let li = $(`<div class='d-flex flex-row align-items-center gap-3 me-5'>
+                        <span class="">Bienvenido ${name}</span>
+                        <button type="button" id='btnClose' class="btn btn-secondary">Cerrar Sesion</button>
+                    </div>`);
+
+        $('#navbars ul').after(li);
+    }
+
+    bindCloseSession(handler){
+        $('#btnClose').click(function(){
+            handler();
+        })
+    }
+
 }
 
 export default VideoSystemView;

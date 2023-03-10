@@ -227,22 +227,22 @@ class VideoSystemController {
         this.#videoSystemView.showButtonCloseWindowsMenu();
         this.#videoSystemView.bindClose(this.handleClose);
 
-        this.#videoSystemView.showAdminMenu();
-        this.#videoSystemView.bindAdmin(
-            this.handlerNewProduccionForm,
-            this.handlerDelProduccionForm,
-            this.handlerAsigProducionForm,
-            this.handlerNewCategoryForm,
-            this.handlerDelCategoryForm,
-            this.handlerNewPersonForm,
-            this.handlerDelPersonForm
-        );
+        // this.#videoSystemView.showAdminMenu();
+        // this.#videoSystemView.bindAdmin(
+        //     this.handlerNewProduccionForm,
+        //     this.handlerDelProduccionForm,
+        //     this.handlerAsigProducionForm,
+        //     this.handlerNewCategoryForm,
+        //     this.handlerDelCategoryForm,
+        //     this.handlerNewPersonForm,
+        //     this.handlerDelPersonForm
+        // );
 
         let userC = getCookie('loginUserCookie');
         if(userC){
             //En caso que tiene sesion
             this.#videoSystemModel.getUser(userC);
-            // this.on
+            this.onOpenSesion();
         }else{
             //en caso que no tiene sesion
             this.onCloseSesion();
@@ -697,6 +697,22 @@ class VideoSystemController {
         this.#videoSystemView.bindLinkLogin(this.handleLoginForm);
         this.#videoSystemView.removeAdminMenu();
         this.#videoSystemView.deleteUserC();
+    }
+
+    onOpenSesion = () => {
+        this.#videoSystemView.showWelcomeAdmin();
+        this.#videoSystemView.bindCloseSession(this.onCloseSesion);
+        this.#videoSystemView.showAdminMenu();
+         this.#videoSystemView.bindAdmin(
+            this.handlerNewProduccionForm,
+            this.handlerDelProduccionForm,
+            this.handlerAsigProducionForm,
+            this.handlerNewCategoryForm,
+            this.handlerDelCategoryForm,
+            this.handlerNewPersonForm,
+            this.handlerDelPersonForm
+        );
+
     }
 }
 
