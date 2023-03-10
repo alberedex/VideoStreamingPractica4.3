@@ -808,8 +808,8 @@ let VideoSystem = (function () {
                 //Validar datos de entrada, antes de realizar la busqueda
                 if (!username) throw new InvalidValueException("username", username);
 
-                let position = this.#users.findIndex((userElement) => userElement.username === username && userElement.email === email);
-
+                // let position = this.#users.findIndex((userElement) => userElement.username === username && userElement.email === email);
+                let position = this.#users.findIndex((userElement) => userElement.username === username);
                 let user;
 
                 if (position === -1) {

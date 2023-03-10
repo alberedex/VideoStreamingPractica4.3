@@ -174,6 +174,8 @@ function newProductionValidation(handler) {
         feedDivs.removeClass('d-block').addClass('d-none');
         let inputs = $(this).find('input');
         inputs.removeClass('is-valid is-invalid');
+        let selects = $(this).find('select');
+        selects.removeClass('is-valid is-invalid');
     }));
 
     $(form.Nacionalidad).change(defaultCheckElement);
@@ -274,6 +276,8 @@ function newPersonValidation(handler) {
         feedDivs.removeClass('d-block').addClass('d-none');
         let inputs = $(this).find('input');
         inputs.removeClass('is-valid is-invalid');
+        let selects = $(this).find('select');
+        selects.removeClass('is-valid is-invalid');
     }));
 
     $(form.selectType).change(defaultCheckElement);
@@ -362,10 +366,12 @@ function delProductionValidation(handler) {
     });
 
     form.addEventListener('reset', (function (event) {
-        let feedDivs = $(this).find('div.valid-feedback, div.invalid-feedback');
-        feedDivs.removeClass('d-block').addClass('d-none');
-        let inputs = $(this).find('input');
-        inputs.removeClass('is-valid is-invalid');
+        // let feedDivs = $(this).find('div.valid-feedback, div.invalid-feedback');
+        // feedDivs.removeClass('d-block').addClass('d-none');
+        // let inputs = $(this).find('input');
+        // inputs.removeClass('is-valid is-invalid');
+        let selects = $(this).find('select');
+        selects.removeClass('is-valid is-invalid');
     }));
 
     $(form.selectDelProd).change(defaultCheckElement);
