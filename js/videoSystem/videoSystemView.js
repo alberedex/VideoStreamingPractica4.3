@@ -1511,7 +1511,7 @@ class VideoSystemView {
             <div class="col-md-7 col-lg-5">
                 <h3 class="mb-4">Iniciar Sesión</h3>
 
-                <form action="#" class="signin-form" name='formLogin'>
+                <form action="#" class="signin-form" name='formLogin' id='formLogin'>
                     <div class="form-group mt-3">
                         <label class="form-control-placeholder" for="username">Usuario</label>
                         <input type="text" class="form-control" name='username' required>
@@ -1534,6 +1534,13 @@ class VideoSystemView {
     </div>`);
 
         this.main.append(divLogin);
+    }
+
+    showMesaggeErrorLogin(){
+        let errorExits = $('#alertErrorLogin');
+        if(errorExits.length == 0) {
+            $('#formLogin').append(`<div class="alert alert-danger" role="alert" id='alertErrorLogin'>Usuario o contraseña incorrectos</div>`);
+        }
     }
 
     bindLogin(handler) {

@@ -485,7 +485,7 @@ class VideoSystemController {
         try {
             this.#videoSystemModel.removeProduction(prod);
             done = true;
-            
+            refreshMain();
         } catch (exception) {
             done = false;
             error = exception;
@@ -699,6 +699,7 @@ class VideoSystemController {
         }else{
             //no es correcto 
             console.log("NO ES CORRECTA");
+            this.#videoSystemView.showMesaggeErrorLogin();
         }
     }
 
