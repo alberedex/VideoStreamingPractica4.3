@@ -1,5 +1,5 @@
 import { Resource, Coordinate } from '../ObjetosEntidad.js';
-import {setCookie,getCookie} from './videoSystemApp.js';
+import {setCookie,getCookie,refreshMain} from './videoSystemApp.js';
 
 class VideoSystemController {
 
@@ -241,7 +241,7 @@ class VideoSystemController {
         let userC = getCookie('loginUserCookie');
         if(userC){
             //En caso que tiene sesion
-            this.#videoSystemModel.getUser(userC);
+            this.#user = this.#videoSystemModel.getUser(userC);
             this.onOpenSesion();
         }else{
             //en caso que no tiene sesion
@@ -361,7 +361,7 @@ class VideoSystemController {
         try {
             this.#videoSystemModel.addCategory(categ);
             done = true;
-            
+            refreshMain();
         } catch (exception) {
             done = false;
             error = exception;
@@ -369,6 +369,7 @@ class VideoSystemController {
         this.#videoSystemView.showMessageActionAddCategory(done, categ, error);
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
         this.onAddCategory();
+        
     }
 
     //Si hay modificacion del modelo, actualizar la vista, en este caso la barra de navegacion
@@ -397,7 +398,7 @@ class VideoSystemController {
         try {
             this.#videoSystemModel.removeCategory(cat);
             done = true;
-            
+            refreshMain();
         } catch (exception) {
             done = false;
             error = exception;
@@ -407,6 +408,7 @@ class VideoSystemController {
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
 
         this.onAddCategory();
+        
     }
 
     //Donde va a mostrar en la vista el formulario de add Producciones y sus eventos pasando el manejador 
@@ -471,6 +473,7 @@ class VideoSystemController {
         this.#videoSystemView.showMessageActionAddProd(done, prod, error);
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
         // this.onAddCategory();
+        refreshMain();
     }
 
     //Recibo tras de validar correctamente los datos para eliminar produccion
@@ -529,7 +532,7 @@ class VideoSystemController {
                 this.#videoSystemModel.deassignDirector(objDirector, prod);
             }
             done = true;
-            // error = `Ha sido un exito el proceso solicitado para Directores`;
+            refreshMain();  
         } catch (exception) {
             done = false;
             error = exception;
@@ -540,6 +543,7 @@ class VideoSystemController {
         //Reiniciamos la formulario 
         this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod),this.#videoSystemModel.getDirectorsAvailableProd(prod),this.#videoSystemModel.getActorsAvailableProd(prod));
         this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
+        
     }
 
     //Recibo los datos para Assignar o desassginar actores de una produccion
@@ -560,7 +564,7 @@ class VideoSystemController {
                 this.#videoSystemModel.deassignActor(obj, prod);
             }
             done = true;
-            
+            refreshMain();
         } catch (exception) {
             done = false;
             error = exception;
@@ -571,6 +575,7 @@ class VideoSystemController {
         //Reiniciamos la formulario
         this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod),this.#videoSystemModel.getDirectorsAvailableProd(prod),this.#videoSystemModel.getActorsAvailableProd(prod));
         this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
+        
     }
 
     //Mostrar en la vista el form de nueva persona y sus eventos pasando el manejador 
@@ -592,7 +597,7 @@ class VideoSystemController {
             try {
                 this.#videoSystemModel.addDirector(obj);
                 done = true;
-
+                refreshMain();
             } catch (exception) {
                 done = false;
                 error = exception;
@@ -605,7 +610,7 @@ class VideoSystemController {
             try {
                 this.#videoSystemModel.addActor(obj);
                 done = true;
-
+                refreshMain();
             } catch (exception) {
                 done = false;
                 error = exception;
@@ -615,6 +620,7 @@ class VideoSystemController {
         //Mensaje de exito
         this.#videoSystemView.showMessageAddPerson(done, obj, error);
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
+        
     }
 
     //Donde va a mostrar el form para eliminar una persona
@@ -635,6 +641,7 @@ class VideoSystemController {
         try {
             this.#videoSystemModel.removeDirector(ObjDirector);
             done = true;
+            refreshMain();
         } catch (exception) {
             done = false;
             error = exception;
@@ -642,6 +649,7 @@ class VideoSystemController {
 
         this.#videoSystemView.showMessageDelPerson(done, ObjDirector, error);
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
+        
     }
     
     //En caso del actor, eliminar
@@ -654,6 +662,7 @@ class VideoSystemController {
         try {
             this.#videoSystemModel.removeActor(ObjActor);
             done = true;
+            refreshMain();
         } catch (exception) {
             done = false;
             error = exception;
@@ -661,6 +670,7 @@ class VideoSystemController {
 
         this.#videoSystemView.showMessageDelPerson(done, ObjActor, error);
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
+        
     }
 
     
@@ -680,6 +690,7 @@ class VideoSystemController {
             this.#user = this.#videoSystemModel.getUser(name,null,pass);
             this.onInit();
             console.log("SESION CORRECTA");
+            this.onOpenSesion();
             if(chkRecordar){
                 this.#videoSystemView.setUserCookie(this.#user);
                 console.log("RECORDAR");
@@ -700,7 +711,7 @@ class VideoSystemController {
     }
 
     onOpenSesion = () => {
-        this.#videoSystemView.showWelcomeAdmin();
+        this.#videoSystemView.showWelcomeAdmin(this.#user);
         this.#videoSystemView.bindCloseSession(this.onCloseSesion);
         this.#videoSystemView.showAdminMenu();
          this.#videoSystemView.bindAdmin(
@@ -712,6 +723,8 @@ class VideoSystemController {
             this.handlerNewPersonForm,
             this.handlerDelPersonForm
         );
+
+        this.#videoSystemView.initHistory();
 
     }
 }

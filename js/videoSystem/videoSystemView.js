@@ -1,5 +1,5 @@
 import { showFeedBack, defaultCheckElement, newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation } from './validation.js';
-import {setCookie,getCookie} from './videoSystemApp.js';
+import { setCookie, getCookie } from './videoSystemApp.js';
 
 class VideoSystemView {
     /**
@@ -29,9 +29,10 @@ class VideoSystemView {
 
     constructor() {
         this.main = $('main');
-        this.menu = $('.navbar-nav');
+        this.menu = $('#navbar-prin');
         this.fichaWindow = null;
         this.fichaWindowRegistry = [];
+        this.areaLogin = $('#AreaLogin');
     }
 
     //Metodo donde carga las categorias en el contenido inicial
@@ -86,8 +87,9 @@ class VideoSystemView {
             //En caso que haya elementos, eliminamos la lista para poner los nuevo
             menu.children().remove();
         }
-
+        console.log(menu);
         for (let category of categories) {
+            console.log("categoria");
             menu.append(`<a data-category="${category.name}" class="dropdown-item collapse-link" href="#">
                                 ${category.name}
                             </a>`);
@@ -611,7 +613,7 @@ class VideoSystemView {
     /**
      * ADMINISTRACIÓN
      */
-    
+
 
 
     /**
@@ -694,7 +696,7 @@ class VideoSystemView {
         });
     }
 
-    bindCloseModalAlert(){
+    bindCloseModalAlert() {
         let myModal = new bootstrap.Modal(document.getElementById('messageModal'), {
             keyboard: false
         });
@@ -771,15 +773,15 @@ class VideoSystemView {
      * Estructura modal global para mostrar al usuario de si ha realizado correctamente o no 
      */
     showModalAlertAction(done, feedback) {
-        let styleBackground,title;
-        
-        
-        if (done){
+        let styleBackground, title;
+
+
+        if (done) {
             //En caso de correcto, mostrar en correcto
             styleBackground = "background-color:#d1e7dd";
             title = `<i class="bi bi-check-circle"></i>
             <h1 class="modal-title fs-5" id="exampleModalLabel">Exito</h1>`;
-        }else{
+        } else {
             //En caso de fallo, mostrar en error
             styleBackground = "background-color:#f8d7da";
             title = `<i class="bi bi-x-circle"></i>
@@ -814,7 +816,7 @@ class VideoSystemView {
     showMessageActionDelCategory(done, categ, feedback) {
         if (done) {
             feedback = `La categoria <strong>${categ.name}</strong> ha sido eliminada correctamente`;
-            
+
             //Reiniciamos el formulario una vez realizado la operacion
             let divCat = $('#selectDelCategory').find(`option[value="${categ.name}"]`);
             divCat.remove();
@@ -1488,7 +1490,8 @@ class VideoSystemView {
     }
 
     showLinkLogin() {
-        this.menu.append(`<li class="nav-item">
+        this.areaLogin.empty();
+        this.areaLogin.append(`<li class="nav-item">
                             <a id='showLogin' class="nav-link collapse-link active" aria-current="page" href="#">Iniciar Sesion</a>
                         </li>`);
 
@@ -1503,42 +1506,32 @@ class VideoSystemView {
 
     showLogin() {
         this.main.empty();
-        let divLogin = $(`<div class="container">
-        <div class="row justify-content-center">
+        let divLogin = $(`<div class="container pt-5">
+        <div class="d-flex justify-content-center pt-5">
             <div class="col-md-7 col-lg-5">
-                <div class="wrap">
-                    <div class="login-wrap p-4 p-md-5">
-                        <div class="d-flex">
-                            <div class="w-100">
-                                <h3 class="mb-4">Sign In</h3>
-                            </div>
-        </div>
-        <form action="#" class="signin-form" name='formLogin'>
-            <div class="form-group mt-3">
-                <label class="form-control-placeholder" for="username">Username</label>
-                <input type="text" class="form-control" name='username' required>
+                <h3 class="mb-4">Iniciar Sesión</h3>
+
+                <form action="#" class="signin-form" name='formLogin'>
+                    <div class="form-group mt-3">
+                        <label class="form-control-placeholder" for="username">Usuario</label>
+                        <input type="text" class="form-control" name='username' required>
+                    </div>
+                    <div class="form-group mt-3 mb-3">
+                        <label class="form-control-placeholder" for="password">Contraseña</label>
+                        <input id="password-field" name='password' type="password" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" id='btn-login'
+                            class="form-control btn btn-primary rounded submit px-3">Iniciar Sesion</button>
+                    </div>
+                    <div class="form-group d-flex">
+                        <input for='recordar' type="checkbox" name='recordar'>
+                        <label class="mb-0 ms-2" id="recordar">Recuerdame</label>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label class="form-control-placeholder" for="password">Password</label>
-                <input id="password-field" name='password' type="password" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <button type="submit" id='btn-login' class="form-control btn btn-primary rounded submit px-3">Iniciar Sesion</button>
-            </div>
-            <div class="form-group d-md-flex">
-            <div class="w-50 text-left">
-            <label class="checkbox-wrap checkbox-primary mb-0">Recuerdame
-            <input type="checkbox" name='recordar'>
-            <span class="checkmark"></span>
-            </label>
-            </div>
-            </div>
-        </form>
         </div>
-        </div>
-        </div>
-        </div>
-        </div>`);
+    </div>`);
 
         this.main.append(divLogin);
     }
@@ -1557,29 +1550,38 @@ class VideoSystemView {
 
     setUserCookie(user) {
         console.log("cookie registrado");
-        setCookie('loginUserCookie',user.username,1);
+        setCookie('loginUserCookie', user.username, 1);
     }
 
-    deleteUserCookie(){
-        setCookie(loginUserCookie,null,0);
+    initHistory(){
+		history.replaceState({action: 'init'}, null);
+	}
+
+    deleteUserCookie() {
+        setCookie(loginUserCookie, null, 0);
     }
 
-    deleteUserC(){
-        setCookie('loginUserCookie',null,0);
+    deleteUserC() {
+        setCookie('loginUserCookie', null, 0);
     }
 
-    showWelcomeAdmin() {
+    showWelcomeAdmin(user) {
+        this.areaLogin.empty();
         let name = getCookie('loginUserCookie');
         let li = $(`<div class='d-flex flex-row align-items-center gap-3 me-5'>
-                        <span class="">Bienvenido ${name}</span>
+                        <span class="">Bienvenido ${user.username}</span>
                         <button type="button" id='btnClose' class="btn btn-secondary">Cerrar Sesion</button>
                     </div>`);
+        // let li = $(`
+        //                 <li class="nav-item"><span class="nav-link collapse-link active" aria-current="page">Bienvenido ${name}</span></li>
+        //                 <li class="nav-item"><button type="button" id='btnClose' class="btn btn-secondary"  class="nav-link collapse-link active" aria-current="page">Cerrar Sesion</button></li>
+        //             `);
 
-        $('#navbars ul').after(li);
+        this.areaLogin.append(li);
     }
 
-    bindCloseSession(handler){
-        $('#btnClose').click(function(){
+    bindCloseSession(handler) {
+        $('#btnClose').click(function () {
             handler();
         })
     }

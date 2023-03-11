@@ -33,9 +33,17 @@ window.addEventListener('popstate', function (event) {
     if (event.state) {
         historyActions[event.state.action](event);
     }
-    
+
     $('body .show').remove();
 });
+
+function refreshMain() {
+    try {
+        historyActions[history.state.action](history);
+    } catch (error) {
+        historyActions.init();
+    }
+}
 
 history.replaceState({ action: 'init' }, null); //Primer history init
 
@@ -52,5 +60,5 @@ function getCookie(cname) {
     return document.cookie.replace(re, "$1");
 }
 
-export {setCookie,getCookie};
+export { setCookie, getCookie, refreshMain };
 export default VideoSystemApp;
