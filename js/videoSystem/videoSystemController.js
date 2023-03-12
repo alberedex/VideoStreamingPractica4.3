@@ -1,5 +1,5 @@
 import { Resource, Coordinate } from '../ObjetosEntidad.js';
-import {setCookie,getCookie,refreshMain} from './videoSystemApp.js';
+import { setCookie, getCookie, refreshMain } from './videoSystemApp.js';
 
 class VideoSystemController {
 
@@ -207,7 +207,7 @@ class VideoSystemController {
         this.#videoSystemModel = model;
         this.#videoSystemView = view;
         this.#user = null;
-        
+
 
         this.onLoad();
         this.onInit();
@@ -217,6 +217,33 @@ class VideoSystemController {
 
     //Carga inicial de la aplicacion
     onLoad = () => {
+
+        // fetch('js/json/Producciones.json')
+        //     .then(respuesta => respuesta.json())
+        //     .then(producciones => {
+        //         console.log(producciones);
+        //         producciones.forEach(prod => {
+        //             let prodIns;
+        //             if(prod.type == 'Movie'){
+        //                 prodIns = this.#videoSystemModel.getMovie(prod.title, prod.nationality, new Date(prod.publication), prod.synopsis, prod.image, prod.resource, prod.locations);
+        //             }else if(prod.type == 'Serie'){
+        //                 prodIns = this.#videoSystemModel.getSerie(prod.title, prod.nationality,new Date(prod.publication), prod.synopsis, prod.image, prod.resource, prod.locations);
+        //             }
+        //             console.log(prodIns);
+        //             this.#videoSystemModel.addProduction(prodIns);
+        //         });
+        //     });
+
+        // fetch('js/json/categoria.json')
+        //     .then(respuesta => respuesta.json())
+        //     .then(cate => {
+        //         cate.forEach(categoria => {
+        //             // console.log(categoria);
+        //             let categoryIns = this.#videoSystemModel.getCategory(categoria.category.name, categoria.category.description);
+        //             console.log(categoryIns);
+        //             this.#videoSystemModel.addCategory(categoryIns);
+        //         });
+        //     });
         this.#loadVideoSystemObjects();
         this.#videoSystemView.showCategoriesInMenu(this.#videoSystemModel.categories);
 
@@ -238,12 +265,14 @@ class VideoSystemController {
         //     this.handlerDelPersonForm
         // );
 
+
+
         let userC = getCookie('loginUserCookie');
-        if(userC){
+        if (userC) {
             //En caso que tiene sesion
             this.#user = this.#videoSystemModel.getUser(userC);
             this.onOpenSesion();
-        }else{
+        } else {
             //en caso que no tiene sesion
             this.onCloseSesion();
         }
@@ -279,6 +308,7 @@ class VideoSystemController {
         this.#videoSystemView.bindDirectores(this.handleDirector);
 
         this.#videoSystemView.bindShowFichaInNewWindow(this.handleProductionNewWindow);
+        this.#videoSystemView.bindAddFavoriteProduction(this.#user);
     }
 
     //lista de los actores
@@ -352,7 +382,7 @@ class VideoSystemController {
         this.#videoSystemView.bindNewCategoryForm(this.handleCreateCategory);
         this.#videoSystemView.bindCloseModal();
     }
-    
+
     //Recibo tras de validar correctamente los datos para crear categoria
     handleCreateCategory = (title, description) => {
         let categ = this.#videoSystemModel.getCategory(title, description);
@@ -369,7 +399,7 @@ class VideoSystemController {
         this.#videoSystemView.showMessageActionAddCategory(done, categ, error);
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
         this.onAddCategory();
-        
+
     }
 
     //Si hay modificacion del modelo, actualizar la vista, en este caso la barra de navegacion
@@ -388,7 +418,7 @@ class VideoSystemController {
         this.#videoSystemView.bindDelCategoryForm(this.handleDelCategory);
         this.#videoSystemView.bindCloseModal(); //enlazar los botones para que elimine totalmente de DOM
     }
-    
+
     //Recibo tras de validar correctamente los datos para eliminar categoria
     handleDelCategory = (category) => {
         let cat = this.#videoSystemModel.getCategory(category);
@@ -408,7 +438,7 @@ class VideoSystemController {
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
 
         this.onAddCategory();
-        
+
     }
 
     //Donde va a mostrar en la vista el formulario de add Producciones y sus eventos pasando el manejador 
@@ -465,7 +495,7 @@ class VideoSystemController {
             }
 
             done = true;
-            
+
         } catch (exception) {
             done = false;
             error = exception;
@@ -508,7 +538,7 @@ class VideoSystemController {
     handlerShowAssignProduction = (production) => {
         let prod = this.#videoSystemModel.getProduction(production);
 
-        this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod),this.#videoSystemModel.getDirectorsAvailableProd(prod),this.#videoSystemModel.getActorsAvailableProd(prod));
+        this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod), this.#videoSystemModel.getDirectorsAvailableProd(prod), this.#videoSystemModel.getActorsAvailableProd(prod));
         this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
     }
 
@@ -532,7 +562,7 @@ class VideoSystemController {
                 this.#videoSystemModel.deassignDirector(objDirector, prod);
             }
             done = true;
-            refreshMain();  
+            refreshMain();
         } catch (exception) {
             done = false;
             error = exception;
@@ -541,9 +571,9 @@ class VideoSystemController {
         this.#videoSystemView.showMessageActionAssignDirector(done, obj, error);
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
         //Reiniciamos la formulario 
-        this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod),this.#videoSystemModel.getDirectorsAvailableProd(prod),this.#videoSystemModel.getActorsAvailableProd(prod));
+        this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod), this.#videoSystemModel.getDirectorsAvailableProd(prod), this.#videoSystemModel.getActorsAvailableProd(prod));
         this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
-        
+
     }
 
     //Recibo los datos para Assignar o desassginar actores de una produccion
@@ -573,9 +603,9 @@ class VideoSystemController {
         this.#videoSystemView.showMessageActionAssignActores(done, obj, error);
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
         //Reiniciamos la formulario
-        this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod),this.#videoSystemModel.getDirectorsAvailableProd(prod),this.#videoSystemModel.getActorsAvailableProd(prod));
+        this.#videoSystemView.showAssignProductionModule(this.#videoSystemModel.getCast(prod), this.#videoSystemModel.getDirectorsProdutions(prod), this.#videoSystemModel.getDirectorsAvailableProd(prod), this.#videoSystemModel.getActorsAvailableProd(prod));
         this.#videoSystemView.bindAssignDesProduction(this.handleAssingDesProdDirector, this.handleAssingDesProdActor, prod);
-        
+
     }
 
     //Mostrar en la vista el form de nueva persona y sus eventos pasando el manejador 
@@ -620,7 +650,7 @@ class VideoSystemController {
         //Mensaje de exito
         this.#videoSystemView.showMessageAddPerson(done, obj, error);
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
-        
+
     }
 
     //Donde va a mostrar el form para eliminar una persona
@@ -633,12 +663,13 @@ class VideoSystemController {
 
     //En caso del director, eliminar
     handlerDelDirector = (director) => {
-        let directorSplit = director.split('/');
-        let ObjDirector = this.#videoSystemModel.getDirector(directorSplit[0], directorSplit[1]);
-
         let done, error;
+        let ObjDirector;
 
         try {
+            let directorSplit = director.split('/');
+            ObjDirector = this.#videoSystemModel.getDirector(directorSplit[0], directorSplit[1]);
+
             this.#videoSystemModel.removeDirector(ObjDirector);
             done = true;
             refreshMain();
@@ -649,17 +680,18 @@ class VideoSystemController {
 
         this.#videoSystemView.showMessageDelPerson(done, ObjDirector, error);
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
-        
+
     }
-    
+
     //En caso del actor, eliminar
     handlerDelActor = (actor) => {
-        let actorSplit = actor.split('/');
-        let ObjActor = this.#videoSystemModel.getActor(actorSplit[0], actorSplit[1]);
-
         let done, error;
+        let ObjActor;
 
         try {
+            let actorSplit = actor.split('/');
+            ObjActor = this.#videoSystemModel.getActor(actorSplit[0], actorSplit[1]);
+
             this.#videoSystemModel.removeActor(ObjActor);
             done = true;
             refreshMain();
@@ -670,36 +702,36 @@ class VideoSystemController {
 
         this.#videoSystemView.showMessageDelPerson(done, ObjActor, error);
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
-        
+
     }
 
-    
-    handleLoginForm = () => {
-		this.#videoSystemView.showLogin();
-		this.#videoSystemView.bindLogin(this.handleLogin);
-	}
 
-    handleLogin = (name,pass,chkRecordar) => {
+    handleLoginForm = () => {
+        this.#videoSystemView.showLogin();
+        this.#videoSystemView.bindLogin(this.handleLogin);
+    }
+
+    handleLogin = (name, pass, chkRecordar) => {
         //login asignar la cookie
         let index = Array.from(this.#videoSystemModel.users).findIndex(userRegist => userRegist.username == name && userRegist.password == pass);
         console.log(index);
         console.log(name);
         console.log(pass);
-        if(index >= 0){
+        if (index >= 0) {
             //es correcto el usuario 
-            this.#user = this.#videoSystemModel.getUser(name,null,pass);
+            this.#user = this.#videoSystemModel.getUser(name, null, pass);
             this.onInit();
             console.log("SESION CORRECTA");
             this.onOpenSesion();
-            if(chkRecordar){
+            if (chkRecordar) {
                 this.#videoSystemView.setUserCookie(this.#user);
                 console.log("RECORDAR");
             }
 
-        }else{
+        } else {
             //no es correcto 
             console.log("NO ES CORRECTA");
-            this.#videoSystemView.showMesaggeErrorLogin();
+            this.#videoSystemView.showMessageErrorLogin();
         }
     }
 
@@ -709,13 +741,16 @@ class VideoSystemController {
         this.#videoSystemView.bindLinkLogin(this.handleLoginForm);
         this.#videoSystemView.removeAdminMenu();
         this.#videoSystemView.deleteUserC();
+        this.#videoSystemView.initHistory();
     }
 
     onOpenSesion = () => {
         this.#videoSystemView.showWelcomeAdmin(this.#user);
         this.#videoSystemView.bindCloseSession(this.onCloseSesion);
         this.#videoSystemView.showAdminMenu();
-         this.#videoSystemView.bindAdmin(
+        this.#videoSystemView.showProdFavorites();
+        this.#videoSystemView.bindShowProdFavorites(this.handlerProdFavorites);
+        this.#videoSystemView.bindAdmin(
             this.handlerNewProduccionForm,
             this.handlerDelProduccionForm,
             this.handlerAsigProducionForm,
@@ -727,6 +762,17 @@ class VideoSystemController {
 
         this.#videoSystemView.initHistory();
 
+    }
+
+    handlerProdFavorites = () => {
+        if (this.#user != null) {
+            this.#videoSystemView.showProductionsListFavorites(this.#user, this.#videoSystemModel.productions);
+
+            this.#videoSystemView.bindProductions(this.handleProduction);
+        } else {
+            //en caso que no haya usuario, ir a inicio
+            this.onInit();
+        }
     }
 }
 

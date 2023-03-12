@@ -21,7 +21,9 @@ const historyActions = {
     ListDirectores: (event) => VideoSystemApp.handleDirectoresList(event.state.nav),
     showProduction: (event) => VideoSystemApp.handleProduction(event.state.produccion),
     showActor: (event) => VideoSystemApp.handleActor(event.state.person),
-    showDirector: (event) => VideoSystemApp.handleDirector(event.state.person)
+    showDirector: (event) => VideoSystemApp.handleDirector(event.state.person),
+    login: () => VideoSystemApp.handleLoginForm(),
+    showProductionFavorites: () => VideoSystemApp.handlerProdFavorites()
 };
 
 /**
@@ -29,9 +31,12 @@ const historyActions = {
  * Es lanzado cada vez que el historial cambia
  */
 window.addEventListener('popstate', function (event) {
-
-    if (event.state) {
-        historyActions[event.state.action](event);
+    try {
+        if (event.state) {
+            historyActions[event.state.action](event);
+        }
+    } catch (error) {
+        historyActions.init();
     }
 
     $('body .show').remove();
@@ -55,8 +60,7 @@ function setCookie(cname, cvalue, exdays) {
 }
 
 function getCookie(cname) {
-    let re = new RegExp('(?:(?:^|.*;\\s*)' + cname +
-        '\\s*\\=\\s*([^;]*).*$)|^.*$');
+    let re = new RegExp('(?:(?:^|.*;\\s*)' + cname + '\\s*\\=\\s*([^;]*).*$)|^.*$');
     return document.cookie.replace(re, "$1");
 }
 

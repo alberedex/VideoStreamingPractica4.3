@@ -1,4 +1,4 @@
-import { showFeedBack, defaultCheckElement, newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation } from './validation.js';
+import { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation,delPersonValidation, loginValidation } from './validation.js';
 import { setCookie, getCookie } from './videoSystemApp.js';
 
 class VideoSystemView {
@@ -87,9 +87,8 @@ class VideoSystemView {
             //En caso que haya elementos, eliminamos la lista para poner los nuevo
             menu.children().remove();
         }
-        console.log(menu);
+
         for (let category of categories) {
-            console.log("categoria");
             menu.append(`<a data-category="${category.name}" class="dropdown-item collapse-link" href="#">
                                 ${category.name}
                             </a>`);
@@ -332,6 +331,7 @@ class VideoSystemView {
                                 <div>
                                     <h1 class="card-title">${production.title}</h1>
                                     <button id="b-open" data-id="${production.title}" class="btn btn-primary text-uppercase mr-2 px-4">Abrir en nueva ventana</button>
+                                    <button id="b-favorite" data-id="${production.title}" class="btn btn-primary text-uppercase mr-2 px-4">Favoritos</button>
                                     <div class="d-flex gap-5 flex-wrap" id='infoProduction'>
                                         <p>${production.nationality}</p>
                                         <p>${production.publication.getFullYear()}</p>
@@ -577,6 +577,8 @@ class VideoSystemView {
 
         });
     }
+
+
     /**
      * Mostramos la opcion de eliminar las ventanas que tengan la referencias en la barra 
      * de navegacion de la pagina inicial
@@ -714,15 +716,7 @@ class VideoSystemView {
     * @param {*} handlerActor 
     */
     bindDelPersonForm(handlerDirector, handlerActor) {
-        $('#listDirector').find('button').click(function (event) {
-            handlerDirector(this.dataset.person);
-            $(this).closest('div.row').remove();
-        });
-
-        $('#listActores').find('button').click(function (event) {
-            handlerActor(this.dataset.person);
-            $(this).closest('div.row').remove();
-        });
+        delPersonValidation(handlerDirector,handlerActor);
     }
 
     /**
@@ -762,6 +756,27 @@ class VideoSystemView {
     */
     bindNewPersonForm(handler) {
         newPersonValidation(handler);
+    }
+
+    /**
+    * Enlazar el evento cuando produce un cambio en el select del formulario de asignar o desasignar a una produccion
+    * @param {*} handler 
+    */
+    bindShowAssignsProd(handler) {
+
+        $('#formBody>select').change(function (event) {
+            handler(this.value);
+        });
+    }
+
+    /**
+     * Enlazar el evento y validar cuando haya pulsado el boton de intercambio de propiedades del formulario de asignar o desasignar a una produccion
+     * @param {*} handlerDirectors 
+     * @param {*} handlerActors 
+     * @param {*} prod 
+     */
+    bindAssignDesProduction(handlerDirectors, handlerActors, prod) {
+        assignDesValidation(handlerDirectors, handlerActors, prod);
     }
 
     /**
@@ -881,7 +896,6 @@ class VideoSystemView {
      * @param {*} feedback 
      */
     showMessageActionDelProd(done, production, feedback) {
-        let styleBackground, title;
 
         if (done) {
             feedback = `La produccion <strong>${production.title}</strong> ha sido eliminada correctamente`;
@@ -952,6 +966,10 @@ class VideoSystemView {
 
         if (done) {
             feedback = `La persona <strong>${person.name}</strong> ha sido eliminado`;
+            document.formDelPersonDirector.reset();
+            document.formDelPersonActor.reset();
+            let formPerson = $('#formRemPerson').find(`option[value="${person.name}/${person.lastname1}"]`);
+            formPerson.remove();
         } else {
             feedback = feedback.message;
         }
@@ -971,7 +989,7 @@ class VideoSystemView {
      */
     showModalAddProduction(actorIterator, directorIterator, categoriesIterator) {
         $('body').append(`<div class="modal fade" id="formAddProduction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Produccion</h1>
@@ -979,12 +997,20 @@ class VideoSystemView {
                     </div>
                     <form name="formNewProduction" role="form" enctype="multipart/form-data" novalidate>
                         <div class="modal-body" id='formBody'>
-                            <div class="col-md-12">
+                        <div class='row'>
+                            <div class="col-md-6">
                                 <label for="Ptitle" class="form-label">Titulo</label>
                                 <input type="text" class="form-control" id="Ptitle" name='Ptitle'  required>
                                 <div class="invalid-feedback">El titulo es obligatorio.</div>
                                 <div class="valid-feedback">Correcto.</div>
                             </div>
+                            <div class="col-md-6">
+                                <label for="Pimage" class="form-label">Imagen</label>
+                                <input type="file" class="form-control" id="Pimage" name='Pimage' required>
+                                <div class="invalid-feedback">La imagen es obligatorio.</div>
+                                <div class="valid-feedback">Correcto.</div>
+                            </div>
+                        </div>
                             <div class='row'>
                             <div class="col-md-6">
                                 <label for="Nacionalidad" class="form-label">Nacionalidad</label>
@@ -1003,17 +1029,12 @@ class VideoSystemView {
                                 <label for="PSynopsis" class="form-label">Synopsis</label>
                                 <textarea class="form-control" id="PSynopsis" name="PSynopsis" aria-describedby="Synopsis" rows="4"></textarea>
                             </div>
-                            <div class="col-md-12">
-                                <label for="Pimage" class="form-label">Imagen</label>
-                                <input type="file" class="form-control" id="Pimage" name='Pimage' required>
-                                <div class="invalid-feedback">La imagen es obligatorio.</div>
-                                <div class="valid-feedback">Correcto.</div>
-                            </div>
+                            
                             
                         </div>
                         <div class="modal-footer">
                             <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="reset" class="btn btn-primary">Borrar datos</button>
+                            <button type="reset" class="btn btn-secondary">Borrar datos</button>
                             <button type="submit" class="btn btn-primary">Crear nueva produccion</button>
                         </div>
                     </form>
@@ -1218,7 +1239,7 @@ class VideoSystemView {
                         </div>
                         <div class="modal-footer">
                             <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
-                            
+                                                      
                         </div>
                     </form>
                 </div>
@@ -1236,50 +1257,7 @@ class VideoSystemView {
 
         bodyForm.append(select);
     }
-    /**
-     * Enlazar el evento cuando produce un cambio en el select
-     * @param {*} handler 
-     */
-    bindShowAssignsProd(handler) {
 
-        $('#formBody>select').change(function (event) {
-            handler(this.value);
-        });
-    }
-
-    /**
-     * Enlazar el evento cuando haya pulsado el boton de intercambio de propiedades
-     * @param {*} handlerDirectors 
-     * @param {*} handlerActors 
-     * @param {*} prod 
-     */
-    bindAssignDesProduction(handlerDirectors, handlerActors, prod) {
-        let form = document.forms.formAssignDesProd;
-
-        $('.directorButton').click(function (event) {
-
-            let directorAssign = [...form.Director.selectedOptions].map(function (option) {
-                return option.value;
-            });
-
-            let directorDeassign = [...form.DirectorProd.selectedOptions].map(function (option) {
-                return option.value;
-            });
-            handlerDirectors(directorAssign, directorDeassign, prod);
-        });
-
-        $('.actorButton').click(function (event) {
-            let actorAssign = [...form.Actor.selectedOptions].map(function (option) {
-                return option.value;
-            });
-
-            let actorDeassign = [...form.ActorProd.selectedOptions].map(function (option) {
-                return option.value;
-            });
-
-            handlerActors(actorAssign, actorDeassign, prod);
-        });
-    }
 
     /**
      * Mostrar los listados disponibles y lo que tiene asignado, pemitir assignar/desassignar de la produccion
@@ -1313,6 +1291,7 @@ class VideoSystemView {
         contanierPerson.append(`<div class="col-md-2 d-flex justify-content-center align-items-center">
           <button type="button" class="btn btn-primary directorButton">
           <i class="bi bi-arrow-left-right"></i></button>
+          
         </div>`);
 
         //Segundo select, que son directores que estan asignados 
@@ -1327,7 +1306,7 @@ class VideoSystemView {
 
         contanierSelectPerson2.append(assignDirector)
         contanierPerson.append(contanierSelectPerson2);
-
+        contanierSelectPerson2.append(`<div class="invalid-feedback">Debes seleccionar</div>`);
         //Turno de los actores
         //Primer select donde muestra los actores disponibles 
         let contanierPersonActor = $('<div class="row mt-4">');
@@ -1343,6 +1322,7 @@ class VideoSystemView {
         }
         contanierSelectPersonActor.append(categoriesSelectActor);
         contanierPersonActor.append(contanierSelectPersonActor);
+        contanierSelectPersonActor.append(` <div class="invalid-feedback">Debes seleccionar</div>`);
         //boton
         contanierPersonActor.append(`<div class="col-md-2 d-flex gap-2 flex-column justify-content-center align-items-center">
           <button type="button" class="btn btn-primary actorButton">
@@ -1423,6 +1403,7 @@ class VideoSystemView {
                 </div>
                         <div class="modal-footer">
                             <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="reset" class="btn btn-secondary">Borrar datos</button>
                             <button type="submit" class="btn btn-primary">Crear nueva persona</button>
                         </div>
                     </form>
@@ -1435,23 +1416,108 @@ class VideoSystemView {
     /**
      * Modal donde permite eliminar Persona
      */
+        /**
+    * Evento donde se enlaza con el boton de los listados para eliminar la persona del sistema
+    * @param {*} handlerDirector 
+    * @param {*} handlerActor 
+    */
+    // bindDelPersonForm(handlerDirector, handlerActor) {
+    //     $('#listDirector').find('button').click(function (event) {
+    //         handlerDirector(this.dataset.person);
+    //         $(this).closest('div.row').remove();
+    //     });
+
+    //     $('#listActores').find('button').click(function (event) {
+    //         handlerActor(this.dataset.person);
+    //         $(this).closest('div.row').remove();
+    //     });
+    // }
+    // showModalRemovePerson(directorIterator, actorIterator) {
+    //     $('body').append(`<div class="modal fade" id="formRemPerson" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
+    //     <div class="modal-dialog modal-lg">
+    //       <div class="modal-content">
+    //         <div class="modal-header">
+    //           <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminar Persona</h1>
+    //           <button type="button" class="btn-close buttonClose" data-bs-dismiss="modal" aria-label="Close"></button>
+    //         </div>
+    //             <div class="modal-body" id='formBody'>
+    //             <div class="container text-center">
+    //             <div class="row row-cols-2">
+    //               <div class="col"><strong>Directores</strong></div>
+    //               <div class="col"><strong>Actores</strong></div>
+    //               <div class="col overflow-auto" id='listDirector' style='height: 500px'></div>
+    //               <div class="col overflow-auto" id='listActores'  style='height: 500px'></div>
+    //             </div>
+    //           </div>
+    //             </div>
+    //             <div class="modal-footer">
+    //             <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
+    //             </div>
+    //       </div>
+    //     </div>
+    //   </div>`);
+
+    //     let columnD = $(`#listDirector`);
+
+
+    //     for (let director of directorIterator) {
+    //         columnD.append(`<div class='row pt-3'>
+    //                             <div class='col'>
+    //                                 <p>${director.name} ${director.lastname1}</p>
+    //                             </div>
+    //                             <div class='col'>
+    //                                 <button class="btn btn-primary" data-person="${director.name}/${director.lastname1}" type='button'>Eliminar</button>
+    //                             </div>
+    //                     </div>`);
+    //     }
+
+
+    //     let column = $(`#listActores`);
+
+    //     for (let actor of actorIterator) {
+    //         column.append(`<div class='row pt-3'>
+    //                             <div class='col'>
+    //                                 <p>${actor.name} ${actor.lastname1}</p>
+    //                             </div>
+    //                             <div class='col'>
+    //                                 <button class="btn btn-primary" data-person="${actor.name}/${actor.lastname1}" type='button'>Eliminar</button>
+    //                             </div>
+    //                     </div>`);
+    //     }
+    // }
+
     showModalRemovePerson(directorIterator, actorIterator) {
         $('body').append(`<div class="modal fade" id="formRemPerson" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminar Persona</h1>
               <button type="button" class="btn-close buttonClose" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-                <div class="modal-body" id='formBody'>
-                <div class="container text-center">
-                <div class="row row-cols-2">
-                  <div class="col"><strong>Directores</strong></div>
-                  <div class="col"><strong>Actores</strong></div>
-                  <div class="col overflow-auto" id='listDirector' style='height: 500px'></div>
-                  <div class="col overflow-auto" id='listActores'  style='height: 500px'></div>
+            <div class="modal-body" id='formBody'>
+            <form name="formDelPersonDirector" role="form" id='formDelPersonDirector' novalidate>
+            <div>
+                <label for='selectDelDirector'>Directores</label>
+                <select class="form-select mb-4" id='selectDelDirector' aria-label="Select eliminar Director" required></select>
+
+                <div class="invalid-feedback">Debe seleccionar un director para eliminar.</div>
+                <div class="valid-feedback">Correcto.</div>
+            </div>
+                <button type="submit" class="btn btn-primary">Eliminar Director</button>
+            
+            </form>
+            <hr>
+            <form name="formDelPersonActor" role="form" id='formDelPersonActor' novalidate>
+                <div>
+                <label for='selectDelActor'>Actores</label>
+
+                <select class="form-select mb-4" id='selectDelActor' aria-label="Select eliminar Actor" required></select>
+
+                <div class="invalid-feedback">Debe seleccionar un actor para eliminar.</div>
+                <div class="valid-feedback">Correcto.</div>
                 </div>
-              </div>
+                <button type="submit" class="btn btn-primary">Eliminar Actor</button>
+            </form>
                 </div>
                 <div class="modal-footer">
                 <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
@@ -1460,33 +1526,20 @@ class VideoSystemView {
         </div>
       </div>`);
 
-        let columnD = $(`#listDirector`);
+        let selectDirector = $('#selectDelDirector');
 
-
+        selectDirector.append(`<option value="">Seleccione una Director</option>`);
         for (let director of directorIterator) {
-            columnD.append(`<div class='row pt-3'>
-                                <div class='col'>
-                                    <p>${director.name} ${director.lastname1}</p>
-                                </div>
-                                <div class='col'>
-                                    <button class="btn btn-primary" data-person="${director.name}/${director.lastname1}" type='button'>Eliminar</button>
-                                </div>
-                        </div>`);
+            selectDirector.append(`<option value="${director.name}/${director.lastname1}">${director.name} ${director.lastname1}</option>`);
         }
 
+        let selectActor = $('#selectDelActor');
 
-        let column = $(`#listActores`);
-
+        selectActor.append(`<option value="">Seleccione una Actor</option>`);
         for (let actor of actorIterator) {
-            column.append(`<div class='row pt-3'>
-                                <div class='col'>
-                                    <p>${actor.name} ${actor.lastname1}</p>
-                                </div>
-                                <div class='col'>
-                                    <button class="btn btn-primary" data-person="${actor.name}/${actor.lastname1}" type='button'>Eliminar</button>
-                                </div>
-                        </div>`);
+            selectActor.append(`<option value="${actor.name}/${actor.lastname1}">${actor.name} ${actor.lastname1}</option>`);
         }
+  
     }
 
     showLinkLogin() {
@@ -1499,7 +1552,7 @@ class VideoSystemView {
 
     bindLinkLogin(handler) {
         $('#showLogin').click(() => {
-            this.#excecuteHandler(handler, [], 'main', { action: 'login' }, '#', event);
+            this.#excecuteHandler(handler, [], 'main', { action: 'login' }, '#Login', event);
         });
     }
 
@@ -1507,24 +1560,25 @@ class VideoSystemView {
     showLogin() {
         this.main.empty();
         let divLogin = $(`<div class="container pt-5">
-        <div class="d-flex justify-content-center pt-5">
-            <div class="col-md-7 col-lg-5">
-                <h3 class="mb-4">Iniciar Sesión</h3>
-
+        <div class="d-flex justify-content-center pt-5 ">
+            <div class="col-6 p-5 bg-dark-subtle rounded shadow">
+                <h2 class="mb-4">Iniciar Sesión</h2>
                 <form action="#" class="signin-form" name='formLogin' id='formLogin'>
                     <div class="form-group mt-3">
                         <label class="form-control-placeholder" for="username">Usuario</label>
                         <input type="text" class="form-control" name='username' required>
+                        <div class="invalid-feedback">La usuario es obligatorio.</div>
+                        <div class="valid-feedback">Correcto.</div>
                     </div>
                     <div class="form-group mt-3 mb-3">
                         <label class="form-control-placeholder" for="password">Contraseña</label>
-                        <input id="password-field" name='password' type="password" class="form-control" required>
+                        <input id="password-field" name='password' type="password" class="form-control" autocomplete=on required>
+                        <div class="invalid-feedback">La contraseña es obligatorio.</div>
+                        <div class="valid-feedback">Correcto.</div>
                     </div>
                     <div class="form-group">
-                        <button type="submit" id='btn-login'
-                            class="form-control btn btn-primary rounded submit px-3">Iniciar Sesion</button>
-                    </div>
-                    <div class="form-group d-flex">
+                        <button type="submit" id='btn-login' class="form-control btn btn-primary rounded submit px-3">Iniciar Sesión</button>
+                    
                         <input for='recordar' type="checkbox" name='recordar'>
                         <label class="mb-0 ms-2" id="recordar">Recuerdame</label>
                     </div>
@@ -1536,19 +1590,15 @@ class VideoSystemView {
         this.main.append(divLogin);
     }
 
-    showMesaggeErrorLogin(){
+    showMessageErrorLogin() {
         let errorExits = $('#alertErrorLogin');
-        if(errorExits.length == 0) {
+        if (errorExits.length == 0) {
             $('#formLogin').append(`<div class="alert alert-danger" role="alert" id='alertErrorLogin'>Usuario o contraseña incorrectos</div>`);
         }
     }
 
     bindLogin(handler) {
-        let form = document.forms.formLogin;
-        $(form).submit(function (event) {
-            handler(form.username.value, form.password.value, form.recordar.checked);
-            event.preventDefault();
-        });
+        loginValidation(handler);
     }
 
     removeAdminMenu() {
@@ -1556,16 +1606,11 @@ class VideoSystemView {
     }
 
     setUserCookie(user) {
-        console.log("cookie registrado");
         setCookie('loginUserCookie', user.username, 1);
     }
 
-    initHistory(){
-		history.replaceState({action: 'init'}, null);
-	}
-
-    deleteUserCookie() {
-        setCookie(loginUserCookie, null, 0);
+    initHistory() {
+        history.replaceState({ action: 'init' }, null, '#');
     }
 
     deleteUserC() {
@@ -1574,15 +1619,11 @@ class VideoSystemView {
 
     showWelcomeAdmin(user) {
         this.areaLogin.empty();
-        let name = getCookie('loginUserCookie');
+
         let li = $(`<div class='d-flex flex-row align-items-center gap-3 me-5'>
                         <span class="">Bienvenido ${user.username}</span>
                         <button type="button" id='btnClose' class="btn btn-secondary">Cerrar Sesion</button>
                     </div>`);
-        // let li = $(`
-        //                 <li class="nav-item"><span class="nav-link collapse-link active" aria-current="page">Bienvenido ${name}</span></li>
-        //                 <li class="nav-item"><button type="button" id='btnClose' class="btn btn-secondary"  class="nav-link collapse-link active" aria-current="page">Cerrar Sesion</button></li>
-        //             `);
 
         this.areaLogin.append(li);
     }
@@ -1591,6 +1632,84 @@ class VideoSystemView {
         $('#btnClose').click(function () {
             handler();
         })
+    }
+
+    showProdFavorites() {
+        let li = `<li class="nav-item">
+        <a class="nav-link active collapse-link" aria-current="page" href="#" id='prodFavorite-menu' data-nav='ProdFavorites'>Produciones Favoritas</i></a>
+        </li>`;
+        this.areaLogin.append(li);
+    }
+
+    bindShowProdFavorites(handler) {
+        $('#prodFavorite-menu').click((event) => {
+            this.#excecuteHandler(handler, [], 'body', { action: 'showProductionFavorites' }, '#ProductionFavorites', event);
+        });
+    }
+
+    bindAddFavoriteProduction(user) {
+        $('#b-favorite').click(function (event) {
+            console.log(user.username);
+            let prodFavorite = localStorage.getItem(`${user.username}`);
+            console.log(prodFavorite);
+
+            let title = event.target.dataset.id;
+
+            if (prodFavorite != null) {
+                let ArrayProdFavorites = prodFavorite.split('/');
+                let encontrado = false;
+                let i = 0;
+                while (!encontrado && ArrayProdFavorites.length > i) {
+                    if (ArrayProdFavorites[i] === title) {
+                        console.log(ArrayProdFavorites[i]);
+                        encontrado = true;
+                    }
+                    i++;
+                }
+                if (!encontrado) {
+                    prodFavorite += `/${title}`;
+                    localStorage.setItem(`${user.username}`, prodFavorite);
+                }
+
+            } else {
+                localStorage.setItem(`${user.username}`, title);
+            }
+        });
+    }
+
+    showProductionsListFavorites(user, producciones) {
+        this.main.empty(); //borramos el contenido del main
+        let contanierPrincipal = $('<div></div>');
+        contanierPrincipal.addClass('container');
+
+        contanierPrincipal.append(`<h1>Producciones favoritas de ${user.username}</h1>`);
+        contanierPrincipal.addClass("text-center");
+        let contanierProduciones = $('<div id="productions" class="d-flex gap-5 justify-content-evenly flex-wrap"></div>');
+        let prodFavorite = localStorage.getItem(`${user.username}`);
+        if (prodFavorite != null) {
+            let ArrayProdFavorites = prodFavorite.split('/');
+            for (let production of producciones) {
+                let encontrado = false;
+                let i = 0;
+                while (!encontrado && ArrayProdFavorites.length > i) {
+
+                    if (production.title == ArrayProdFavorites[i]) {
+                        contanierProduciones.append(`<a data-produccion="${production.title}" href='#'>
+                                          <div class="card" style="width: 18rem;">
+                                            <img src="${production.image}" class="card-img-top" alt="${production.title}">
+                                                 <div class="card-body">
+                                                     <h5 class="card-title">${production.title}</h5>
+                                                     <p class="card-text"><small class="text-muted">${production.publication.getFullYear()}</small></p>
+                                                 </div>
+                                            </div></a>`);
+                        encontrado = true;
+                    }
+                    i++;
+                }
+            }
+        }
+        contanierPrincipal.append(contanierProduciones);
+        this.main.append(contanierPrincipal);
     }
 
 }

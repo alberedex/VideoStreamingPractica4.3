@@ -221,7 +221,11 @@ class Production {
         if ((new.target === Production)) throw new AbstractClassException("Production");
 
         if (!title) throw new InvalidValueException("title", title);
-        if (!(DATE_EXPR.test(publication))) throw new InvalidValueException("publication", publication);
+        
+        if(!(publication instanceof Date)){
+            if (!(DATE_EXPR.test(publication))) throw new InvalidValueException("publication", publication);
+            publication = stringToDate(publication);
+        }
 
         if(!image){
             image = `https://via.placeholder.com/667x375.jpg?text=${title}`;
@@ -229,7 +233,8 @@ class Production {
 
         this.#title = title;
         this.#nationality = nationality;
-        this.#publication = stringToDate(publication);
+        // this.#publication = stringToDate(publication);
+        this.#publication = publication;
         this.#synopsis = synopsis;
         this.#image = image;
     }

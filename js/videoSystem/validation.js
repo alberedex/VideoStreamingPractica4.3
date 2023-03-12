@@ -262,13 +262,11 @@ function newPersonValidation(handler) {
         if (!isValid) {
             firstInvalidElement.focus();
         } else {
-            //this.Pimage.value
             handler(this.PersonName.value, this.PersonLastName1.value, this.PersonLastName2.value, newDate, undefined, this.selectType.value);
         }
         event.preventDefault();
         event.stopPropagation();
 
-        // this.classList.add('was-validated');
     });
 
     form.addEventListener('reset', (function (event) {
@@ -366,10 +364,8 @@ function delProductionValidation(handler) {
     });
 
     form.addEventListener('reset', (function (event) {
-        // let feedDivs = $(this).find('div.valid-feedback, div.invalid-feedback');
-        // feedDivs.removeClass('d-block').addClass('d-none');
-        // let inputs = $(this).find('input');
-        // inputs.removeClass('is-valid is-invalid');
+        let feedDivs = $(this).find('div.valid-feedback, div.invalid-feedback');
+        feedDivs.removeClass('d-block').addClass('d-none');
         let selects = $(this).find('select');
         selects.removeClass('is-valid is-invalid');
     }));
@@ -378,4 +374,154 @@ function delProductionValidation(handler) {
 
 }
 
-export { showFeedBack, defaultCheckElement, newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation }
+/**
+ * Validacion de asignacion y desasignacion de los directores/actores de una produccion
+ * @param {*} handlerDirectors 
+ * @param {*} handlerActors 
+ * @param {*} prod 
+ */
+function assignDesValidation(handlerDirectors, handlerActors, prod) {
+    let form = document.forms.formAssignDesProd;
+
+    $('.directorButton').click(function (event) {
+
+        let directorAssign = [...form.Director.selectedOptions].map(function (option) {
+            return option.value;
+        });
+
+        let directorDeassign = [...form.DirectorProd.selectedOptions].map(function (option) {
+            return option.value;
+        });
+
+        if (directorAssign.length == 0 && directorDeassign.length == 0) {
+            showFeedBack($(form.Director), false);
+            showFeedBack($(form.DirectorProd), false);
+        } else {
+            handlerDirectors(directorAssign, directorDeassign, prod);
+        }
+    });
+
+    $('.actorButton').click(function (event) {
+        let actorAssign = [...form.Actor.selectedOptions].map(function (option) {
+            return option.value;
+        });
+
+        let actorDeassign = [...form.ActorProd.selectedOptions].map(function (option) {
+            return option.value;
+        });
+
+        if (actorAssign.length == 0 && actorDeassign.length == 0) {
+            showFeedBack($(form.Actor), false);
+            showFeedBack($(form.ActorProd), false);
+        } else {
+            handlerActors(actorAssign, actorDeassign, prod);
+        }
+    });
+}
+
+/**
+ * Validacion del formulario del eliminacion del persona del sistema
+ */
+function delPersonValidation(handlerDirector,handlerActor){
+    let formDirector = document.forms.formDelPersonDirector;
+    let formActor = document.forms.formDelPersonActor;
+
+    $(formDirector).submit(function(event){
+        let isValid = true;
+        let firstInvalidElement = null;
+        
+        if(!this.selectDelDirector.checkValidity()){
+            isValid = false;
+            firstInvalidElement = this.selectDelDirector;
+            showFeedBack($(this.selectDelDirector), false);
+        }
+
+        if (!isValid) {
+            firstInvalidElement.focus();
+        } else {
+            handlerDirector(this.selectDelDirector.value);
+        }
+        event.preventDefault();
+        event.stopPropagation();
+    });
+
+
+    $(formActor).submit(function(event){
+        let isValid = true;
+        let firstInvalidElement = null;
+        
+        if(!this.selectDelActor.checkValidity()){
+            isValid = false;
+            firstInvalidElement = this.selectDelActor;
+            showFeedBack($(this.selectDelActor), false);
+        }
+
+        if (!isValid) {
+            firstInvalidElement.focus();
+        } else {
+            handlerActor(this.selectDelActor.value);
+        }
+        event.preventDefault();
+        event.stopPropagation();
+    });
+
+    $(formDirector.selectDelDirector).change(defaultCheckElement);
+    $(formActor.selectDelActor).change(defaultCheckElement);
+
+    formDirector.addEventListener('reset', (function (event) {
+        let feedDivs = $(this).find('div.valid-feedback, div.invalid-feedback');
+        feedDivs.removeClass('d-block').addClass('d-none');
+        let selects = $(this).find('select');
+        selects.removeClass('is-valid is-invalid');
+    }));
+    formActor.addEventListener('reset', (function (event) {
+        let feedDivs = $(this).find('div.valid-feedback, div.invalid-feedback');
+        feedDivs.removeClass('d-block').addClass('d-none');
+        let selects = $(this).find('select');
+        selects.removeClass('is-valid is-invalid');
+    }));
+}
+
+/**
+ * Validacion de Login
+ * @param {*} handler 
+ */
+function loginValidation(handler) {
+    let form = document.forms.formLogin;
+    $(form).attr('novalidate', true);
+    $(form).submit(function (event) {
+
+        let isValid = true;
+        let firstInvalidElement = null;
+
+        if (form.username.checkValidity()) {
+            showFeedBack($(this.username), true);
+        } else {
+            isValid = false;
+            firstInvalidElement = this.username;
+            showFeedBack($(this.username), false);
+        }
+
+        if (form.password.checkValidity()) {
+            showFeedBack($(this.password), true);
+        } else {
+            isValid = false;
+            firstInvalidElement = this.password;
+            showFeedBack($(this.password), false);
+        }
+
+        if (!isValid) {
+            firstInvalidElement.focus();
+        } else {
+
+            handler(form.username.value, form.password.value, form.recordar.checked);
+        }
+        event.preventDefault();
+        event.stopPropagation();
+    });
+
+    $(form.username).change(defaultCheckElement);
+    $(form.password).change(defaultCheckElement);
+}
+
+export { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation,delPersonValidation, loginValidation }
