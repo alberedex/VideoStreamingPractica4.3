@@ -58,8 +58,11 @@ class Person {
         //Validar datos de entrada
         if (!name) throw new InvalidValueException("name", name);
         if (!lastname1) throw new InvalidValueException("lastname1", lastname1);
-        if (!(DATE_EXPR.test(born))) throw new InvalidValueException("born", born);
 
+        if(!(born instanceof Date)){
+            if (!(DATE_EXPR.test(born))) throw new InvalidValueException("born", born);
+            born = stringToDate(born);
+        }
         //Como no es obligatorio picture, puede introducir vacio o una ruta de la fotografia cumpliendo el REGEX que exige
         if(picture){
             //En caso que no sea vacio, validar
@@ -71,7 +74,7 @@ class Person {
         this.#name = name;
         this.#lastname1 = lastname1;
         this.#lastname2 = lastname2;
-        this.#born = stringToDate(born);
+        this.#born = born;
         this.#picture = picture;
 
     }
@@ -221,7 +224,11 @@ class Production {
         if ((new.target === Production)) throw new AbstractClassException("Production");
 
         if (!title) throw new InvalidValueException("title", title);
-        if (!(DATE_EXPR.test(publication))) throw new InvalidValueException("publication", publication);
+        
+        if(!(publication instanceof Date)){
+            if (!(DATE_EXPR.test(publication))) throw new InvalidValueException("publication", publication);
+            publication = stringToDate(publication);
+        }
 
         if(!image){
             image = `https://via.placeholder.com/667x375.jpg?text=${title}`;
@@ -229,7 +236,8 @@ class Production {
 
         this.#title = title;
         this.#nationality = nationality;
-        this.#publication = stringToDate(publication);
+        // this.#publication = stringToDate(publication);
+        this.#publication = publication;
         this.#synopsis = synopsis;
         this.#image = image;
     }

@@ -29,15 +29,26 @@ const historyActions = {
  * Es lanzado cada vez que el historial cambia
  */
 window.addEventListener('popstate', function (event) {
-
-    if (event.state) {
-        historyActions[event.state.action](event);
+    try {
+        if (event.state) {
+            historyActions[event.state.action](event);
+        }
+    } catch (error) {
+        historyActions.init();
     }
     
     $('body .show').remove();
 });
 
+function refreshMain() {
+    try {
+        historyActions[history.state.action](history);
+    } catch (error) {
+        historyActions.init();
+    }
+}
+
 history.replaceState({ action: 'init' }, null); //Primer history init
 
-
+export { refreshMain };
 export default VideoSystemApp;
