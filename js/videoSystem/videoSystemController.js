@@ -980,11 +980,11 @@ class VideoSystemController {
             return response.json();
         }).then(function(data) {
             console.dir(data);
-            $$result.log(data);
-            $$result.log(JSON.stringify(data));
+            console.log(data);
+            console.log(JSON.stringify(data));
         }).catch(function(err) {
-            $$result.log('No se ha recibido respuesta.');
-            $$result.log(err.toString());
+            console.log('No se ha recibido respuesta.');
+            console.log(err.toString());
         });
     }
 }
