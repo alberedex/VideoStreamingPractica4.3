@@ -73,6 +73,14 @@ function DateFormat(Pdate) {
     return newDate;
 }
 
+function checkFileExtension(file, allowedExtensions) {
+    let fileExtension = file.name.split('.').pop().toLowerCase();
+
+    return allowedExtensions.some((extension) => {
+        return extension === fileExtension
+    });
+}
+
 /**
  * Validacion de nuevo Produccion 
  */
@@ -107,7 +115,12 @@ function newProductionValidation(handler) {
             showFeedBack($(this.newproCategories), true);
         }
 
-        if (!this.Pimage.checkValidity()) {
+        if (!this.Pimage.value) {
+            isValid = false;
+            firstInvalidElement = this.Pimage;
+            showFeedBack($(this.Pimage), false);
+        } else if (!checkFileExtension(this.Pimage.files[0], ['jpg', 'png', 'gif'])) {
+
             isValid = false;
             firstInvalidElement = this.Pimage;
 
@@ -183,8 +196,13 @@ function newProductionValidation(handler) {
     $(form.selectType).change(defaultCheckElement);
     $(form.Pdate).change(defaultCheckElement);
 
-    $(form.Pimage).change(function () {
-        if (!this.checkValidity()) {
+    $(form.Pimage).change(function (event) {
+        if (!this.value) {
+            isValid = false;
+            firstInvalidElement = this.Pimage;
+            showFeedBack($(this), false);
+        } else if (!checkFileExtension(this.files[0], ['jpg', 'png', 'gif'])) {
+
             showFeedBack($(this), false);
         } else {
             showFeedBack($(this), true);
@@ -422,15 +440,15 @@ function assignDesValidation(handlerDirectors, handlerActors, prod) {
 /**
  * Validacion del formulario del eliminacion del persona del sistema
  */
-function delPersonValidation(handlerDirector,handlerActor){
+function delPersonValidation(handlerDirector, handlerActor) {
     let formDirector = document.forms.formDelPersonDirector;
     let formActor = document.forms.formDelPersonActor;
 
-    $(formDirector).submit(function(event){
+    $(formDirector).submit(function (event) {
         let isValid = true;
         let firstInvalidElement = null;
-        
-        if(!this.selectDelDirector.checkValidity()){
+
+        if (!this.selectDelDirector.checkValidity()) {
             isValid = false;
             firstInvalidElement = this.selectDelDirector;
             showFeedBack($(this.selectDelDirector), false);
@@ -446,11 +464,11 @@ function delPersonValidation(handlerDirector,handlerActor){
     });
 
 
-    $(formActor).submit(function(event){
+    $(formActor).submit(function (event) {
         let isValid = true;
         let firstInvalidElement = null;
-        
-        if(!this.selectDelActor.checkValidity()){
+
+        if (!this.selectDelActor.checkValidity()) {
             isValid = false;
             firstInvalidElement = this.selectDelActor;
             showFeedBack($(this.selectDelActor), false);

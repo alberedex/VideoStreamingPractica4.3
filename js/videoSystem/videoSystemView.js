@@ -1013,7 +1013,7 @@ class VideoSystemView {
                             <div class="col-md-6">
                                 <label for="Pimage" class="form-label">Imagen</label>
                                 <input type="file" class="form-control" id="Pimage" name='Pimage' required>
-                                <div class="invalid-feedback">La imagen es obligatorio.</div>
+                                <div class="invalid-feedback">La imagen es obligatorio y con extensión jpg, png o gif.</div>
                                 <div class="valid-feedback">Correcto.</div>
                             </div>
                         </div>
@@ -1417,80 +1417,6 @@ class VideoSystemView {
             </div>
         </div>`);
     }
-
-
-    /**
-     * Modal donde permite eliminar Persona
-     */
-        /**
-    * Evento donde se enlaza con el boton de los listados para eliminar la persona del sistema
-    * @param {*} handlerDirector 
-    * @param {*} handlerActor 
-    */
-    // bindDelPersonForm(handlerDirector, handlerActor) {
-    //     $('#listDirector').find('button').click(function (event) {
-    //         handlerDirector(this.dataset.person);
-    //         $(this).closest('div.row').remove();
-    //     });
-
-    //     $('#listActores').find('button').click(function (event) {
-    //         handlerActor(this.dataset.person);
-    //         $(this).closest('div.row').remove();
-    //     });
-    // }
-    // showModalRemovePerson(directorIterator, actorIterator) {
-    //     $('body').append(`<div class="modal fade" id="formRemPerson" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
-    //     <div class="modal-dialog modal-lg">
-    //       <div class="modal-content">
-    //         <div class="modal-header">
-    //           <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminar Persona</h1>
-    //           <button type="button" class="btn-close buttonClose" data-bs-dismiss="modal" aria-label="Close"></button>
-    //         </div>
-    //             <div class="modal-body" id='formBody'>
-    //             <div class="container text-center">
-    //             <div class="row row-cols-2">
-    //               <div class="col"><strong>Directores</strong></div>
-    //               <div class="col"><strong>Actores</strong></div>
-    //               <div class="col overflow-auto" id='listDirector' style='height: 500px'></div>
-    //               <div class="col overflow-auto" id='listActores'  style='height: 500px'></div>
-    //             </div>
-    //           </div>
-    //             </div>
-    //             <div class="modal-footer">
-    //             <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
-    //             </div>
-    //       </div>
-    //     </div>
-    //   </div>`);
-
-    //     let columnD = $(`#listDirector`);
-
-
-    //     for (let director of directorIterator) {
-    //         columnD.append(`<div class='row pt-3'>
-    //                             <div class='col'>
-    //                                 <p>${director.name} ${director.lastname1}</p>
-    //                             </div>
-    //                             <div class='col'>
-    //                                 <button class="btn btn-primary" data-person="${director.name}/${director.lastname1}" type='button'>Eliminar</button>
-    //                             </div>
-    //                     </div>`);
-    //     }
-
-
-    //     let column = $(`#listActores`);
-
-    //     for (let actor of actorIterator) {
-    //         column.append(`<div class='row pt-3'>
-    //                             <div class='col'>
-    //                                 <p>${actor.name} ${actor.lastname1}</p>
-    //                             </div>
-    //                             <div class='col'>
-    //                                 <button class="btn btn-primary" data-person="${actor.name}/${actor.lastname1}" type='button'>Eliminar</button>
-    //                             </div>
-    //                     </div>`);
-    //     }
-    // }
 
     showModalRemovePerson(directorIterator, actorIterator) {
         $('body').append(`<div class="modal fade" id="formRemPerson" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">

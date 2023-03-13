@@ -359,23 +359,23 @@ class VideoSystemController {
         fetch('js/json/ProduccionesSim.json')
             .then(respuesta => respuesta.json())
             .then(elementos => {
-                console.log(elementos);
+                // console.log(elementos);
 
                 elementos[0].Producciones.forEach(prod => {
                     let prodIns;
                     if (prod.type == 'Movie') {
                         prodIns = this.#videoSystemModel.getMovie(prod.title, prod.nationality, new Date(prod.publication), prod.synopsis, prod.image, prod.resource, prod.locations);
                     } else if (prod.type == 'Serie') {
-                        prodIns = this.#videoSystemModel.getSerie(prod.title, prod.nationality, new Date(prod.publication), prod.synopsis, prod.image, prod.resource, prod.locations);
+                        prodIns = this.#videoSystemModel.getSerie(prod.title, prod.nationality, new Date(prod.publication), prod.synopsis, prod.image, prod.resources, prod.locations,prod.seasons);
                     }
-                    console.log(prodIns);
+                    // console.log(prodIns);
                     this.#videoSystemModel.addProduction(prodIns);
                 });
 
                 elementos[0].categorias.forEach(categoria => {
                     //Creamos el objeto categoria y la metemos en el modelo
                     let categoryIns = this.#videoSystemModel.getCategory(categoria.category.name, categoria.category.description);
-                    console.log(categoryIns);
+                    // console.log(categoryIns);
                     this.#videoSystemModel.addCategory(categoryIns);
                     //Asignamos las producciones a la categoria
                     categoria.productions.forEach(prod => {
@@ -387,7 +387,7 @@ class VideoSystemController {
                 elementos[0].Actores.forEach(actor => {
                     //Creamos el objeto categoria y la metemos en el modelo
                     let actorIns = this.#videoSystemModel.getActor(actor.actor.name, actor.actor.lastname1, actor.actor.lastname2, new Date(actor.actor.born), actor.actor.picture);
-                    console.log(actorIns); //(name, lastname1, lastname2, born, picture)
+                    // console.log(actorIns); //(name, lastname1, lastname2, born, picture)
                     this.#videoSystemModel.addActor(actorIns);
                     //Asignamos las producciones a la categoria
                     actor.productions.forEach(prod => {
@@ -399,7 +399,7 @@ class VideoSystemController {
                 elementos[0].directores.forEach(director => {
                     //Creamos el objeto categoria y la metemos en el modelo
                     let directorIns = this.#videoSystemModel.getDirector(director.director.name, director.director.lastname1, director.director.lastname2, new Date(director.director.born), director.director.picture);
-                    console.log(directorIns); //(name, lastname1, lastname2, born, picture)
+                    // console.log(directorIns); //(name, lastname1, lastname2, born, picture)
                     this.#videoSystemModel.addDirector(directorIns);
                     //Asignamos las producciones a la categoria
                     director.productions.forEach(prod => {
@@ -411,7 +411,7 @@ class VideoSystemController {
                 elementos[0].users.forEach(usuario => {
                     //Creamos el objeto categoria y la metemos en el modelo
                     let userIns = this.#videoSystemModel.getUser(usuario.username,usuario.email,usuario.password);
-                    console.log(userIns); //(username, email, password)
+                    // console.log(userIns); //(username, email, password)
                     this.#videoSystemModel.addUser(userIns);
                     
                 });
@@ -965,7 +965,27 @@ class VideoSystemController {
     }
 
     handlerGrabarJSON = () =>{
-        this.#videoSystemModel.generatorJSON();
+        let jsonObjs = this.#videoSystemModel.generatorJSON();
+
+
+        let base = location.protocol + '//' + location.host + location.pathname;
+        let url = new URL('writeJSONBackup.php', base);
+        let formData = new FormData();
+        formData.append("jsonObj", jsonObjs);
+
+        fetch(url, {
+            method: 'post',
+            body: formData
+        }).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            console.dir(data);
+            $$result.log(data);
+            $$result.log(JSON.stringify(data));
+        }).catch(function(err) {
+            $$result.log('No se ha recibido respuesta.');
+            $$result.log(err.toString());
+        });
     }
 }
 

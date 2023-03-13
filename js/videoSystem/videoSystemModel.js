@@ -212,7 +212,7 @@ let VideoSystem = (function () {
 
                 let position = this.#getPositionCategory(category);
                 //En caso de que no exista o si es la categoria por defecto, no permito que elimine
-                if (position === -1 || position === 0) throw new CategoryIsNotExistsException(); 
+                if (position === -1 || position === 0) throw new CategoryIsNotExistsException();
 
                 let productions = this.#categories[position].productions;
 
@@ -322,7 +322,7 @@ let VideoSystem = (function () {
                     let i = 0;
                     let encontrado = false;
 
-                    while(i < categoria.productions.length && !encontrado){
+                    while (i < categoria.productions.length && !encontrado) {
                         if (categoria.productions[i].title === production.title) {
                             categoria.productions.splice(i, 1);
                             encontrado = true; //lo finalizamos para esta categoria, ya esta borrado
@@ -337,8 +337,8 @@ let VideoSystem = (function () {
                     let i = 0;
                     let encontrado = false;
 
-                    while(i < actor.productions.length && !encontrado){
-                         if (actor.productions[i].title === production.title) {
+                    while (i < actor.productions.length && !encontrado) {
+                        if (actor.productions[i].title === production.title) {
                             actor.productions.splice(i, 1);
                             encontrado = true; //lo finalizamos para el actor, ya esta borrado
                         }
@@ -352,7 +352,7 @@ let VideoSystem = (function () {
                     let i = 0;
                     let encontrado = false;
 
-                    while(i < director.productions.length && !encontrado){
+                    while (i < director.productions.length && !encontrado) {
                         if (director.productions[i].title === production.title) {
                             director.productions.splice(i, 1);
                             encontrado = true; //lo finalizamos para el/la director/a, ya esta borrado
@@ -488,7 +488,7 @@ let VideoSystem = (function () {
                 for (let prod of productions) {
                     if (prod == null) throw new InvalidValueException("Productions", prod);
                 }
-                                
+
                 for (let i = 0; i < productions.length; i++) {
 
                     //Obtenemos la posicion de la lista de Produccion 
@@ -498,11 +498,11 @@ let VideoSystem = (function () {
                         this.addProduction(productions[i]);
                         //Asignar la produccion a la categoria
                         catP.push(productions[i]);
-                    }else{
+                    } else {
                         //en caso que existe, comprobamos que no tiene asignado a la categoria
                         let positionProduction = catP.findIndex((productionsE) => productionsE.title === productions[i].title);
                         //En caso que no esta asignado, lo asignamos de la lista 
-                        if(positionProduction === -1) catP.push(this.#productions[positionProd]);
+                        if (positionProduction === -1) catP.push(this.#productions[positionProd]);
                     }
 
                 }
@@ -528,7 +528,7 @@ let VideoSystem = (function () {
                 //Compruebo todos los productions que no sean null
                 for (let prod of productions) {
                     if (prod == null) throw new InvalidValueException("Productions", prod);
-                }                
+                }
 
                 for (let i = 0; i < productions.length; i++) {
 
@@ -568,7 +568,7 @@ let VideoSystem = (function () {
 
                     //Obtenemos la posicion de la lista de Produccion 
                     let positionProd = this.#getPositionProduction(productions[i]);
-                    
+
                     //En caso que no exista, lo hacemos un push a la lista 
                     if (positionProd === -1) {
 
@@ -822,7 +822,7 @@ let VideoSystem = (function () {
                 return user;
 
             }
-            
+
             //Metodo donde devuelve la produccion
             getProduction(title) {
                 //Validar datos de entrada, antes de realizar la busqueda
@@ -849,13 +849,13 @@ let VideoSystem = (function () {
                 for (let act of this.#actors) {
                     let encontrado;
                     let i = 0;
-                    while(i < act.productions.length && !encontrado){
+                    while (i < act.productions.length && !encontrado) {
                         if (act.productions[i].title === production.title) {
                             encontrado = act.actor;
                         }
                         i++; //incrementamos 
                     }
-                    if(encontrado) yield encontrado;
+                    if (encontrado) yield encontrado;
                 }
             }
 
@@ -886,7 +886,7 @@ let VideoSystem = (function () {
                     }
                 }
             }
-            
+
             //Devuelve el director de la produccion
             * getDirectorsProdutions(produccion) {
                 if (!produccion) throw new InvalidValueException("produccion", null);
@@ -896,7 +896,7 @@ let VideoSystem = (function () {
                     //Recorremos las producciones
                     for (let director of this.#directors) {
                         for (const produccionDirector of director.productions) {
-                            if(produccion === produccionDirector){
+                            if (produccion === produccionDirector) {
                                 yield director.director;
                             }
                         }
@@ -927,82 +927,154 @@ let VideoSystem = (function () {
                 }
             }
 
-            * getDirectorsAvailableProd(produccion){
+            * getDirectorsAvailableProd(produccion) {
                 if (!produccion) throw new InvalidValueException("produccion", null);
-      
+
                 for (const director of this.#directors) {
                     let d = director.director;
-                    
+
                     let existe = false;
-                    for(let directorAssign of this.getDirectorsProdutions(produccion)){
-                        if(directorAssign.name == d.name && directorAssign.lastname1 == d.lastname1){
+                    for (let directorAssign of this.getDirectorsProdutions(produccion)) {
+                        if (directorAssign.name == d.name && directorAssign.lastname1 == d.lastname1) {
                             existe = true;
                         }
                     }
-                    if(!existe) yield d;
+                    if (!existe) yield d;
                 }
             }
 
-            * getActorsAvailableProd(produccion){
-            if (!produccion) throw new InvalidValueException("produccion", null);
-  
-            for (const actor of this.#actors) {
-                let a = actor.actor;
-                
-                let existe = false;
-                for(let actorAssign of this.getCast(produccion)){
-                    if(actorAssign.name == a.name && actorAssign.lastname1 == a.lastname1){
-                        existe = true;
+            * getActorsAvailableProd(produccion) {
+                if (!produccion) throw new InvalidValueException("produccion", null);
+
+                for (const actor of this.#actors) {
+                    let a = actor.actor;
+
+                    let existe = false;
+                    for (let actorAssign of this.getCast(produccion)) {
+                        if (actorAssign.name == a.name && actorAssign.lastname1 == a.lastname1) {
+                            existe = true;
+                        }
                     }
+                    if (!existe) yield a;
                 }
-                if(!existe) yield a;
             }
-        }
 
-        generatorJSON(){
-            let string=`[{ "Producciones": [`;
-            let array = [];
-            for(let produccion of this.productions){
+            generatorJSON() {
 
-                let production;
-                if(produccion instanceof Movie){
-                    production = {
+                let ObjLitToJSON = {
+                    Producciones: [],
+                    Actores: [],
+                    categorias: [],
+                    directores: [],
+                    users: []
+                };
+
+                for (let produccion of this.productions) {
+
+                    let productionObjLit;
+                    //Propiedades comunes
+                    productionObjLit = {
                         title: produccion.title,
                         nationality: produccion.nationality,
                         publication: produccion.publication,
                         synopsis: produccion.synopsis,
-                        image: produccion.image,
-                        resource: produccion.resource,
-                        locations: produccion.locations,
-                        type: "Movie"
+                        image: produccion.image
                     }
-                }else if(produccion instanceof Serie){
-                    production = {
-                        title: produccion.title,
-                        nationality: produccion.nationality,
-                        publication: produccion.publication,
-                        synopsis: produccion.synopsis,
-                        image: produccion.image,
-                        resources: produccion.resources,
-                        locations: produccion.locations,
-                        seasons: produccion.seasons,
-                        type: "Serie" 
+                    if (produccion instanceof Movie) {
+                        //En caso de pelicula
+                        productionObjLit.resource = produccion.resource;
+                        productionObjLit.locations = [];
+                        productionObjLit.type = "Movie";
+
+                    } else if (produccion instanceof Serie) {
+                        //En caso de Serie
+                        productionObjLit.resources = [];
+                        productionObjLit.locations = [];
+                        productionObjLit.seasons = produccion.seasons;
+                        productionObjLit.type = "Serie";
+
+                        for (let resource of produccion.resources) {
+                            console.log(resource);
+                            productionObjLit.resources.push({
+                                duration: resource.duration,
+                                link: resource.link
+                            });
+                        }
                     }
+                    //coordinate
+                    for (let coordinate of produccion.locations) {
+                        productionObjLit.locations.push({
+                            latitude: coordinate.latitude,
+                            longitude: coordinate.longitude
+                        });
+                    }
+                    //Metemos el objeto en la lista de producciones
+                    ObjLitToJSON.Producciones.push(productionObjLit);
                 }
 
-                array.push(JSON.stringify(production));
+                for (let actor of this.#actors) {
+                    let actorObjLit = {
+                        actor: {
+                            name: actor.actor.name,
+                            lastname1: actor.actor.lastname1,
+                            lastname2: actor.actor.lastname2,
+                            born: actor.actor.born,
+                            picture: actor.actor.picture
+                        },
+                        productions: []
+                    }
+
+                    for (let prod of actor.productions) {
+                        actorObjLit.productions.push(prod.title);
+                    }
+                    ObjLitToJSON.Actores.push(actorObjLit);
+                }
+
+                for (let director of this.#directors) {
+                    let directorObjLit = {
+                        director: {
+                            name: director.director.name,
+                            lastname1: director.director.lastname1,
+                            lastname2: director.director.lastname2,
+                            born: director.director.born,
+                            picture: director.director.picture
+                        },
+                        productions: []
+                    }
+
+                    for (let prod of director.productions) {
+                        directorObjLit.productions.push(prod.title);
+                    }
+                    ObjLitToJSON.directores.push(directorObjLit);
+                }
+
+                for (let categoria of this.#categories) {
+                    let categoriaObjLit = {
+                        categorias: {
+                            name: categoria.category.name,
+                            description: categoria.category.description
+                        },
+                        productions: []
+                    }
+
+                    for (let prod of categoria.productions) {
+                        categoriaObjLit.productions.push(prod.title);
+                    }
+                    ObjLitToJSON.categorias.push(categoriaObjLit);
+                }
+
+                for (let user of this.#users) {
+                    let userObjLit = {
+                        username: user.username,
+                        email: user.email,
+                        password: user.password
+                    }
+                    ObjLitToJSON.users.push(userObjLit);
+
+                }
+
+                return JSON.stringify(ObjLitToJSON);
             }
-
-            string += array.join(",");
-            // string+=",'Actores': [";
-            string+= `]}`;
-
-
-            //FINAL
-            string +=`]`;
-            console.log(string);
-        }
-
         }
         let vs = new VideoSystem(name);
         Object.freeze(vs);
