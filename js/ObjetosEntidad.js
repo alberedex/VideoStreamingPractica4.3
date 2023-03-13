@@ -58,8 +58,11 @@ class Person {
         //Validar datos de entrada
         if (!name) throw new InvalidValueException("name", name);
         if (!lastname1) throw new InvalidValueException("lastname1", lastname1);
-        if (!(DATE_EXPR.test(born))) throw new InvalidValueException("born", born);
 
+        if(!(born instanceof Date)){
+            if (!(DATE_EXPR.test(born))) throw new InvalidValueException("born", born);
+            born = stringToDate(born);
+        }
         //Como no es obligatorio picture, puede introducir vacio o una ruta de la fotografia cumpliendo el REGEX que exige
         if(picture){
             //En caso que no sea vacio, validar
@@ -71,7 +74,7 @@ class Person {
         this.#name = name;
         this.#lastname1 = lastname1;
         this.#lastname2 = lastname2;
-        this.#born = stringToDate(born);
+        this.#born = born;
         this.#picture = picture;
 
     }

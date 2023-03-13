@@ -72,9 +72,9 @@ class VideoSystemController {
         let coor3 = new Coordinate(42.5412, -44.5214);
 
         let user1 = this.#videoSystemModel.getUser("alberedex", "2001rs@gmail.com", "pass1234");
-        let userAdmin = this.#videoSystemModel.getUser("admin", "admin@gmail.com", "admin");
+        let user2 = this.#videoSystemModel.getUser("admin", "admin@gmail.com", "admin");
         this.#videoSystemModel.addUser(user1);
-        this.#videoSystemModel.addUser(userAdmin);
+        this.#videoSystemModel.addUser(user2);
 
         this.#videoSystemModel.addCategory(category1);
         this.#videoSystemModel.addCategory(category2);
@@ -88,7 +88,6 @@ class VideoSystemController {
         this.#videoSystemModel.addProduction(movie6);
         this.#videoSystemModel.addProduction(movie7);
 
-        //Series
         this.#videoSystemModel.addProduction(serie1);
         this.#videoSystemModel.addProduction(serie2);
         this.#videoSystemModel.addProduction(serie3);
@@ -148,7 +147,7 @@ class VideoSystemController {
         this.#videoSystemModel.addDirector(director12);
 
         this.#videoSystemModel.assignCategory(category1, serie1, movie2, movie3, serie3);
-        //Categoria1 = Comedia = El vecino, Murder Mystery, Deadpool
+
         this.#videoSystemModel.assignCategory(category2, serie2);
         this.#videoSystemModel.assignCategory(category2, movie1);
         this.#videoSystemModel.assignCategory(category2, serie4);
@@ -210,7 +209,7 @@ class VideoSystemController {
 
 
         this.onLoad();
-        this.onInit();
+        // this.onInit();
 
         this.#videoSystemView.bindInit(this.handleInit);
     }
@@ -222,12 +221,13 @@ class VideoSystemController {
         //     .then(respuesta => respuesta.json())
         //     .then(producciones => {
         //         console.log(producciones);
+        //         //Recorremos el array y metemos el objeto al modelo
         //         producciones.forEach(prod => {
         //             let prodIns;
-        //             if(prod.type == 'Movie'){
+        //             if (prod.type == 'Movie') {
         //                 prodIns = this.#videoSystemModel.getMovie(prod.title, prod.nationality, new Date(prod.publication), prod.synopsis, prod.image, prod.resource, prod.locations);
-        //             }else if(prod.type == 'Serie'){
-        //                 prodIns = this.#videoSystemModel.getSerie(prod.title, prod.nationality,new Date(prod.publication), prod.synopsis, prod.image, prod.resource, prod.locations);
+        //             } else if (prod.type == 'Serie') {
+        //                 prodIns = this.#videoSystemModel.getSerie(prod.title, prod.nationality, new Date(prod.publication), prod.synopsis, prod.image, prod.resource, prod.locations);
         //             }
         //             console.log(prodIns);
         //             this.#videoSystemModel.addProduction(prodIns);
@@ -238,21 +238,217 @@ class VideoSystemController {
         //     .then(respuesta => respuesta.json())
         //     .then(cate => {
         //         cate.forEach(categoria => {
-        //             // console.log(categoria);
+        //             //Creamos el objeto categoria y la metemos en el modelo
         //             let categoryIns = this.#videoSystemModel.getCategory(categoria.category.name, categoria.category.description);
         //             console.log(categoryIns);
         //             this.#videoSystemModel.addCategory(categoryIns);
+        //             //Asignamos las producciones a la categoria
+        //             categoria.productions.forEach(prod => {
+        //                 let producionAssing = this.#videoSystemModel.getProduction(prod.title);
+        //                 this.#videoSystemModel.assignCategory(categoryIns, producionAssing);
+        //             })
         //         });
         //     });
-        this.#loadVideoSystemObjects();
-        this.#videoSystemView.showCategoriesInMenu(this.#videoSystemModel.categories);
 
-        this.#videoSystemView.showPersonsMenu();
-        this.#videoSystemView.bindActorsList(this.handleActoresList);
-        this.#videoSystemView.bindDirectorsList(this.handleDirectoresList);
-        this.#videoSystemView.bindCategoriesListMenu(this.handleProductionsCategoryList);
-        this.#videoSystemView.showButtonCloseWindowsMenu();
-        this.#videoSystemView.bindClose(this.handleClose);
+        //     fetch('js/json/actores.json')
+        //     .then(respuesta => respuesta.json())
+        //     .then(actores => {
+        //         actores.forEach(actor => {
+        //             //Creamos el objeto categoria y la metemos en el modelo
+        //             let actorIns = this.#videoSystemModel.getActor(actor.actor.name, actor.actor.lastname1,actor.actor.lastname2,new Date(actor.actor.born),actor.actor.picture);
+        //             console.log(actorIns); //(name, lastname1, lastname2, born, picture)
+        //             this.#videoSystemModel.addActor(actorIns);
+        //             //Asignamos las producciones a la categoria
+        //             actor.productions.forEach(prod => {
+        //                 let producionAssing = this.#videoSystemModel.getProduction(prod.title);
+        //                 this.#videoSystemModel.assignActor(actorIns, producionAssing);
+        //             })
+        //         });
+        //     });
+
+        //     fetch('js/json/directores.json')
+        //     .then(respuesta => respuesta.json())
+        //     .then(directores => {
+        //         directores.forEach(director => {
+        //             //Creamos el objeto categoria y la metemos en el modelo
+        //             let directorIns = this.#videoSystemModel.getDirector(director.director.name, director.director.lastname1,director.director.lastname2,new Date(director.director.born),director.director.picture);
+        //             console.log(directorIns); //(name, lastname1, lastname2, born, picture)
+        //             this.#videoSystemModel.addDirector(directorIns);
+        //             //Asignamos las producciones a la categoria
+        //             director.productions.forEach(prod => {
+        //                 let producionAssing = this.#videoSystemModel.getProduction(prod.title);
+        //                 this.#videoSystemModel.assignDirector(directorIns, producionAssing);
+        //             })
+        //         });
+        //     });
+
+        // fetch('js/json/Producciones copy.json')
+        //     .then(respuesta => respuesta.json())
+        //     .then(elementos => {
+        //         console.log(elementos);
+
+        //         elementos[0].Producciones.forEach(prod => {
+        //             let prodIns;
+        //             if (prod.type == 'Movie') {
+        //                 prodIns = this.#videoSystemModel.getMovie(prod.title, prod.nationality, new Date(prod.publication), prod.synopsis, prod.image, prod.resource, prod.locations);
+        //             } else if (prod.type == 'Serie') {
+        //                 prodIns = this.#videoSystemModel.getSerie(prod.title, prod.nationality, new Date(prod.publication), prod.synopsis, prod.image, prod.resource, prod.locations);
+        //             }
+        //             console.log(prodIns);
+        //             this.#videoSystemModel.addProduction(prodIns);
+        //         });
+
+        //         elementos[0].categorias.forEach(categoria => {
+        //             //Creamos el objeto categoria y la metemos en el modelo
+        //             let categoryIns = this.#videoSystemModel.getCategory(categoria.category.name, categoria.category.description);
+        //             console.log(categoryIns);
+        //             this.#videoSystemModel.addCategory(categoryIns);
+        //             //Asignamos las producciones a la categoria
+        //             categoria.productions.forEach(prod => {
+        //                 let producionAssing = this.#videoSystemModel.getProduction(prod.title);
+        //                 this.#videoSystemModel.assignCategory(categoryIns, producionAssing);
+        //             })
+        //         });
+
+        //         elementos[0].Actores.forEach(actor => {
+        //             //Creamos el objeto categoria y la metemos en el modelo
+        //             let actorIns = this.#videoSystemModel.getActor(actor.actor.name, actor.actor.lastname1, actor.actor.lastname2, new Date(actor.actor.born), actor.actor.picture);
+        //             console.log(actorIns); //(name, lastname1, lastname2, born, picture)
+        //             this.#videoSystemModel.addActor(actorIns);
+        //             //Asignamos las producciones a la categoria
+        //             actor.productions.forEach(prod => {
+        //                 let producionAssing = this.#videoSystemModel.getProduction(prod);
+        //                 this.#videoSystemModel.assignActor(actorIns, producionAssing);
+        //             })
+        //         });
+
+        //         elementos[0].directores.forEach(director => {
+        //             //Creamos el objeto categoria y la metemos en el modelo
+        //             let directorIns = this.#videoSystemModel.getDirector(director.director.name, director.director.lastname1, director.director.lastname2, new Date(director.director.born), director.director.picture);
+        //             console.log(directorIns); //(name, lastname1, lastname2, born, picture)
+        //             this.#videoSystemModel.addDirector(directorIns);
+        //             //Asignamos las producciones a la categoria
+        //             director.productions.forEach(prod => {
+        //                 let producionAssing = this.#videoSystemModel.getProduction(prod.title);
+        //                 this.#videoSystemModel.assignDirector(directorIns, producionAssing);
+        //             })
+        //         });
+
+        //         elementos[0].users.forEach(usuario => {
+        //             //Creamos el objeto categoria y la metemos en el modelo
+        //             let userIns = this.#videoSystemModel.getUser(usuario.username,usuario.email,usuario.password);
+        //             console.log(userIns); //(username, email, password)
+        //             this.#videoSystemModel.addUser(userIns);
+                    
+        //         });
+
+        //     }).then(() =>{
+        //         this.#videoSystemView.showCategoriesInMenu(this.#videoSystemModel.categories);
+        
+        //         this.#videoSystemView.showPersonsMenu();
+        //         this.#videoSystemView.bindActorsList(this.handleActoresList);
+        //         this.#videoSystemView.bindDirectorsList(this.handleDirectoresList);
+        //         this.#videoSystemView.bindCategoriesListMenu(this.handleProductionsCategoryList);
+        //         this.#videoSystemView.showButtonCloseWindowsMenu();
+        //         this.#videoSystemView.bindClose(this.handleClose);
+
+        //         this.onInit();
+
+        //     });
+
+        fetch('js/json/ProduccionesSim.json')
+            .then(respuesta => respuesta.json())
+            .then(elementos => {
+                console.log(elementos);
+
+                elementos[0].Producciones.forEach(prod => {
+                    let prodIns;
+                    if (prod.type == 'Movie') {
+                        prodIns = this.#videoSystemModel.getMovie(prod.title, prod.nationality, new Date(prod.publication), prod.synopsis, prod.image, prod.resource, prod.locations);
+                    } else if (prod.type == 'Serie') {
+                        prodIns = this.#videoSystemModel.getSerie(prod.title, prod.nationality, new Date(prod.publication), prod.synopsis, prod.image, prod.resource, prod.locations);
+                    }
+                    console.log(prodIns);
+                    this.#videoSystemModel.addProduction(prodIns);
+                });
+
+                elementos[0].categorias.forEach(categoria => {
+                    //Creamos el objeto categoria y la metemos en el modelo
+                    let categoryIns = this.#videoSystemModel.getCategory(categoria.category.name, categoria.category.description);
+                    console.log(categoryIns);
+                    this.#videoSystemModel.addCategory(categoryIns);
+                    //Asignamos las producciones a la categoria
+                    categoria.productions.forEach(prod => {
+                        let producionAssing = this.#videoSystemModel.getProduction(prod);
+                        this.#videoSystemModel.assignCategory(categoryIns, producionAssing);
+                    })
+                });
+
+                elementos[0].Actores.forEach(actor => {
+                    //Creamos el objeto categoria y la metemos en el modelo
+                    let actorIns = this.#videoSystemModel.getActor(actor.actor.name, actor.actor.lastname1, actor.actor.lastname2, new Date(actor.actor.born), actor.actor.picture);
+                    console.log(actorIns); //(name, lastname1, lastname2, born, picture)
+                    this.#videoSystemModel.addActor(actorIns);
+                    //Asignamos las producciones a la categoria
+                    actor.productions.forEach(prod => {
+                        let producionAssing = this.#videoSystemModel.getProduction(prod);
+                        this.#videoSystemModel.assignActor(actorIns, producionAssing);
+                    })
+                });
+
+                elementos[0].directores.forEach(director => {
+                    //Creamos el objeto categoria y la metemos en el modelo
+                    let directorIns = this.#videoSystemModel.getDirector(director.director.name, director.director.lastname1, director.director.lastname2, new Date(director.director.born), director.director.picture);
+                    console.log(directorIns); //(name, lastname1, lastname2, born, picture)
+                    this.#videoSystemModel.addDirector(directorIns);
+                    //Asignamos las producciones a la categoria
+                    director.productions.forEach(prod => {
+                        let producionAssing = this.#videoSystemModel.getProduction(prod);
+                        this.#videoSystemModel.assignDirector(directorIns, producionAssing);
+                    })
+                });
+
+                elementos[0].users.forEach(usuario => {
+                    //Creamos el objeto categoria y la metemos en el modelo
+                    let userIns = this.#videoSystemModel.getUser(usuario.username,usuario.email,usuario.password);
+                    console.log(userIns); //(username, email, password)
+                    this.#videoSystemModel.addUser(userIns);
+                    
+                });
+
+            }).then(() =>{
+                this.#videoSystemView.showCategoriesInMenu(this.#videoSystemModel.categories);
+        
+                this.#videoSystemView.showPersonsMenu();
+                this.#videoSystemView.bindActorsList(this.handleActoresList);
+                this.#videoSystemView.bindDirectorsList(this.handleDirectoresList);
+                this.#videoSystemView.bindCategoriesListMenu(this.handleProductionsCategoryList);
+                this.#videoSystemView.showButtonCloseWindowsMenu();
+                this.#videoSystemView.bindClose(this.handleClose);
+
+                let userC = getCookie('loginUserCookie');
+                if (userC) {
+                    //En caso que tiene sesion
+                    this.#user = this.#videoSystemModel.getUser(userC);
+                    this.onOpenSesion();
+                } else {
+                    //en caso que no tiene sesion
+                    this.onCloseSesion();
+                }
+
+                this.onInit();
+
+            });
+
+        // this.#loadVideoSystemObjects();
+        // this.#videoSystemView.showCategoriesInMenu(this.#videoSystemModel.categories);
+
+        // this.#videoSystemView.showPersonsMenu();
+        // this.#videoSystemView.bindActorsList(this.handleActoresList);
+        // this.#videoSystemView.bindDirectorsList(this.handleDirectoresList);
+        // this.#videoSystemView.bindCategoriesListMenu(this.handleProductionsCategoryList);
+        // this.#videoSystemView.showButtonCloseWindowsMenu();
+        // this.#videoSystemView.bindClose(this.handleClose);
 
         // this.#videoSystemView.showAdminMenu();
         // this.#videoSystemView.bindAdmin(
@@ -267,15 +463,7 @@ class VideoSystemController {
 
 
 
-        let userC = getCookie('loginUserCookie');
-        if (userC) {
-            //En caso que tiene sesion
-            this.#user = this.#videoSystemModel.getUser(userC);
-            this.onOpenSesion();
-        } else {
-            //en caso que no tiene sesion
-            this.onCloseSesion();
-        }
+       
     }
 
     //En respuesta a un cambio de datos
@@ -757,7 +945,8 @@ class VideoSystemController {
             this.handlerNewCategoryForm,
             this.handlerDelCategoryForm,
             this.handlerNewPersonForm,
-            this.handlerDelPersonForm
+            this.handlerDelPersonForm,
+            this.handlerGrabarJSON
         );
 
         this.#videoSystemView.initHistory();
@@ -773,6 +962,10 @@ class VideoSystemController {
             //en caso que no haya usuario, ir a inicio
             this.onInit();
         }
+    }
+
+    handlerGrabarJSON = () =>{
+        this.#videoSystemModel.generatorJSON();
     }
 }
 

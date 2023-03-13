@@ -650,6 +650,9 @@ class VideoSystemView {
                         </button>
                         <button type='button' id="delPerson" class="nav-link dropdown-item collapse-link btn btn-link text-black">
                             Eliminar Persona
+                        </button>
+                        <button type='button' id="grabarJSON" class="nav-link dropdown-item collapse-link btn btn-link text-black">
+                        Grabar objetos a JSON
                         </button>`);
 
         li.append(container);
@@ -658,7 +661,7 @@ class VideoSystemView {
 
 
 
-    bindAdmin(handlerNewProduccion, handlerDelProduccion, handlerAsigProducion, handlerNewCategory, handlerDelCategory, handlerNewPerson, handlerDelPerson) {
+    bindAdmin(handlerNewProduccion, handlerDelProduccion, handlerAsigProducion, handlerNewCategory, handlerDelCategory, handlerNewPerson, handlerDelPerson,handlerGrabarJSON) {
         $('#newProduccion').click((event) => {
             handlerNewProduccion();
         });
@@ -679,6 +682,9 @@ class VideoSystemView {
         });
         $('#delPerson').click((event) => {
             handlerDelPerson();
+        });
+        $('#grabarJSON').click((event) => {
+            handlerGrabarJSON();
         });
     }
 
@@ -1699,7 +1705,10 @@ class VideoSystemView {
                                             <img src="${production.image}" class="card-img-top" alt="${production.title}">
                                                  <div class="card-body">
                                                      <h5 class="card-title">${production.title}</h5>
+                                                     <div class='d-flex justify-content-around align-items-center'>
                                                      <p class="card-text"><small class="text-muted">${production.publication.getFullYear()}</small></p>
+                                                     
+                                                     </div>
                                                  </div>
                                             </div></a>`);
                         encontrado = true;
@@ -1707,10 +1716,12 @@ class VideoSystemView {
                     i++;
                 }
             }
+            // <button type="button" class="btn btn-danger"><i class="bi bi-trash-fill"></i>Quitar de la lista</button>
         }
         contanierPrincipal.append(contanierProduciones);
         this.main.append(contanierPrincipal);
     }
+    
 
 }
 

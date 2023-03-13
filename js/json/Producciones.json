@@ -1,0 +1,233 @@
+[
+    {
+        "title": "Los crímenes de la academia",
+        "nationality": "USA",
+        "publication": "2022-12-22T23:00:00.000Z",
+        "synopsis": "Historia ambientada en 1830 sobre un veterano detective, Augustus Landor, que intenta resolver unos asesinatos cometidos en West Point con la ayuda de un joven cadete al que el mundo conocería luego como Edgar Allan Poe.",
+        "image": "image/cartel/LosCrimenesDeLaAcademia.png",
+        "resource": {
+            "duration": 85,
+            "link": "movie/CrimenesDeLaAcademia.mp4"
+        },
+        "locations": [],
+        "type": "Movie"
+    },
+    {
+        "title": "Murder Mystery",
+        "nationality": "USA",
+        "publication": "2019-06-13T22:00:00.000Z",
+        "synopsis": "Un policía de Nueva York y su mujer se van de vacaciones a Europa pero terminan acusados de asesinato",
+        "image": "image/cartel/murderMystery.png",
+        "resource": {
+            "duration": 97,
+            "link": "movie/movieMurderM.mp4"
+        },
+        "locations": [],
+        "type": "Movie"
+    },
+    {
+        "title": "Deadpool",
+        "nationality": "USA",
+        "publication": "2016-02-11T23:00:00.000Z",
+        "synopsis": "Wade Wilson, tras ser sometido a un cruel experimento científico, adquiere poderes especiales",
+        "image": "image/cartel/DeadpoolCartel.png",
+        "resource": {
+            "duration": 109,
+            "link": "movie/dealpool.mp4"
+        },
+        "locations": [],
+        "type": "Movie"
+    },
+    {
+        "title": "Love Happens",
+        "nationality": "USA",
+        "publication": "2009-09-17T22:00:00.000Z",
+        "synopsis": "El viudo Burke Ryan es un exitoso autor de libros de autoayuda que enseña cómo enfrentarse al dolor, pero es incapaz de seguir sus propios consejos. En uno de sus seminarios conoce a Eloise, una florista algo desencantada con el amor.",
+        "image": "image/cartel/loveHappens.png",
+        "resource": {
+            "duration": 90,
+            "link": "movie/loveHappens.mp4"
+        },
+        "locations": [],
+        "type": "Movie"
+    },
+    {
+        "title": "Cásate conmigo",
+        "nationality": "USA",
+        "publication": "2022-02-10T23:00:00.000Z",
+        "synopsis": "Una estrella del pop es abandonada por su prometido momentos antes de su boda en el Madison Square Garden, por lo que decide casarse con un hombre seleccionado aleatoriamente entre el público.",
+        "image": "image/cartel/casateConmigo.png",
+        "resource": {
+            "duration": 112,
+            "link": "movie/casateConmigo.mp4"
+        },
+        "locations": [],
+        "type": "Movie"
+    },
+    {
+        "title": "Palmeras en la Nieve",
+        "nationality": "España",
+        "publication": "2015-12-08T23:00:00.000Z",
+        "synopsis": "El descubrimiento de una carta olvidada durante años empuja a Clarence a viajar a Bioko para visitar la tierra en la que su padre Jacobo y su tío Kilian pasaron la mayor parte de su juventud, la isla de Fernando Poo. Allí experimentará la amistad, el amor y el odio, y los contrastes de una vida social ligera y espontánea opuesta a la rigidez de la sociedad española.",
+        "image": "image/cartel/PalmerasEnLaNieve.png",
+        "resource": {
+            "duration": 163,
+            "link": "movie/PalmerasEnLaNieve.mp4"
+        },
+        "locations": [],
+        "type": "Movie"
+    },
+    {
+        "title": "Los abrazos rotos",
+        "nationality": "España",
+        "publication": "2009-03-17T23:00:00.000Z",
+        "synopsis": "Mateo Blanco es un escritor y director de cine que catorce años atrás sufrió un accidente de coche que le dejó ciego. A partir de ese accidente, en el que también murió su mujer, Mateo usa su nombre para firmar como director y el pseudónimo Harry Caine para sus otros trabajos.",
+        "image": "image/cartel/AbrazosRotos.png",
+        "resource": {
+            "duration": 125,
+            "link": "movie/AbrazosRotos.mp4"
+        },
+        "locations": [],
+        "type": "Movie"
+    },
+    {
+        "title": "El vecino",
+        "nationality": "España",
+        "publication": "2019-12-30T23:00:00.000Z",
+        "synopsis": "Un vecino superheroe",
+        "image": "image/cartel/portadaVecino.png",
+        "resources": [
+            {
+                "duration": 32,
+                "link": "serie/Episode1.mp4"
+            },
+            {
+                "duration": 24,
+                "link": "serie/LaRedSocial.mp4"
+            },
+            {
+                "duration": 31,
+                "link": "serie/dia.mp4"
+            }
+        ],
+        "locations": "",
+        "seasons": 2,
+        "type": "Serie"
+    },
+    {
+        "title": "Resident Evil",
+        "nationality": "Estados Unidos",
+        "publication": "2022-07-13T22:00:00.000Z",
+        "synopsis": "Un virus mortal causara un apocalipsis global",
+        "image": "image/cartel/portadaREvil.png",
+        "resources": [
+            {
+                "duration": 60,
+                "link": "serie/Bienvenidos_a_New_Raccoon_City.mp4"
+            },
+            {
+                "duration": 48,
+                "link": "serie/Lo_malo_conocido.mp4"
+            },
+            {
+                "duration": 45,
+                "link": "serie/La_luz.mp4"
+            },
+            {
+                "duration": 53,
+                "link": "serie/La_transformacion.mp4"
+            },
+            {
+                "duration": 10,
+                "link": "serie/insertadoDespues.mp4"
+            }
+        ],
+        "locations": "",
+        "seasons": 2,
+        "type": "Serie"
+    },
+    {
+        "title": "Brooklyn Nine-Nine",
+        "nationality": "Estados Unidos",
+        "publication": "2013-07-16T22:00:00.000Z",
+        "synopsis": "forman una simpática y poco convencional brigada, pero todo cambia tras la llegada del nuevo jefe, el inflexible Raymond Holt.",
+        "image": "image/cartel/brooklyn99.png",
+        "resources": [
+            {
+                "duration": 60,
+                "link": "serie/b99_1.mp4"
+            },
+            {
+                "duration": 48,
+                "link": "serie/b99_2.mp4"
+            },
+            {
+                "duration": 45,
+                "link": "serie/b99_3.mp4"
+            },
+            {
+                "duration": 53,
+                "link": "serie/b99_4.mp4"
+            }
+        ],
+        "locations": "",
+        "seasons": 9,
+        "type": "Serie"
+    },
+    {
+        "title": "El club de la medianoche",
+        "nationality": "Estados Unidos",
+        "publication": "2022-10-06T22:00:00.000Z",
+        "synopsis": "En una mansión con una misteriosa historia, ocho miembros del Midnight Club se reúnen cada noche a la medianoche para contar historias siniestras y buscar señales sobrenaturales del más allá.",
+        "image": "image/cartel/clubMedianoche.png",
+        "resources": [
+            {
+                "duration": 60,
+                "link": "serie/clubM_1.mp4"
+            },
+            {
+                "duration": 48,
+                "link": "serie/clubM_2.mp4"
+            },
+            {
+                "duration": 45,
+                "link": "serie/clubM_3.mp4"
+            },
+            {
+                "duration": 53,
+                "link": "serie/clubM_4.mp4"
+            }
+        ],
+        "locations": "",
+        "seasons": 1,
+        "type": "Serie"
+    },
+    {
+        "title": "Archivo 81",
+        "nationality": "Estados Unidos",
+        "publication": "2022-01-13T23:00:00.000Z",
+        "synopsis": "Un archivista acepta un trabajo restaurando cintas de video dañadas y se ve envuelto en un misterio que involucra al director desaparecido y un culto demoníaco.",
+        "image": "image/cartel/archivo81.png",
+        "resources": [
+            {
+                "duration": 75,
+                "link": "serie/a81_1.mp4"
+            },
+            {
+                "duration": 48,
+                "link": "serie/a81_2.mp4"
+            },
+            {
+                "duration": 45,
+                "link": "serie/a81_3.mp4"
+            },
+            {
+                "duration": 53,
+                "link": "serie/a81_4.mp4"
+            }
+        ],
+        "locations": "",
+        "seasons": 1,
+        "type": "Serie"
+    }
+]

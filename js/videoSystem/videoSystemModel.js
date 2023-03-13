@@ -959,6 +959,50 @@ let VideoSystem = (function () {
             }
         }
 
+        generatorJSON(){
+            let string=`[{ "Producciones": [`;
+            let array = [];
+            for(let produccion of this.productions){
+
+                let production;
+                if(produccion instanceof Movie){
+                    production = {
+                        title: produccion.title,
+                        nationality: produccion.nationality,
+                        publication: produccion.publication,
+                        synopsis: produccion.synopsis,
+                        image: produccion.image,
+                        resource: produccion.resource,
+                        locations: produccion.locations,
+                        type: "Movie"
+                    }
+                }else if(produccion instanceof Serie){
+                    production = {
+                        title: produccion.title,
+                        nationality: produccion.nationality,
+                        publication: produccion.publication,
+                        synopsis: produccion.synopsis,
+                        image: produccion.image,
+                        resources: produccion.resources,
+                        locations: produccion.locations,
+                        seasons: produccion.seasons,
+                        type: "Serie" 
+                    }
+                }
+
+                array.push(JSON.stringify(production));
+            }
+
+            string += array.join(",");
+            // string+=",'Actores': [";
+            string+= `]}`;
+
+
+            //FINAL
+            string +=`]`;
+            console.log(string);
+        }
+
         }
         let vs = new VideoSystem(name);
         Object.freeze(vs);

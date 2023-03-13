@@ -117,7 +117,7 @@ function newProductionValidation(handler) {
         }
 
         if (this.Pdate.checkValidity()) {
-            newDate = DateFormat(this.Pdate.value);
+            // newDate = DateFormat(this.Pdate.value);
 
             showFeedBack($(this.Pdate), true);
         } else {
@@ -161,7 +161,7 @@ function newProductionValidation(handler) {
             });
 
 
-            handler(this.Ptitle.value, this.Nacionalidad.value, newDate, this.PSynopsis.value, imagentemp, categorias, directores, actores, this.selectType.value);
+            handler(this.Ptitle.value, this.Nacionalidad.value, new Date(this.Pdate.value), this.PSynopsis.value, imagentemp, categorias, directores, actores, this.selectType.value);
 
         }
         event.preventDefault();
@@ -215,7 +215,7 @@ function newPersonValidation(handler) {
         let newDate;
 
         if (this.Pdate.checkValidity()) {
-            newDate = DateFormat(this.Pdate.value);
+            // newDate = DateFormat(this.Pdate.value);
 
             showFeedBack($(this.Pdate), true);
         } else {
@@ -262,7 +262,7 @@ function newPersonValidation(handler) {
         if (!isValid) {
             firstInvalidElement.focus();
         } else {
-            handler(this.PersonName.value, this.PersonLastName1.value, this.PersonLastName2.value, newDate, undefined, this.selectType.value);
+            handler(this.PersonName.value, this.PersonLastName1.value, this.PersonLastName2.value, new Date(this.Pdate.value), undefined, this.selectType.value);
         }
         event.preventDefault();
         event.stopPropagation();
