@@ -391,7 +391,6 @@ class VideoSystemController {
 
         this.#videoSystemView.showFichaPersonNewWindow(actor, this.#videoSystemModel.getProdutionsActor(actor));
 
-        // this.#videoSystemView.bindProductions(this.handleProduction);
     }
 
     //Director nueva ventana
@@ -401,7 +400,6 @@ class VideoSystemController {
 
         this.#videoSystemView.showFichaPersonNewWindow(director, this.#videoSystemModel.getProductionsDirector(director));
 
-        // this.#videoSystemView.bindProductions(this.handleProduction);
     }
     //Para cerrar todas las ventanas registradas
     handleClose = () => {
@@ -440,8 +438,6 @@ class VideoSystemController {
         this.#videoSystemView.showCategoriesInMenu(this.#videoSystemModel.categories);
         this.#videoSystemView.bindCategoriesListMenu(this.handleProductionsCategoryList);
 
-        // this.#videoSystemView.init(this.#videoSystemModel.categories);
-        // this.#videoSystemView.bindCategoriesList(this.handleProductionsCategoryList);
     }
 
     //Donde va a mostrar el formulario de Eliminar categoria
@@ -535,7 +531,7 @@ class VideoSystemController {
         }
         this.#videoSystemView.showMessageActionAddProd(done, prod, error);
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
-        // this.onAddCategory();
+
         refreshMain();
     }
 
@@ -879,7 +875,7 @@ class VideoSystemController {
     handlerGrabarJSON = () => {
         let jsonObjs = this.#videoSystemModel.generatorJSON();
 
-        
+
         let base = location.protocol + '//' + location.host + location.pathname;
         let url = new URL('writeJSONBackup.php', base);
         let formData = new FormData();

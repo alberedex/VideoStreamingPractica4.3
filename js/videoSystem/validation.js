@@ -61,7 +61,6 @@ function newCategoryValidation(handler) {
     }));
 
     $(form.nombreCategoria).change(defaultCheckElement);
-    // $(form.description).change(defaultCheckElement);
 
 }
 
@@ -126,7 +125,6 @@ function newProductionValidation(handler) {
                     L.marker([this.dataset.lat, this.dataset.lon]).addTo(map);
 
                     locations.push(new Coordinate(this.dataset.lat, this.dataset.lon));
-                    console.log(L);
                     event.preventDefault();
                     event.stopPropagation();
                 })
@@ -158,6 +156,24 @@ function newProductionValidation(handler) {
             showFeedBack($(this.selectType), false);
         }
 
+        if (!this.newproActor.checkValidity()) {
+            isValid = false;
+            firstInvalidElement = this.newproActor;
+
+            showFeedBack($(this.newproActor), false);
+        } else {
+            showFeedBack($(this.newproActor), true);
+        }
+
+        if (!this.newproDirector.checkValidity()) {
+            isValid = false;
+            firstInvalidElement = this.newproDirector;
+
+            showFeedBack($(this.newproDirector), false);
+        } else {
+            showFeedBack($(this.newproDirector), true);
+        }
+
         if (!this.newproCategories.checkValidity()) {
             isValid = false;
             firstInvalidElement = this.newproCategories;
@@ -182,8 +198,6 @@ function newProductionValidation(handler) {
         }
 
         if (this.Pdate.checkValidity()) {
-            // newDate = DateFormat(this.Pdate.value);
-
             showFeedBack($(this.Pdate), true);
         } else {
             isValid = false;
@@ -247,7 +261,9 @@ function newProductionValidation(handler) {
     $(form.Nacionalidad).change(defaultCheckElement);
     $(form.Ptitle).change(defaultCheckElement);
     $(form.selectType).change(defaultCheckElement);
-    $(form.Pdate).change(defaultCheckElement);
+    $(form.newproCategories).change(defaultCheckElement);
+    $(form.newproDirector).change(defaultCheckElement);
+    $(form.newproActor).change(defaultCheckElement);
 
     $(form.Pimage).change(function (event) {
         if (!this.value) {
@@ -261,12 +277,6 @@ function newProductionValidation(handler) {
             showFeedBack($(this), true);
         }
     });
-
-    // $(form.newproActor).change(defaultCheckElement);
-    // $(form.newproActor).change(defaultCheckElement);
-    // $(form.newproDirector).change(defaultCheckElement);
-
-    // $(form.PSynopsis).change(defaultCheckElement);
 
 }
 
@@ -283,7 +293,6 @@ function newPersonValidation(handler) {
     $(form).submit(function (event) {
         let isValid = true;
         let firstInvalidElement = null;
-        let newDate;
 
         if (this.Pdate.checkValidity()) {
             // newDate = DateFormat(this.Pdate.value);
@@ -482,7 +491,6 @@ function assignDesValidation(handlerDirectors, handlerActors, prod) {
     let form = document.forms.formAssignDesProd;
 
     $('.directorButton').click(function (event) {
-
         let directorAssign = [...form.Director.selectedOptions].map(function (option) {
             return option.value;
         });
@@ -494,6 +502,8 @@ function assignDesValidation(handlerDirectors, handlerActors, prod) {
         if (directorAssign.length == 0 && directorDeassign.length == 0) {
             showFeedBack($(form.Director), false);
             showFeedBack($(form.DirectorProd), false);
+
+
         } else {
             handlerDirectors(directorAssign, directorDeassign, prod);
         }
@@ -515,6 +525,36 @@ function assignDesValidation(handlerDirectors, handlerActors, prod) {
             handlerActors(actorAssign, actorDeassign, prod);
         }
     });
+
+    $(form.DirectorProd).change(function () {
+        if (this.selectedOptions.length) {
+            showFeedBack($(this), true);
+            showFeedBack($(form.Director), true);
+        }
+    });
+
+    $(form.Director).change(function () {
+        if (this.selectedOptions.length) {
+            showFeedBack($(this), true);
+            showFeedBack($(form.DirectorProd), true);
+        }
+    });
+
+    $(form.ActorProd).change(function () {
+        if (this.selectedOptions.length) {
+            showFeedBack($(this), true);
+            showFeedBack($(form.Actor), true);
+        }
+    });
+
+    $(form.Actor).change(function () {
+        if (this.selectedOptions.length) {
+            showFeedBack($(this), true);
+            showFeedBack($(form.ActorProd), true);
+        }
+    });
+
+
 }
 
 /**

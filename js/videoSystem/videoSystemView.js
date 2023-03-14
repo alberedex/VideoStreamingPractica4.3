@@ -1087,8 +1087,9 @@ class VideoSystemView {
         let alertsSelect = $(`<div class="invalid-feedback">Debe seleccionar al menos uno.</div>
         <div class="valid-feedback">Correcto.</div>`);
 
+        let contanierPerson = $('<div class="row">');
         //Categorias
-        let contanierSelectCategory = $('<div class="col-md-12">');
+        let contanierSelectCategory = $('<div class="col-md-4">');
         contanierSelectCategory.append('<label for="newproCategories" class="form-label">Categorias</label>');
 
         let categoriesSelectCategory = $(`<select class="form-select" multiple aria-label="multiple select Categorias" id="newproCategories" name="newproCategories" aria-describedby="newproCategories" required></select>`);
@@ -1098,14 +1099,15 @@ class VideoSystemView {
         }
 
         contanierSelectCategory.append(categoriesSelectCategory);
-        formProduc.append(contanierSelectCategory);
+        // formProduc.append(contanierSelectCategory);
+        contanierPerson.append(contanierSelectCategory);
         contanierSelectCategory.append(alertsSelect);
 
         //Person
-        let contanierPerson = $('<div class="row">');
+        
 
-        let contanierSelectPerson = $('<div class="col-md-6">');
-        contanierSelectPerson.append('<label for="newproDirector" class="form-label">Director</label>');
+        let contanierSelectPerson = $('<div class="col-md-4">');
+        contanierSelectPerson.append('<label for="newproDirector" class="form-label">Directores:</label>');
 
         let categoriesSelect = $(`<select class="form-select" multiple aria-label="multiple select Directores" id="newproDirector" name="newproDirector" aria-describedby="director" required></select>`);
 
@@ -1118,8 +1120,8 @@ class VideoSystemView {
         contanierSelectPerson.append(alertsSelect.clone());
 
 
-        let contanierSelectActor = $('<div class="col-md-6">');
-        contanierSelectActor.append('<label for="newproActor" class="form-label">Actor</label>');
+        let contanierSelectActor = $('<div class="col-md-4">');
+        contanierSelectActor.append('<label for="newproActor" class="form-label">Actores:</label>');
 
         let categoriesSelectActor = $(`<select class="form-select" multiple aria-label="multiple select Actores" id="newproActor" name="newproActor" aria-describedby="actor" required></select>`);
 
