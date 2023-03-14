@@ -1,15 +1,21 @@
 <?php
 
-$json = $_POST['jsonObj'];
+if(isset($_POST['jsonObj'])){
+    $json = $_POST['jsonObj'];
+    
+    $fecha = time();
+    
+    $campos = getdate($fecha);
 
-$fecha = time();
+    $title = "Backup/Backup-$campos[mday]-$campos[mon]-$campos[year]-$campos[hours]_$campos[minutes]_$campos[seconds].json";
 
-$campos = getdate($fecha);
-
-$fd = fopen("Backup/Backup-$campos[mday]-$campos[mon]-$campos[year]-$campos[hours]_$campos[minutes].json","a+") or die ("Error al abrir el archivo Ejemplo.txt");
-
-fputs($fd,$json);
-
-fclose($fd);
+    $fd = fopen("$title","w+") or die ("Error al crear el archivo");
+    
+    fputs($fd,$json);
+    
+    fclose($fd);
+    echo $title;
+}
 
 ?>
+

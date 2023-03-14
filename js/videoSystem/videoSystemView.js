@@ -1,4 +1,4 @@
-import { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation,delPersonValidation, loginValidation } from './validation.js';
+import { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation, delPersonValidation, loginValidation, map } from './validation.js';
 import { setCookie, getCookie } from './videoSystemApp.js';
 
 class VideoSystemView {
@@ -389,7 +389,31 @@ class VideoSystemView {
         } else if (production.constructor.name == 'Movie') {
 
             //En caso que sea pelicula
-            info.append(this.#convertMinToHours(production.resource.duration));
+            if (production.resource.duration != null) {
+                info.append(this.#convertMinToHours(production.resource.duration));
+            }
+        }
+
+        if (production.locations.length > 0) {
+            contanier.append(`<div class="container"><h5>Ubicaciones: </h5><div class="m-4" id="mapidProd" name='mapid'></div></div>`);
+
+            let mapContainerProd = $('#mapidProd');
+            mapContainerProd.css({
+                height: '250px',
+                border: '2px solid #faa541',
+            });
+
+            let mapProd = L.map('mapidProd').setView([production.locations[0].latitude, production.locations[0].longitude], 15);
+            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+                maxZoom: 18
+            }).addTo(mapProd);
+
+
+            for (let location of production.locations) {
+                L.marker([location.latitude, location.longitude]).addTo(mapProd);
+
+            }
         }
     }
 
@@ -661,7 +685,7 @@ class VideoSystemView {
 
 
 
-    bindAdmin(handlerNewProduccion, handlerDelProduccion, handlerAsigProducion, handlerNewCategory, handlerDelCategory, handlerNewPerson, handlerDelPerson,handlerGrabarJSON) {
+    bindAdmin(handlerNewProduccion, handlerDelProduccion, handlerAsigProducion, handlerNewCategory, handlerDelCategory, handlerNewPerson, handlerDelPerson, handlerGrabarJSON) {
         $('#newProduccion').click((event) => {
             handlerNewProduccion();
         });
@@ -722,7 +746,7 @@ class VideoSystemView {
     * @param {*} handlerActor 
     */
     bindDelPersonForm(handlerDirector, handlerActor) {
-        delPersonValidation(handlerDirector,handlerActor);
+        delPersonValidation(handlerDirector, handlerActor);
     }
 
     /**
@@ -885,6 +909,15 @@ class VideoSystemView {
             feedback = `La produccion <strong>${prod.title}</strong> ha sido añadido`;
 
             document.formNewProduction.reset();
+            document.fGeocoder.reset();
+            $('#geocoderAddresses').empty();
+            //Eliminar puntos
+            map.eachLayer(function (layer) {
+                if (layer._shadow) {
+                    map.removeLayer(layer);
+                }
+            });
+
 
         } else {
             feedback = feedback.message;
@@ -1004,6 +1037,7 @@ class VideoSystemView {
                     <form name="formNewProduction" role="form" enctype="multipart/form-data" novalidate>
                         <div class="modal-body" id='formBody'>
                         <div class='row'>
+                        <div class='row'>
                             <div class="col-md-6">
                                 <label for="Ptitle" class="form-label">Titulo</label>
                                 <input type="text" class="form-control" id="Ptitle" name='Ptitle'  required>
@@ -1035,8 +1069,8 @@ class VideoSystemView {
                                 <label for="PSynopsis" class="form-label">Synopsis</label>
                                 <textarea class="form-control" id="PSynopsis" name="PSynopsis" aria-describedby="Synopsis" rows="4"></textarea>
                             </div>
-                            
-                            
+                        </div>
+                        
                         </div>
                         <div class="modal-footer">
                             <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
@@ -1107,6 +1141,37 @@ class VideoSystemView {
                       </select>
                       <div class="invalid-feedback">Debe seleccionar que tipo de produccion es.</div>
                     <div class="valid-feedback">Correcto.</div></div>`);
+
+        formProduc.append(`<div class="container p-4">
+        <form id="fGeocoder" method="get" name='fGeocoder' action="https://nominatim.openstreetmap.org/search">
+            <input type="hidden" name="format" value="json">
+            <input type="hidden" name="limit" value="3">
+            <h2>Buscar:</h2>
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <label for="address" class="col-form-label">Dirección</label>
+                    <input type="text" name="q" class="form-control" id="address" placeholder="Introduce la dirección a buscar">
+                </div>
+                <div class="col-sm-2 align-self-end">
+                    <button id="bAddress" class="btn btn-primary" type="submit">Buscar</button>
+                </div>
+            </div>
+            <div id="geocoderAddresses"></div>
+            <div id="geocoderMap" class="my-2"></div>
+        </form>
+    </div>`);
+
+        formProduc.append(`<div class="container"><div class="m-4" id="mapid" name='mapid'></div></div>`);
+
+        let mapContainer = $('#mapid');
+        mapContainer.css({
+            height: '250px',
+            border: '2px solid #faa541',
+            margin: '0',
+            padding: '0'
+        });
+
+
     }
 
     /**
@@ -1401,8 +1466,8 @@ class VideoSystemView {
                     </div>
                     <div class="col-md-6 p-3">
                         <label for="Pimage" class="form-label">Imagen</label>
-                        <input type="file" class="form-control" id="Pimage" name='Pimage'>
-                        <div class="invalid-feedback">La imagen es obligatorio.</div>
+                        <input type="file" class="form-control" id="Pimage" name='Pimage' required>
+                        <div class="invalid-feedback">La imagen es obligatorio y con extensión jpg, png o gif.</div>
                         <div class="valid-feedback">Correcto.</div>
                     </div>
                     </div>
@@ -1418,6 +1483,11 @@ class VideoSystemView {
         </div>`);
     }
 
+    /**
+     * Mostramos el modal del formulario de eliminar Personas
+     * @param {*} directorIterator 
+     * @param {*} actorIterator 
+     */
     showModalRemovePerson(directorIterator, actorIterator) {
         $('body').append(`<div class="modal fade" id="formRemPerson" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
         <div class="modal-dialog">
@@ -1471,9 +1541,12 @@ class VideoSystemView {
         for (let actor of actorIterator) {
             selectActor.append(`<option value="${actor.name}/${actor.lastname1}">${actor.name} ${actor.lastname1}</option>`);
         }
-  
+
     }
 
+    /**
+     * Mostramos en la barra de navegacion de iniciar sesion , en caso que no exista la cookie
+     */
     showLinkLogin() {
         this.areaLogin.empty();
         this.areaLogin.append(`<li class="nav-item">
@@ -1482,13 +1555,19 @@ class VideoSystemView {
 
     }
 
+    /**
+     * Enlazamos el manejador al evento cuando hace click al login
+     * @param {*} handler 
+     */
     bindLinkLogin(handler) {
         $('#showLogin').click(() => {
             this.#excecuteHandler(handler, [], 'main', { action: 'login' }, '#Login', event);
         });
     }
 
-
+    /**
+     * Mostrar en main el formulario de login
+     */
     showLogin() {
         this.main.empty();
         let divLogin = $(`<div class="container pt-5">
@@ -1510,9 +1589,6 @@ class VideoSystemView {
                     </div>
                     <div class="form-group">
                         <button type="submit" id='btn-login' class="form-control btn btn-primary rounded submit px-3">Iniciar Sesión</button>
-                    
-                        <input for='recordar' type="checkbox" name='recordar'>
-                        <label class="mb-0 ms-2" id="recordar">Recuerdame</label>
                     </div>
                 </form>
             </div>
@@ -1522,6 +1598,9 @@ class VideoSystemView {
         this.main.append(divLogin);
     }
 
+    /**
+     * Mostrar el mensaje de Error en caso de fallo
+     */
     showMessageErrorLogin() {
         let errorExits = $('#alertErrorLogin');
         if (errorExits.length == 0) {
@@ -1529,26 +1608,47 @@ class VideoSystemView {
         }
     }
 
+    /**
+     * Validacion de los campos del login
+     * @param {*} handler 
+     */
     bindLogin(handler) {
         loginValidation(handler);
     }
 
+    /**
+     * En caso de no tener sesion, eliminarlo
+     */
     removeAdminMenu() {
         $('#MenuAdminstrador').remove();
     }
 
+    /**
+     * Asignacion del cookie de sesion 
+     * @param {*} user 
+     */
     setUserCookie(user) {
         setCookie('loginUserCookie', user.username, 1);
     }
 
+    /**
+     * Cambio de historial de ese momento (Login por init)
+     */
     initHistory() {
         history.replaceState({ action: 'init' }, null, '#');
     }
 
+    /**
+     * Eliminacion del cookie de sesion en caso de cierre
+     */
     deleteUserC() {
         setCookie('loginUserCookie', null, 0);
     }
 
+    /**
+     * Mostramos el bienvenidos al usuario
+     * @param {} user 
+     */
     showWelcomeAdmin(user) {
         this.areaLogin.empty();
 
@@ -1560,12 +1660,19 @@ class VideoSystemView {
         this.areaLogin.append(li);
     }
 
+    /**
+     * Enlazamos el manejador con el evento, cuando pulse el boton de cierre sesion
+     * @param {*} handler 
+     */
     bindCloseSession(handler) {
         $('#btnClose').click(function () {
             handler();
         })
     }
 
+    /**
+     * Mostrar opcion en nav de producciones favoritas
+     */
     showProdFavorites() {
         let li = `<li class="nav-item">
         <a class="nav-link active collapse-link" aria-current="page" href="#" id='prodFavorite-menu' data-nav='ProdFavorites'>Produciones Favoritas</i></a>
@@ -1573,42 +1680,31 @@ class VideoSystemView {
         this.areaLogin.append(li);
     }
 
+    /**
+     * Enlazar el manejador con el evento cuando haga el click a boton de prod favorites
+     * @param {*} handler 
+     */
     bindShowProdFavorites(handler) {
         $('#prodFavorite-menu').click((event) => {
             this.#excecuteHandler(handler, [], 'body', { action: 'showProductionFavorites' }, '#ProductionFavorites', event);
         });
     }
 
-    bindAddFavoriteProduction(user) {
+    /**
+     * enlazar el manejador con el evento cuando pulse el boton de meterlo en la lista favoritas
+     * @param {*} handler 
+     */
+    bindAddFavoriteProduction(handler) {
         $('#b-favorite').click(function (event) {
-            console.log(user.username);
-            let prodFavorite = localStorage.getItem(`${user.username}`);
-            console.log(prodFavorite);
-
-            let title = event.target.dataset.id;
-
-            if (prodFavorite != null) {
-                let ArrayProdFavorites = prodFavorite.split('/');
-                let encontrado = false;
-                let i = 0;
-                while (!encontrado && ArrayProdFavorites.length > i) {
-                    if (ArrayProdFavorites[i] === title) {
-                        console.log(ArrayProdFavorites[i]);
-                        encontrado = true;
-                    }
-                    i++;
-                }
-                if (!encontrado) {
-                    prodFavorite += `/${title}`;
-                    localStorage.setItem(`${user.username}`, prodFavorite);
-                }
-
-            } else {
-                localStorage.setItem(`${user.username}`, title);
-            }
+            handler(event.target.dataset.id);
         });
     }
 
+    /**
+     * Mostrar la lista de producciones favoritas del usuario
+     * @param {*} user 
+     * @param {*} producciones 
+     */
     showProductionsListFavorites(user, producciones) {
         this.main.empty(); //borramos el contenido del main
         let contanierPrincipal = $('<div></div>');
@@ -1626,7 +1722,8 @@ class VideoSystemView {
                 while (!encontrado && ArrayProdFavorites.length > i) {
 
                     if (production.title == ArrayProdFavorites[i]) {
-                        contanierProduciones.append(`<a data-produccion="${production.title}" href='#'>
+                        contanierProduciones.append(`
+                        <div><a data-produccion="${production.title}" href='#'>
                                           <div class="card" style="width: 18rem;">
                                             <img src="${production.image}" class="card-img-top" alt="${production.title}">
                                                  <div class="card-body">
@@ -1636,18 +1733,72 @@ class VideoSystemView {
                                                      
                                                      </div>
                                                  </div>
-                                            </div></a>`);
+                                            </div></a>
+                                            <button type="button" data-produccion="${production.title}" class="btn btn-danger delProdFavorite"><i class="bi bi-trash-fill"></i>Quitar de la lista</button></div>`);
                         encontrado = true;
                     }
                     i++;
                 }
             }
-            // <button type="button" class="btn btn-danger"><i class="bi bi-trash-fill"></i>Quitar de la lista</button>
+            // 
+        } else {
+            contanierPrincipal.append(`<p class="alert alert-warning">No hay producciones favoritas</p>`);
         }
         contanierPrincipal.append(contanierProduciones);
         this.main.append(contanierPrincipal);
+
     }
-    
+
+    /**
+    * Una vez hecho una accion con PHP, mostrar el mensaje al admin
+    * @param {*} done 
+    * @param {*} categ 
+    * @param {*} feedback 
+    */
+    showMessageActionWriteJSON(done, fichero, feedback) {
+
+        if (done) {
+            feedback = `El fichero ha sido creado en: ${fichero}`;
+
+        } else {
+            feedback = `No se ha recibido respuesta, no se ha podido crear el fichero`;
+
+        }
+        //Mostrar el mensaje con el modal global con su mensaje
+        this.showModalAlertAction(done, feedback);
+
+    }
+
+    /**
+     * Mostrar el mensaje de accion cuando pulse de meterlo en la lista
+     * @param {*} done 
+     */
+    showMessageActionFavoritesProds(done) {
+        $('#alertFav').remove();
+        if(done){
+            $('#b-favorite').after(`<div class="alert alert-success" id='alertFav' role="alert">
+            Ha sido añadido a las producciones favoritas
+          </div>`);
+          
+        }else{
+            $('#b-favorite').after(`<div class="alert alert-danger" id='alertFav' role="alert">
+            No se ha podido añadir a favoritos, ya tienes en favoritos o inicia sesion
+          </div>`);
+
+        }
+
+    }
+
+    /**
+     * Enlazamos el manejador con el evento cuando pulsa para eliminar la produccion de la lista de favoritos
+     * @param {*} handler 
+     */
+    bindRemoveProdFavorite(handler){
+        $('.delProdFavorite').click(function () {
+            handler(this.dataset.produccion);
+        });
+    }
+
 
 }
 

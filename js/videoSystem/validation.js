@@ -1,3 +1,4 @@
+import { Coordinate } from '../ObjetosEntidad.js';
 function showFeedBack(input, valid, message) {
     let validClass = (valid) ? 'is-valid' : 'is-invalid';
     let div = (valid) ? input.nextAll("div.valid-feedback") : input.nextAll("div.invalid-feedback");
@@ -80,7 +81,7 @@ function checkFileExtension(file, allowedExtensions) {
         return extension === fileExtension
     });
 }
-
+let map;
 /**
  * Validacion de nuevo Produccion 
  */
@@ -89,12 +90,63 @@ function newProductionValidation(handler) {
 
     $(form).attr('novalidate', true);
     // $(form).addClass('needs-validation');
+    let locations = [];
+
+    map = L.map('mapid').setView([38.990831799999995, -3.9206173000000004], 15);
+    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+        maxZoom: 18
+    }).addTo(map);
+
+    map.on('click', function (event) {
+        L.marker([event.latlng.lat, event.latlng.lng]).addTo(map);
+        locations.push(new Coordinate(event.latlng.lat, event.latlng.lng));
+    });
+
+    let formGeoCoder = $('#fGeocoder');
+    let addresses = $('#geocoderAddresses');
+
+    formGeoCoder.submit(function (event) {
+        let formGeoC = $(this);
+        $.get(this.action + '?' + formGeoC.serialize()).then(
+            function (data) {
+                let list = $('<div class="list-group"></div>');
+                data.forEach((address) => {
+                    list.append(`<a href="#" data-lat="${address.lat}" data-lon="${address.lon}" class="list-group-item list-group-item-action">
+                        ${address.display_name}</a>`);
+                });
+                addresses.empty();
+                addresses.append(list);
+                list.find('a').click(function (event) {
+                    $(this).siblings().removeClass('active');
+                    $(this).addClass('active');
+
+                    map.setView(new L.LatLng(this.dataset.lat, this.dataset.lon), 15);
+
+                    L.marker([this.dataset.lat, this.dataset.lon]).addTo(map);
+
+                    locations.push(new Coordinate(this.dataset.lat, this.dataset.lon));
+                    console.log(L);
+                    event.preventDefault();
+                    event.stopPropagation();
+                })
+            }, function (error) {
+                addresses.empty();
+                addresses.append(`<div class="text-danger">
+                    <i class="fas fa-exclamation-circle"></i>
+                    No se ha podido establecer la conexión con el servidor de mapas.
+                </div>`);
+            }
+        );
+
+        event.preventDefault();
+        event.stopPropagation();
+    })
 
     $(form).submit(function (event) {
         let isValid = true;
         let firstInvalidElement = null;
 
-        let newDate;
         let imagentemp;
 
         if (this.selectType.value) {
@@ -174,8 +226,9 @@ function newProductionValidation(handler) {
             });
 
 
-            handler(this.Ptitle.value, this.Nacionalidad.value, new Date(this.Pdate.value), this.PSynopsis.value, imagentemp, categorias, directores, actores, this.selectType.value);
+            handler(this.Ptitle.value, this.Nacionalidad.value, new Date(this.Pdate.value), this.PSynopsis.value, imagentemp, categorias, directores, actores, locations, this.selectType.value);
 
+            locations = [];
         }
         event.preventDefault();
         event.stopPropagation();
@@ -277,6 +330,20 @@ function newPersonValidation(handler) {
             showFeedBack($(this.selectType), false);
         }
 
+        if (!this.Pimage.value) {
+            isValid = false;
+            firstInvalidElement = this.Pimage;
+            showFeedBack($(this.Pimage), false);
+        } else if (!checkFileExtension(this.Pimage.files[0], ['jpg', 'png', 'gif'])) {
+
+            isValid = false;
+            firstInvalidElement = this.Pimage;
+
+            showFeedBack($(this.Pimage), false);
+        } else {
+            showFeedBack($(this.Pimage), true);
+        }
+
         if (!isValid) {
             firstInvalidElement.focus();
         } else {
@@ -300,6 +367,19 @@ function newPersonValidation(handler) {
     $(form.PersonName).change(defaultCheckElement);
     $(form.PersonLastName1).change(defaultCheckElement);
     $(form.PersonLastName2).change(defaultCheckElement);
+
+    $(form.Pimage).change(function (event) {
+        if (!this.value) {
+            isValid = false;
+            firstInvalidElement = this.Pimage;
+            showFeedBack($(this), false);
+        } else if (!checkFileExtension(this.files[0], ['jpg', 'png', 'gif'])) {
+
+            showFeedBack($(this), false);
+        } else {
+            showFeedBack($(this), true);
+        }
+    });
 
 }
 
@@ -532,7 +612,7 @@ function loginValidation(handler) {
             firstInvalidElement.focus();
         } else {
 
-            handler(form.username.value, form.password.value, form.recordar.checked);
+            handler(form.username.value, form.password.value);
         }
         event.preventDefault();
         event.stopPropagation();
@@ -542,4 +622,4 @@ function loginValidation(handler) {
     $(form.password).change(defaultCheckElement);
 }
 
-export { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation,delPersonValidation, loginValidation }
+export { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation, delPersonValidation, loginValidation, map }

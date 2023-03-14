@@ -10,16 +10,7 @@
                 "duration": 85,
                 "link": "movie/CrimenesDeLaAcademia.mp4"
             },
-            "locations": [
-                {
-                    "latitude": 38.98846863323883,
-                    "longitude": -3.9146733283996586
-                },
-                {
-                    "latitude": 38.987834848896355,
-                    "longitude": -3.9345002174377446
-                }
-            ],
+            "locations": [],
             "type": "Movie"
         },
         {
@@ -32,16 +23,7 @@
                 "duration": 97,
                 "link": "movie/movieMurderM.mp4"
             },
-            "locations": [
-                {
-                    "latitude": 38.98846863323883,
-                    "longitude": -3.9146733283996586
-                },
-                {
-                    "latitude": 38.987834848896355,
-                    "longitude": -3.9345002174377446
-                }
-            ],
+            "locations": [],
             "type": "Movie"
         },
         {
@@ -54,12 +36,7 @@
                 "duration": 109,
                 "link": "movie/dealpool.mp4"
             },
-            "locations": [
-                {
-                    "latitude": 38.98846863323883,
-                    "longitude": -3.9146733283996586
-                }
-            ],
+            "locations": [],
             "type": "Movie"
         },
         {
@@ -538,8 +515,8 @@
     "Categorias": [
         {
             "category": {
-                "name": "Comedia",
-                "description": "Obra que presenta una mayoría de escenas y situaciones humorísticas o festivas"
+                "name": "default category",
+                "description": ""
             },
             "productions": [
                 "El vecino",

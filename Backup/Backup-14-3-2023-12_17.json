@@ -512,16 +512,16 @@
             ]
         }
     ],
-    "categorias": [
+    "Categorias": [
         {
-            "categorias": {
+            "category": {
                 "name": "default category",
                 "description": ""
             },
             "productions": []
         },
         {
-            "categorias": {
+            "category": {
                 "name": "Comedia",
                 "description": "Obra que presenta una mayoría de escenas y situaciones humorísticas o festivas"
             },
@@ -533,7 +533,7 @@
             ]
         },
         {
-            "categorias": {
+            "category": {
                 "name": "Terror",
                 "description": "Al espectador sensaciones de pavor, terror, miedo, disgusto, repugnancia, horror, incomodidad o preocupación."
             },
@@ -545,7 +545,7 @@
             ]
         },
         {
-            "categorias": {
+            "category": {
                 "name": "Románticas",
                 "description": "es un género cinematográfico que se caracteriza por retratar argumentos construidos de eventos y personajes relacionados con la expresión del amor y las relaciones románticas."
             },
@@ -557,7 +557,7 @@
             ]
         }
     ],
-    "directores": [
+    "Directores": [
         {
             "director": {
                 "name": "Scott",
@@ -704,7 +704,7 @@
             ]
         }
     ],
-    "users": [
+    "Users": [
         {
             "username": "alberedex",
             "email": "2001rs@gmail.com",
