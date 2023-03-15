@@ -44,7 +44,6 @@ function refreshMain() {
     try {
         historyActions[history.state.action](history);
     } catch (error) {
-        console.log(error);
         historyActions.init();
     }
 }
