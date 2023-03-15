@@ -10,7 +10,16 @@
                 "duration": 85,
                 "link": "movie/CrimenesDeLaAcademia.mp4"
             },
-            "locations": [],
+            "locations": [
+                {
+                    "latitude": 38.98846863323883,
+                    "longitude": -3.9146733283996586
+                },
+                {
+                    "latitude": 38.987834848896355,
+                    "longitude": -3.9345002174377446
+                }
+            ],
             "type": "Movie"
         },
         {
@@ -23,7 +32,16 @@
                 "duration": 97,
                 "link": "movie/movieMurderM.mp4"
             },
-            "locations": [],
+            "locations": [
+                {
+                    "latitude": 38.98846863323883,
+                    "longitude": -3.9146733283996586
+                },
+                {
+                    "latitude": 38.987834848896355,
+                    "longitude": -3.9345002174377446
+                }
+            ],
             "type": "Movie"
         },
         {
@@ -36,7 +54,12 @@
                 "duration": 109,
                 "link": "movie/dealpool.mp4"
             },
-            "locations": [],
+            "locations": [
+                {
+                    "latitude": 38.98846863323883,
+                    "longitude": -3.9146733283996586
+                }
+            ],
             "type": "Movie"
         },
         {
@@ -61,19 +84,6 @@
             "resource": {
                 "duration": 112,
                 "link": "movie/casateConmigo.mp4"
-            },
-            "locations": [],
-            "type": "Movie"
-        },
-        {
-            "title": "Palmeras en la Nieve",
-            "nationality": "España",
-            "publication": "2015-12-08T23:00:00.000Z",
-            "synopsis": "El descubrimiento de una carta olvidada durante años empuja a Clarence a viajar a Bioko para visitar la tierra en la que su padre Jacobo y su tío Kilian pasaron la mayor parte de su juventud, la isla de Fernando Poo. Allí experimentará la amistad, el amor y el odio, y los contrastes de una vida social ligera y espontánea opuesta a la rigidez de la sociedad española.",
-            "image": "image/cartel/PalmerasEnLaNieve.png",
-            "resource": {
-                "duration": 163,
-                "link": "movie/PalmerasEnLaNieve.mp4"
             },
             "locations": [],
             "type": "Movie"
@@ -230,6 +240,25 @@
             "locations": [],
             "seasons": 1,
             "type": "Serie"
+        },
+        {
+            "title": "Pepe",
+            "nationality": "español",
+            "publication": "2023-03-09T00:00:00.000Z",
+            "synopsis": "hola",
+            "image": "https://via.placeholder.com/667x375.jpg?text=Pepe",
+            "resource": "",
+            "locations": [
+                {
+                    "latitude": 38.98571298517937,
+                    "longitude": -3.9268612861633305
+                },
+                {
+                    "latitude": "39.072196",
+                    "longitude": "-3.6143611"
+                }
+            ],
+            "type": "Movie"
         }
     ],
     "Actores": [
@@ -255,7 +284,8 @@
                 "picture": "image/imagesActor/harryMelling.jpg"
             },
             "productions": [
-                "Los crímenes de la academia"
+                "Los crímenes de la academia",
+                "Pepe"
             ]
         },
         {
@@ -279,7 +309,8 @@
                 "picture": "image/imagesActor/RyanReynold.jpg"
             },
             "productions": [
-                "Deadpool"
+                "Deadpool",
+                "Pepe"
             ]
         },
         {
@@ -471,9 +502,7 @@
                 "born": "1986-06-11T22:00:00.000Z",
                 "picture": "image/imagesActor/MarioCasasS.jpg"
             },
-            "productions": [
-                "Palmeras en la Nieve"
-            ]
+            "productions": []
         },
         {
             "actor": {
@@ -483,9 +512,7 @@
                 "born": "1992-03-27T23:00:00.000Z",
                 "picture": "image/imagesActor/BertaVazquez.jpg"
             },
-            "productions": [
-                "Palmeras en la Nieve"
-            ]
+            "productions": []
         },
         {
             "actor": {
@@ -529,7 +556,8 @@
                 "El vecino",
                 "Murder Mystery",
                 "Deadpool",
-                "Brooklyn Nine-Nine"
+                "Brooklyn Nine-Nine",
+                "Pepe"
             ]
         },
         {
@@ -541,7 +569,8 @@
                 "Resident Evil",
                 "Los crímenes de la academia",
                 "El club de la medianoche",
-                "Archivo 81"
+                "Archivo 81",
+                "Pepe"
             ]
         },
         {
@@ -552,9 +581,15 @@
             "productions": [
                 "Love Happens",
                 "Cásate conmigo",
-                "Palmeras en la Nieve",
                 "Los abrazos rotos"
             ]
+        },
+        {
+            "category": {
+                "name": "Pepito",
+                "description": "holafjdsfld"
+            },
+            "productions": []
         }
     ],
     "Directores": [
@@ -568,7 +603,8 @@
             },
             "productions": [
                 "Los crímenes de la academia",
-                "El vecino"
+                "El vecino",
+                "Pepe"
             ]
         },
         {
@@ -580,7 +616,8 @@
                 "picture": "image/director/fotoNacho.jpg"
             },
             "productions": [
-                "El vecino"
+                "El vecino",
+                "Pepe"
             ]
         },
         {
@@ -592,7 +629,8 @@
                 "picture": "image/director/fotoADabb.jpg"
             },
             "productions": [
-                "Resident Evil"
+                "Resident Evil",
+                "Pepe"
             ]
         },
         {
@@ -687,9 +725,7 @@
                 "born": "1975-11-09T23:00:00.000Z",
                 "picture": "image/director/FernandoGonzalez.jpg"
             },
-            "productions": [
-                "Palmeras en la Nieve"
-            ]
+            "productions": []
         },
         {
             "director": {
@@ -715,5 +751,24 @@
             "email": "admin@gmail.com",
             "password": "admin"
         }
-    ]
+    ],
+    "ProductionsDelete": [
+        {
+            "title": "Palmeras en la Nieve",
+            "nationality": "España",
+            "publication": "2015-12-08T23:00:00.000Z",
+            "synopsis": "El descubrimiento de una carta olvidada durante años empuja a Clarence a viajar a Bioko para visitar la tierra en la que su padre Jacobo y su tío Kilian pasaron la mayor parte de su juventud, la isla de Fernando Poo. Allí experimentará la amistad, el amor y el odio, y los contrastes de una vida social ligera y espontánea opuesta a la rigidez de la sociedad española.",
+            "image": "image/cartel/PalmerasEnLaNieve.png",
+            "resource": {
+                "duration": 163,
+                "link": "movie/PalmerasEnLaNieve.mp4"
+            },
+            "locations": [],
+            "type": "Movie"
+        }
+    ],
+    "CategoriesDelete": [],
+    "ActorsDelete": [],
+    "DirectorDelete": [],
+    "usersDelete": []
 }

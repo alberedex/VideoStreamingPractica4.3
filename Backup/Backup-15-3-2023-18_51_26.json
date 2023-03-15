@@ -10,7 +10,16 @@
                 "duration": 85,
                 "link": "movie/CrimenesDeLaAcademia.mp4"
             },
-            "locations": [],
+            "locations": [
+                {
+                    "latitude": 38.98846863323883,
+                    "longitude": -3.9146733283996586
+                },
+                {
+                    "latitude": 38.987834848896355,
+                    "longitude": -3.9345002174377446
+                }
+            ],
             "type": "Movie"
         },
         {
@@ -23,7 +32,16 @@
                 "duration": 97,
                 "link": "movie/movieMurderM.mp4"
             },
-            "locations": [],
+            "locations": [
+                {
+                    "latitude": 38.98846863323883,
+                    "longitude": -3.9146733283996586
+                },
+                {
+                    "latitude": 38.987834848896355,
+                    "longitude": -3.9345002174377446
+                }
+            ],
             "type": "Movie"
         },
         {
@@ -36,7 +54,12 @@
                 "duration": 109,
                 "link": "movie/dealpool.mp4"
             },
-            "locations": [],
+            "locations": [
+                {
+                    "latitude": 38.98846863323883,
+                    "longitude": -3.9146733283996586
+                }
+            ],
             "type": "Movie"
         },
         {
@@ -232,13 +255,22 @@
             "type": "Serie"
         },
         {
-            "title": "dfd",
-            "nationality": "",
-            "publication": "2023-03-15T00:00:00.000Z",
-            "synopsis": "fgfg",
-            "image": "https://via.placeholder.com/667x375.jpg?text=dfd",
+            "title": "Pepe",
+            "nationality": "español",
+            "publication": "2023-03-09T00:00:00.000Z",
+            "synopsis": "hola",
+            "image": "https://via.placeholder.com/667x375.jpg?text=Pepe",
             "resource": "",
-            "locations": [],
+            "locations": [
+                {
+                    "latitude": 38.98571298517937,
+                    "longitude": -3.9268612861633305
+                },
+                {
+                    "latitude": "39.072196",
+                    "longitude": "-3.6143611"
+                }
+            ],
             "type": "Movie"
         }
     ],
@@ -265,7 +297,8 @@
                 "picture": "image/imagesActor/harryMelling.jpg"
             },
             "productions": [
-                "Los crímenes de la academia"
+                "Los crímenes de la academia",
+                "Pepe"
             ]
         },
         {
@@ -277,8 +310,7 @@
                 "picture": "image/imagesActor/paolaRivas.jpg"
             },
             "productions": [
-                "Resident Evil",
-                "dfd"
+                "Resident Evil"
             ]
         },
         {
@@ -290,7 +322,8 @@
                 "picture": "image/imagesActor/RyanReynold.jpg"
             },
             "productions": [
-                "Deadpool"
+                "Deadpool",
+                "Pepe"
             ]
         },
         {
@@ -523,16 +556,16 @@
             ]
         }
     ],
-    "categorias": [
+    "Categorias": [
         {
-            "categorias": {
+            "category": {
                 "name": "default category",
                 "description": ""
             },
             "productions": []
         },
         {
-            "categorias": {
+            "category": {
                 "name": "Comedia",
                 "description": "Obra que presenta una mayoría de escenas y situaciones humorísticas o festivas"
             },
@@ -540,11 +573,12 @@
                 "El vecino",
                 "Murder Mystery",
                 "Deadpool",
-                "Brooklyn Nine-Nine"
+                "Brooklyn Nine-Nine",
+                "Pepe"
             ]
         },
         {
-            "categorias": {
+            "category": {
                 "name": "Terror",
                 "description": "Al espectador sensaciones de pavor, terror, miedo, disgusto, repugnancia, horror, incomodidad o preocupación."
             },
@@ -552,11 +586,12 @@
                 "Resident Evil",
                 "Los crímenes de la academia",
                 "El club de la medianoche",
-                "Archivo 81"
+                "Archivo 81",
+                "Pepe"
             ]
         },
         {
-            "categorias": {
+            "category": {
                 "name": "Románticas",
                 "description": "es un género cinematográfico que se caracteriza por retratar argumentos construidos de eventos y personajes relacionados con la expresión del amor y las relaciones románticas."
             },
@@ -564,12 +599,18 @@
                 "Love Happens",
                 "Cásate conmigo",
                 "Palmeras en la Nieve",
-                "Los abrazos rotos",
-                "dfd"
+                "Los abrazos rotos"
             ]
+        },
+        {
+            "category": {
+                "name": "Pepito",
+                "description": "holafjdsfld"
+            },
+            "productions": []
         }
     ],
-    "directores": [
+    "Directores": [
         {
             "director": {
                 "name": "Scott",
@@ -581,7 +622,7 @@
             "productions": [
                 "Los crímenes de la academia",
                 "El vecino",
-                "dfd"
+                "Pepe"
             ]
         },
         {
@@ -593,7 +634,8 @@
                 "picture": "image/director/fotoNacho.jpg"
             },
             "productions": [
-                "El vecino"
+                "El vecino",
+                "Pepe"
             ]
         },
         {
@@ -605,7 +647,8 @@
                 "picture": "image/director/fotoADabb.jpg"
             },
             "productions": [
-                "Resident Evil"
+                "Resident Evil",
+                "Pepe"
             ]
         },
         {
@@ -717,7 +760,7 @@
             ]
         }
     ],
-    "users": [
+    "Users": [
         {
             "username": "alberedex",
             "email": "2001rs@gmail.com",
@@ -728,5 +771,10 @@
             "email": "admin@gmail.com",
             "password": "admin"
         }
-    ]
+    ],
+    "ProductionsDelete": [],
+    "CategoriesDelete": [],
+    "ActorsDelete": [],
+    "DirectorDelete": [],
+    "usersDelete": []
 }
