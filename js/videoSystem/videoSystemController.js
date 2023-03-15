@@ -297,10 +297,10 @@ class VideoSystemController {
                 if (userC) {
                     //En caso que tiene sesion
                     this.#user = this.#videoSystemModel.getUser(userC);
-                    this.onOpenSesion();
+                    this.onExistsCookieLogin();
                 } else {
                     //en caso que no tiene sesion
-                    this.onCloseSesion();
+                    this.onCloseCookieLogin();
                 }
 
                 this.onInit();
@@ -406,6 +406,10 @@ class VideoSystemController {
     handleClose = () => {
         this.#videoSystemView.closeWindows();
     }
+
+    /**
+     * FORMULARIOS
+     */
 
     //Donde el manejador enlaza la vista del formulario con los eventos
     handlerNewCategoryForm = () => {
@@ -736,6 +740,10 @@ class VideoSystemController {
     }
 
     /**
+     * LOGIN
+     */
+
+    /**
      * manejador para mostrar el login
      */
     handleLoginForm = () => {
@@ -756,7 +764,7 @@ class VideoSystemController {
             //es correcto el usuario 
             this.#user = this.#videoSystemModel.getUser(name, null, pass);
             this.onInit();
-            this.onOpenSesion();
+            this.onExistsCookieLogin();
             this.#videoSystemView.setUserCookie(this.#user);
         } else {
             //no es correcto, mostrar el mensaje de error
@@ -767,21 +775,22 @@ class VideoSystemController {
     /**
      * En caso de no existir cookie de login o al cerrar sesion
      */
-    onCloseSesion = () => {
+    onCloseCookieLogin = () => {
         this.#user = null;
         this.#videoSystemView.showLinkLogin();
         this.#videoSystemView.bindLinkLogin(this.handleLoginForm);
         this.#videoSystemView.removeAdminMenu();
         this.#videoSystemView.deleteUserC();
+        this.handleInit();
         this.#videoSystemView.initHistory();
     }
 
     /**
      * En caso de existir la cookie de login o al iniciar sesion
      */
-    onOpenSesion = () => {
+    onExistsCookieLogin = () => {
         this.#videoSystemView.showWelcomeAdmin(this.#user);
-        this.#videoSystemView.bindCloseSession(this.onCloseSesion);
+        this.#videoSystemView.bindCloseSession(this.onCloseCookieLogin);
         this.#videoSystemView.showAdminMenu();
         this.#videoSystemView.showProdFavorites();
         this.#videoSystemView.bindShowProdFavorites(this.handlerProdFavorites);
@@ -860,16 +869,24 @@ class VideoSystemController {
     handlerRemoveProduction = (prod) =>{
         let prodFavorite = localStorage.getItem(`${this.#user.username}`);
 
+        //Filtramos en nueva array menos la produccion que se va a eliminar
+        
         let prodFavoritesAfter = (prodFavorite.split('/')).filter(title => title != prod);
+
         if(prodFavoritesAfter.length > 0){
             localStorage.setItem(`${this.#user.username}`, prodFavoritesAfter.join("/"));
 
         }else{
+            //En caso que ya no haya mas producciones, eliminar el item
             localStorage.removeItem(`${this.#user.username}`);
         }
         this.handlerProdFavorites();
     }
 
+    /**
+     * JSON 
+     */
+    
     /**
      * Donde se va a generar el JSON del estado actual del sistema, y realizar el guardado
      */

@@ -1,4 +1,5 @@
 import { Coordinate } from '../ObjetosEntidad.js';
+
 function showFeedBack(input, valid, message) {
     let validClass = (valid) ? 'is-valid' : 'is-invalid';
     let div = (valid) ? input.nextAll("div.valid-feedback") : input.nextAll("div.invalid-feedback");
@@ -73,6 +74,12 @@ function DateFormat(Pdate) {
     return newDate;
 }
 
+/**
+ * Comprobamos la extension que tiene el fichero
+ * @param {*} file 
+ * @param {*} allowedExtensions 
+ * @returns 
+ */
 function checkFileExtension(file, allowedExtensions) {
     let fileExtension = file.name.split('.').pop().toLowerCase();
 
@@ -80,16 +87,18 @@ function checkFileExtension(file, allowedExtensions) {
         return extension === fileExtension
     });
 }
-let map;
+
+let map; //Creamos la variable para trabajar
+
 /**
  * Validacion de nuevo Produccion 
  */
 function newProductionValidation(handler) {
     let form = document.forms.formNewProduction;
 
-    $(form).attr('novalidate', true);
-    // $(form).addClass('needs-validation');
     let locations = [];
+
+    $(form).attr('novalidate', true);
 
     map = L.map('mapid').setView([38.990831799999995, -3.9206173000000004], 15);
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -140,13 +149,13 @@ function newProductionValidation(handler) {
         event.preventDefault();
         event.stopPropagation();
     })
-
+    //Formulario de nueva Produccion
     $(form).submit(function (event) {
         let isValid = true;
         let firstInvalidElement = null;
 
         let imagentemp;
-
+        //Select prod
         if (this.selectType.value) {
 
             showFeedBack($(this.selectType), true);
@@ -155,7 +164,7 @@ function newProductionValidation(handler) {
             firstInvalidElement = this.selectType;
             showFeedBack($(this.selectType), false);
         }
-
+        //Select multiple de actores
         if (!this.newproActor.checkValidity()) {
             isValid = false;
             firstInvalidElement = this.newproActor;
@@ -165,6 +174,7 @@ function newProductionValidation(handler) {
             showFeedBack($(this.newproActor), true);
         }
 
+        //Select multiple de directores
         if (!this.newproDirector.checkValidity()) {
             isValid = false;
             firstInvalidElement = this.newproDirector;
@@ -174,6 +184,7 @@ function newProductionValidation(handler) {
             showFeedBack($(this.newproDirector), true);
         }
 
+        //Select multiple de categorias
         if (!this.newproCategories.checkValidity()) {
             isValid = false;
             firstInvalidElement = this.newproCategories;
@@ -183,6 +194,7 @@ function newProductionValidation(handler) {
             showFeedBack($(this.newproCategories), true);
         }
 
+        //Input de imagen
         if (!this.Pimage.value) {
             isValid = false;
             firstInvalidElement = this.Pimage;
@@ -197,6 +209,7 @@ function newProductionValidation(handler) {
             showFeedBack($(this.Pimage), true);
         }
 
+        //Input de fecha
         if (this.Pdate.checkValidity()) {
             showFeedBack($(this.Pdate), true);
         } else {
@@ -205,7 +218,7 @@ function newProductionValidation(handler) {
             showFeedBack($(this.Pdate), false);
         }
 
-
+        //Input de nacionalidad
         if (this.Nacionalidad.checkValidity()) {
 
             showFeedBack($(this.Nacionalidad), true);
@@ -215,6 +228,7 @@ function newProductionValidation(handler) {
             showFeedBack($(this.Nacionalidad), false);
         }
 
+        //Input de titlo 
         if (!this.Ptitle.checkValidity()) {
             isValid = false;
             firstInvalidElement = this.Ptitle;
@@ -224,9 +238,12 @@ function newProductionValidation(handler) {
 
         }
 
+        //En caso que no sea valido, focus
         if (!isValid) {
             firstInvalidElement.focus();
         } else {
+            //Si es valido
+           
             let categorias = [...this.newproCategories.selectedOptions].map(function (option) {
                 return option.value;
             });
@@ -242,7 +259,7 @@ function newProductionValidation(handler) {
 
             handler(this.Ptitle.value, this.Nacionalidad.value, new Date(this.Pdate.value), this.PSynopsis.value, imagentemp, categorias, directores, actores, locations, this.selectType.value);
 
-            locations = [];
+            
         }
         event.preventDefault();
         event.stopPropagation();
@@ -256,6 +273,8 @@ function newProductionValidation(handler) {
         inputs.removeClass('is-valid is-invalid');
         let selects = $(this).find('select');
         selects.removeClass('is-valid is-invalid');
+
+        locations = [];
     }));
 
     $(form.Nacionalidad).change(defaultCheckElement);
@@ -302,14 +321,14 @@ function newPersonValidation(handler) {
     let form = document.forms.formNewPerson;
 
     $(form).attr('novalidate', true);
-    // $(form).addClass('needs-validation');
 
+    //Formulario de nueva persona
     $(form).submit(function (event) {
         let isValid = true;
         let firstInvalidElement = null;
 
+        //Input de fecha
         if (this.Pdate.checkValidity()) {
-            // newDate = DateFormat(this.Pdate.value);
 
             showFeedBack($(this.Pdate), true);
         } else {
@@ -318,6 +337,7 @@ function newPersonValidation(handler) {
             showFeedBack($(this.Pdate), false);
         }
 
+        //Input de apellido2
         if (this.PersonLastName2.checkValidity()) {
 
             showFeedBack($(this.PersonLastName2), true);
@@ -326,6 +346,7 @@ function newPersonValidation(handler) {
             firstInvalidElement = this.PersonLastName2;
             showFeedBack($(this.PersonLastName2), false);
         }
+        //Input de apellido1
         if (this.PersonLastName1.checkValidity()) {
 
             showFeedBack($(this.PersonLastName1), true);
@@ -335,6 +356,7 @@ function newPersonValidation(handler) {
             showFeedBack($(this.PersonLastName1), false);
         }
 
+        //Input de nombre
         if (this.PersonName.checkValidity()) {
 
             showFeedBack($(this.PersonName), true);
@@ -344,6 +366,7 @@ function newPersonValidation(handler) {
             showFeedBack($(this.PersonName), false);
         }
 
+        //Select de tipo de persona
         if (this.selectType.checkValidity()) {
 
             showFeedBack($(this.selectType), true);
@@ -353,6 +376,7 @@ function newPersonValidation(handler) {
             showFeedBack($(this.selectType), false);
         }
 
+        //Input de imagen
         if (!this.Pimage.value) {
             isValid = false;
             firstInvalidElement = this.Pimage;
@@ -414,12 +438,13 @@ function delCategoryValidation(handler) {
     let form = document.forms.formDelCategory;
 
     $(form).attr('novalidate', true);
-    // $(form).addClass('needs-validation');
-
+    
+    //Formulario de eliminar categoria
     $(form).submit(function (event) {
         let isValid = true;
         let firstInvalidElement = null;
 
+        //Input con options de categorias
         if (this.selectDelCategory.checkValidity()) {
 
             showFeedBack($(this.selectDelCategory), true);
@@ -459,12 +484,12 @@ function delProductionValidation(handler) {
     let form = document.forms.formDelProduction;
 
     $(form).attr('novalidate', true);
-    // $(form).addClass('needs-validation');
 
+    //Formulario de eliminar produccion
     $(form).submit(function (event) {
         let isValid = true;
         let firstInvalidElement = null;
-
+        //Select de producciones
         if (this.selectDelProd.checkValidity()) {
 
             showFeedBack($(this.selectDelProd), true);
@@ -504,7 +529,7 @@ function delProductionValidation(handler) {
  */
 function assignDesValidation(handlerDirectors, handlerActors, prod) {
     let form = document.forms.formAssignDesProd;
-
+    //Si hace el click al boton de directores
     $('.directorButton').click(function (event) {
         let directorAssign = [...form.Director.selectedOptions].map(function (option) {
             return option.value;
@@ -513,17 +538,17 @@ function assignDesValidation(handlerDirectors, handlerActors, prod) {
         let directorDeassign = [...form.DirectorProd.selectedOptions].map(function (option) {
             return option.value;
         });
-
+        //Comprobamos si hay al menos uno seleccionado
         if (directorAssign.length == 0 && directorDeassign.length == 0) {
             showFeedBack($(form.Director), false);
             showFeedBack($(form.DirectorProd), false);
-
 
         } else {
             handlerDirectors(directorAssign, directorDeassign, prod);
         }
     });
 
+    //Si hace el click al boton de actores
     $('.actorButton').click(function (event) {
         let actorAssign = [...form.Actor.selectedOptions].map(function (option) {
             return option.value;
@@ -532,7 +557,8 @@ function assignDesValidation(handlerDirectors, handlerActors, prod) {
         let actorDeassign = [...form.ActorProd.selectedOptions].map(function (option) {
             return option.value;
         });
-
+        
+        //Comprobamos si hay al menos uno seleccionado
         if (actorAssign.length == 0 && actorDeassign.length == 0) {
             showFeedBack($(form.Actor), false);
             showFeedBack($(form.ActorProd), false);
@@ -578,11 +604,11 @@ function assignDesValidation(handlerDirectors, handlerActors, prod) {
 function delPersonValidation(handlerDirector, handlerActor) {
     let formDirector = document.forms.formDelPersonDirector;
     let formActor = document.forms.formDelPersonActor;
-
+    //Formulario de Director
     $(formDirector).submit(function (event) {
         let isValid = true;
         let firstInvalidElement = null;
-
+        //Select de directores
         if (!this.selectDelDirector.checkValidity()) {
             isValid = false;
             firstInvalidElement = this.selectDelDirector;
@@ -598,11 +624,11 @@ function delPersonValidation(handlerDirector, handlerActor) {
         event.stopPropagation();
     });
 
-
+    //Formulario de actor
     $(formActor).submit(function (event) {
         let isValid = true;
         let firstInvalidElement = null;
-
+        //Select de actores
         if (!this.selectDelActor.checkValidity()) {
             isValid = false;
             firstInvalidElement = this.selectDelActor;

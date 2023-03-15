@@ -123,7 +123,6 @@ class VideoSystemView {
         });
         //Evento cuando tenga el menu para resoluciones pequeñas, al hacer click a un item, oculte la nav despelgada
         $('.collapse-link').click(function () {
-            console.log("fff");
             $('.navbar-collapse').collapse('hide');
         });
 
@@ -150,7 +149,6 @@ class VideoSystemView {
 
     bindActorsList(handler) {
         this.menu.find('a[id="actor-menu"]').click((event) => {
-            // handler(this.dataset.nav);
 
             let nav = event.currentTarget.dataset.nav;
             this.#excecuteHandler(handler, [nav], 'body', { action: 'ListActores', nav: nav }, '#ListActors', event);
@@ -159,7 +157,6 @@ class VideoSystemView {
 
     bindDirectorsList(handler) {
         this.menu.find('a[id="director-menu"]').click((event) => {
-            // handler(this.dataset.nav);
 
             let nav = event.currentTarget.dataset.nav;
             this.#excecuteHandler(handler, [nav], 'body', { action: 'ListDirectores', nav: nav }, '#ListDirectores', event);
@@ -610,7 +607,7 @@ class VideoSystemView {
      */
     showButtonCloseWindowsMenu() {
         this.menu.append(`<li class="nav-item">
-                            <button type='button' id='b-closeW' class="nav-link collapse-link active btn btn-link" href="" >Cerrar Ventanas</button>
+                            <button type='button' id='b-closeW' class="nav-link collapse-link active btn btn-link" >Cerrar Ventanas</button>
                         </li>`);
     }
 
