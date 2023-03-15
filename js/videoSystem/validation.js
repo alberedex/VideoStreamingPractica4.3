@@ -88,14 +88,67 @@ function checkFileExtension(file, allowedExtensions) {
     });
 }
 
+let map; //Creamos la variable para trabajar
+
 /**
  * Validacion de nuevo Produccion 
  */
 function newProductionValidation(handler) {
     let form = document.forms.formNewProduction;
 
+    let locations = [];
+
     $(form).attr('novalidate', true);
 
+    map = L.map('mapid').setView([38.990831799999995, -3.9206173000000004], 15);
+    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+        maxZoom: 18
+    }).addTo(map);
+
+    map.on('click', function (event) {
+        L.marker([event.latlng.lat, event.latlng.lng]).addTo(map);
+        locations.push(new Coordinate(event.latlng.lat, event.latlng.lng));
+    });
+
+    let formGeoCoder = $('#fGeocoder');
+    let addresses = $('#geocoderAddresses');
+
+    formGeoCoder.submit(function (event) {
+        let formGeoC = $(this);
+        $.get(this.action + '?' + formGeoC.serialize()).then(
+            function (data) {
+                let list = $('<div class="list-group"></div>');
+                data.forEach((address) => {
+                    list.append(`<a href="#" data-lat="${address.lat}" data-lon="${address.lon}" class="list-group-item list-group-item-action">
+                        ${address.display_name}</a>`);
+                });
+                addresses.empty();
+                addresses.append(list);
+                list.find('a').click(function (event) {
+                    $(this).siblings().removeClass('active');
+                    $(this).addClass('active');
+
+                    map.setView(new L.LatLng(this.dataset.lat, this.dataset.lon), 15);
+
+                    L.marker([this.dataset.lat, this.dataset.lon]).addTo(map);
+
+                    locations.push(new Coordinate(this.dataset.lat, this.dataset.lon));
+                    event.preventDefault();
+                    event.stopPropagation();
+                })
+            }, function (error) {
+                addresses.empty();
+                addresses.append(`<div class="text-danger">
+                    <i class="fas fa-exclamation-circle"></i>
+                    No se ha podido establecer la conexión con el servidor de mapas.
+                </div>`);
+            }
+        );
+
+        event.preventDefault();
+        event.stopPropagation();
+    })
     //Formulario de nueva Produccion
     $(form).submit(function (event) {
         let isValid = true;
@@ -204,7 +257,7 @@ function newProductionValidation(handler) {
             });
 
 
-            handler(this.Ptitle.value, this.Nacionalidad.value, new Date(this.Pdate.value), this.PSynopsis.value, imagentemp, categorias, directores, actores, [], this.selectType.value);
+            handler(this.Ptitle.value, this.Nacionalidad.value, new Date(this.Pdate.value), this.PSynopsis.value, imagentemp, categorias, directores, actores, locations, this.selectType.value);
 
 
         }
@@ -221,6 +274,7 @@ function newProductionValidation(handler) {
         let selects = $(this).find('select');
         selects.removeClass('is-valid is-invalid');
 
+        locations = [];
     }));
 
     $(form.Nacionalidad).change(defaultCheckElement);
@@ -287,7 +341,7 @@ function newPersonValidation(handler) {
         } else {
             showFeedBack($(this.Pimage), true);
         }
-        
+
         //Input de fecha
         if (this.Pdate.checkValidity()) {
 
@@ -376,7 +430,6 @@ function newPersonValidation(handler) {
             showFeedBack($(this), true);
         }
     });
-
 }
 
 /**
@@ -620,4 +673,46 @@ function delPersonValidation(handlerDirector, handlerActor) {
     }));
 }
 
-export { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation, delPersonValidation, selectProdAssignDes }
+/**
+ * Validacion de Login
+ * @param {*} handler 
+ */
+function loginValidation(handler) {
+    let form = document.forms.formLogin;
+    $(form).attr('novalidate', true);
+    $(form).submit(function (event) {
+
+        let isValid = true;
+        let firstInvalidElement = null;
+
+        if (form.username.checkValidity()) {
+            showFeedBack($(this.username), true);
+        } else {
+            isValid = false;
+            firstInvalidElement = this.username;
+            showFeedBack($(this.username), false);
+        }
+
+        if (form.password.checkValidity()) {
+            showFeedBack($(this.password), true);
+        } else {
+            isValid = false;
+            firstInvalidElement = this.password;
+            showFeedBack($(this.password), false);
+        }
+
+        if (!isValid) {
+            firstInvalidElement.focus();
+        } else {
+
+            handler(form.username.value, form.password.value);
+        }
+        event.preventDefault();
+        event.stopPropagation();
+    });
+
+    $(form.username).change(defaultCheckElement);
+    $(form.password).change(defaultCheckElement);
+}
+
+export { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation, delPersonValidation, selectProdAssignDes, loginValidation, map }
