@@ -211,7 +211,7 @@ class VideoSystemController {
         this.onLoad();
         // this.onInit();
 
-        this.#videoSystemView.bindInit(this.handleInit);
+        // this.#videoSystemView.bindInit(this.handleInit);
     }
 
     //Carga inicial de la aplicacion
@@ -304,6 +304,7 @@ class VideoSystemController {
                 }
 
                 this.onInit();
+                this.#videoSystemView.bindInit(this.handleInit);
 
             });
 

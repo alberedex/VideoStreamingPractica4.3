@@ -123,6 +123,7 @@ class VideoSystemView {
         });
         //Evento cuando tenga el menu para resoluciones pequeñas, al hacer click a un item, oculte la nav despelgada
         $('.collapse-link').click(function () {
+            console.log("fff");
             $('.navbar-collapse').collapse('hide');
         });
 
@@ -1092,7 +1093,7 @@ class VideoSystemView {
         let contanierSelectCategory = $('<div class="col-md-4">');
         contanierSelectCategory.append('<label for="newproCategories" class="form-label">Categorias</label>');
 
-        let categoriesSelectCategory = $(`<select class="form-select" multiple aria-label="multiple select Categorias" id="newproCategories" name="newproCategories" aria-describedby="newproCategories" required></select>`);
+        let categoriesSelectCategory = $(`<select class="form-select" aria-label="multiple select Categorias" id="newproCategories" name="newproCategories" aria-describedby="newproCategories" multiple required></select>`);
 
         for (let category of categoriesIterator) {
             categoriesSelectCategory.append(`<option value="${category.name}">${category.name}</option>`);
@@ -1109,7 +1110,7 @@ class VideoSystemView {
         let contanierSelectPerson = $('<div class="col-md-4">');
         contanierSelectPerson.append('<label for="newproDirector" class="form-label">Directores:</label>');
 
-        let categoriesSelect = $(`<select class="form-select" multiple aria-label="multiple select Directores" id="newproDirector" name="newproDirector" aria-describedby="director" required></select>`);
+        let categoriesSelect = $(`<select class="form-select" aria-label="multiple select Directores" id="newproDirector" name="newproDirector" aria-describedby="director" multiple required></select>`);
 
         for (let director of directorIterator) {
             categoriesSelect.append(`<option value="${director.name}/${director.lastname1}">${director.name} ${director.lastname1}</option>`);
@@ -1123,7 +1124,7 @@ class VideoSystemView {
         let contanierSelectActor = $('<div class="col-md-4">');
         contanierSelectActor.append('<label for="newproActor" class="form-label">Actores:</label>');
 
-        let categoriesSelectActor = $(`<select class="form-select" multiple aria-label="multiple select Actores" id="newproActor" name="newproActor" aria-describedby="actor" required></select>`);
+        let categoriesSelectActor = $(`<select class="form-select" aria-label="multiple select Actores" id="newproActor" name="newproActor" aria-describedby="actor" multiple required></select>`);
 
         for (let actor of actorIterator) {
             categoriesSelectActor.append(`<option value="${actor.name}/${actor.lastname1}">${actor.name} ${actor.lastname1}</option>`);

@@ -261,9 +261,23 @@ function newProductionValidation(handler) {
     $(form.Nacionalidad).change(defaultCheckElement);
     $(form.Ptitle).change(defaultCheckElement);
     $(form.selectType).change(defaultCheckElement);
-    $(form.newproCategories).change(defaultCheckElement);
-    $(form.newproDirector).change(defaultCheckElement);
-    $(form.newproActor).change(defaultCheckElement);
+    $(form.Pdate).change(defaultCheckElement);
+
+    $(form.newproCategories).change(function () {
+        if (this.selectedOptions.length) {
+            showFeedBack($(this), true);
+        }
+    });
+    $(form.newproDirector).change(function () {
+        if (this.selectedOptions.length) {
+            showFeedBack($(this), true);
+        }
+    });
+    $(form.newproActor).change(function () {
+        if (this.selectedOptions.length) {
+            showFeedBack($(this), true);
+        }
+    });
 
     $(form.Pimage).change(function (event) {
         if (!this.value) {
@@ -376,6 +390,7 @@ function newPersonValidation(handler) {
     $(form.PersonName).change(defaultCheckElement);
     $(form.PersonLastName1).change(defaultCheckElement);
     $(form.PersonLastName2).change(defaultCheckElement);
+    $(form.Pdate).change(defaultCheckElement);
 
     $(form.Pimage).change(function (event) {
         if (!this.value) {
