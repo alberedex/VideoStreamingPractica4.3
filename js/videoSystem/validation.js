@@ -243,7 +243,7 @@ function newProductionValidation(handler) {
             firstInvalidElement.focus();
         } else {
             //Si es valido
-           
+
             let categorias = [...this.newproCategories.selectedOptions].map(function (option) {
                 return option.value;
             });
@@ -259,7 +259,7 @@ function newProductionValidation(handler) {
 
             handler(this.Ptitle.value, this.Nacionalidad.value, new Date(this.Pdate.value), this.PSynopsis.value, imagentemp, categorias, directores, actores, locations, this.selectType.value);
 
-            
+
         }
         event.preventDefault();
         event.stopPropagation();
@@ -327,6 +327,21 @@ function newPersonValidation(handler) {
         let isValid = true;
         let firstInvalidElement = null;
 
+        //Input de imagen
+        if (!this.Pimage.value) {
+            isValid = false;
+            firstInvalidElement = this.Pimage;
+            showFeedBack($(this.Pimage), false);
+        } else if (!checkFileExtension(this.Pimage.files[0], ['jpg', 'png', 'gif'])) {
+
+            isValid = false;
+            firstInvalidElement = this.Pimage;
+
+            showFeedBack($(this.Pimage), false);
+        } else {
+            showFeedBack($(this.Pimage), true);
+        }
+
         //Input de fecha
         if (this.Pdate.checkValidity()) {
 
@@ -376,20 +391,7 @@ function newPersonValidation(handler) {
             showFeedBack($(this.selectType), false);
         }
 
-        //Input de imagen
-        if (!this.Pimage.value) {
-            isValid = false;
-            firstInvalidElement = this.Pimage;
-            showFeedBack($(this.Pimage), false);
-        } else if (!checkFileExtension(this.Pimage.files[0], ['jpg', 'png', 'gif'])) {
 
-            isValid = false;
-            firstInvalidElement = this.Pimage;
-
-            showFeedBack($(this.Pimage), false);
-        } else {
-            showFeedBack($(this.Pimage), true);
-        }
 
         if (!isValid) {
             firstInvalidElement.focus();
@@ -428,7 +430,6 @@ function newPersonValidation(handler) {
             showFeedBack($(this), true);
         }
     });
-
 }
 
 /**
@@ -438,7 +439,7 @@ function delCategoryValidation(handler) {
     let form = document.forms.formDelCategory;
 
     $(form).attr('novalidate', true);
-    
+
     //Formulario de eliminar categoria
     $(form).submit(function (event) {
         let isValid = true;
@@ -557,7 +558,7 @@ function assignDesValidation(handlerDirectors, handlerActors, prod) {
         let actorDeassign = [...form.ActorProd.selectedOptions].map(function (option) {
             return option.value;
         });
-        
+
         //Comprobamos si hay al menos uno seleccionado
         if (actorAssign.length == 0 && actorDeassign.length == 0) {
             showFeedBack($(form.Actor), false);
@@ -596,7 +597,7 @@ function assignDesValidation(handlerDirectors, handlerActors, prod) {
     });
 }
 
-function selectProdAssignDes(handler){
+function selectProdAssignDes(handler) {
     $('#selectProd>select').change(function (event) {
         if (this.value != "") {
             handler(this.value);
@@ -714,4 +715,4 @@ function loginValidation(handler) {
     $(form.password).change(defaultCheckElement);
 }
 
-export { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation, delPersonValidation,selectProdAssignDes, loginValidation, map }
+export { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation, delPersonValidation, selectProdAssignDes, loginValidation, map }
