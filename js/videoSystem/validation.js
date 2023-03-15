@@ -594,8 +594,19 @@ function assignDesValidation(handlerDirectors, handlerActors, prod) {
             showFeedBack($(form.ActorProd), true);
         }
     });
+}
 
-
+function selectProdAssignDes(handler){
+    $('#selectProd>select').change(function (event) {
+        if (this.value != "") {
+            handler(this.value);
+            showFeedBack($(this), true);
+        } else {
+            showFeedBack($(this), false);
+            let fila = $('#formBody .row');
+            if (fila.children().length > 0) fila.remove();
+        }
+    });
 }
 
 /**
@@ -703,4 +714,4 @@ function loginValidation(handler) {
     $(form.password).change(defaultCheckElement);
 }
 
-export { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation, delPersonValidation, loginValidation, map }
+export { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation, delPersonValidation,selectProdAssignDes, loginValidation, map }

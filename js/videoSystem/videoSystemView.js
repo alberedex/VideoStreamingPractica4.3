@@ -1,4 +1,4 @@
-import { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation, delPersonValidation, loginValidation, map } from './validation.js';
+import { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation, delPersonValidation,selectProdAssignDes, loginValidation, map } from './validation.js';
 import { setCookie, getCookie } from './videoSystemApp.js';
 
 class VideoSystemView {
@@ -792,9 +792,7 @@ class VideoSystemView {
     */
     bindShowAssignsProd(handler) {
 
-        $('#formBody>select').change(function (event) {
-            handler(this.value);
-        });
+        selectProdAssignDes(handler);
     }
 
     /**
@@ -1102,7 +1100,7 @@ class VideoSystemView {
         contanierSelectCategory.append(alertsSelect);
 
         //Person
-        
+
 
         let contanierSelectPerson = $('<div class="col-md-4">');
         contanierSelectPerson.append('<label for="newproDirector" class="form-label">Directores:</label>');
@@ -1318,15 +1316,16 @@ class VideoSystemView {
         </div>`);
 
         let bodyForm = $('#formBody');
-
+        let contenedor = $(`<div id='selectProd'></div>`);
         let select = $(`<select class="form-select mb-4" id='selectProd' aria-label="Default select example">`);
 
         select.append(`<option value="">Seleccione una produccion</option>`);
         for (let prod of productionsIterator) {
             select.append(`<option value="${prod.title}">${prod.title}</option>`);
         }
-
-        bodyForm.append(select);
+        contenedor.append(select);
+        contenedor.append(`<div class="invalid-feedback">Debes seleccionar una produccion.</div>`);
+        bodyForm.append(contenedor);
     }
 
 
@@ -1775,12 +1774,12 @@ class VideoSystemView {
      */
     showMessageActionFavoritesProds(done) {
         $('#alertFav').remove();
-        if(done){
+        if (done) {
             $('#b-favorite').after(`<div class="alert alert-success" id='alertFav' role="alert">
             Ha sido añadido a las producciones favoritas
           </div>`);
-          
-        }else{
+
+        } else {
             $('#b-favorite').after(`<div class="alert alert-danger" id='alertFav' role="alert">
             No se ha podido añadir a favoritos, ya tienes en favoritos o inicia sesion
           </div>`);
@@ -1793,7 +1792,7 @@ class VideoSystemView {
      * Enlazamos el manejador con el evento cuando pulsa para eliminar la produccion de la lista de favoritos
      * @param {*} handler 
      */
-    bindRemoveProdFavorite(handler){
+    bindRemoveProdFavorite(handler) {
         $('.delProdFavorite').click(function () {
             handler(this.dataset.produccion);
         });
