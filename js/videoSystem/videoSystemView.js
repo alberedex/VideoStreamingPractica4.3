@@ -1,4 +1,4 @@
-import { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation,delPersonValidation } from './validation.js';
+import { newCategoryValidation, newProductionValidation, newPersonValidation, delCategoryValidation, delProductionValidation, assignDesValidation, delPersonValidation,selectProdAssignDes } from './validation.js';
 
 class VideoSystemView {
     /**
@@ -610,7 +610,7 @@ class VideoSystemView {
     /**
      * ADMINISTRACIÓN
      */
-    
+
 
 
     /**
@@ -693,7 +693,7 @@ class VideoSystemView {
         });
     }
 
-    bindCloseModalAlert(){
+    bindCloseModalAlert() {
         let myModal = new bootstrap.Modal(document.getElementById('messageModal'), {
             keyboard: false
         });
@@ -711,7 +711,7 @@ class VideoSystemView {
     * @param {*} handlerActor 
     */
     bindDelPersonForm(handlerDirector, handlerActor) {
-        delPersonValidation(handlerDirector,handlerActor);
+        delPersonValidation(handlerDirector, handlerActor);
     }
 
     /**
@@ -759,9 +759,7 @@ class VideoSystemView {
     */
     bindShowAssignsProd(handler) {
 
-        $('#formBody>select').change(function (event) {
-            handler(this.value);
-        });
+        selectProdAssignDes(handler);
     }
 
     /**
@@ -993,6 +991,7 @@ class VideoSystemView {
                     <form name="formNewProduction" role="form" enctype="multipart/form-data" novalidate>
                         <div class="modal-body" id='formBody'>
                         <div class='row'>
+                        <div class='row'>
                             <div class="col-md-6">
                                 <label for="Ptitle" class="form-label">Titulo</label>
                                 <input type="text" class="form-control" id="Ptitle" name='Ptitle'  required>
@@ -1024,8 +1023,8 @@ class VideoSystemView {
                                 <label for="PSynopsis" class="form-label">Synopsis</label>
                                 <textarea class="form-control" id="PSynopsis" name="PSynopsis" aria-describedby="Synopsis" rows="4"></textarea>
                             </div>
-                            
-                            
+                        </div>
+                        
                         </div>
                         <div class="modal-footer">
                             <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
@@ -1042,27 +1041,28 @@ class VideoSystemView {
         let alertsSelect = $(`<div class="invalid-feedback">Debe seleccionar al menos uno.</div>
         <div class="valid-feedback">Correcto.</div>`);
 
+        let contanierPerson = $('<div class="row">');
         //Categorias
-        let contanierSelectCategory = $('<div class="col-md-12">');
+        let contanierSelectCategory = $('<div class="col-md-4">');
         contanierSelectCategory.append('<label for="newproCategories" class="form-label">Categorias</label>');
 
-        let categoriesSelectCategory = $(`<select class="form-select" multiple aria-label="multiple select Categorias" id="newproCategories" name="newproCategories" aria-describedby="newproCategories" required></select>`);
+        let categoriesSelectCategory = $(`<select class="form-select" aria-label="multiple select Categorias" id="newproCategories" name="newproCategories" aria-describedby="newproCategories" multiple required></select>`);
 
         for (let category of categoriesIterator) {
             categoriesSelectCategory.append(`<option value="${category.name}">${category.name}</option>`);
         }
 
         contanierSelectCategory.append(categoriesSelectCategory);
-        formProduc.append(contanierSelectCategory);
+        contanierPerson.append(contanierSelectCategory);
         contanierSelectCategory.append(alertsSelect);
 
         //Person
-        let contanierPerson = $('<div class="row">');
 
-        let contanierSelectPerson = $('<div class="col-md-6">');
-        contanierSelectPerson.append('<label for="newproDirector" class="form-label">Director</label>');
 
-        let categoriesSelect = $(`<select class="form-select" multiple aria-label="multiple select Directores" id="newproDirector" name="newproDirector" aria-describedby="director" required></select>`);
+        let contanierSelectPerson = $('<div class="col-md-4">');
+        contanierSelectPerson.append('<label for="newproDirector" class="form-label">Directores:</label>');
+
+        let categoriesSelect = $(`<select class="form-select" aria-label="multiple select Directores" id="newproDirector" name="newproDirector" aria-describedby="director" multiple required></select>`);
 
         for (let director of directorIterator) {
             categoriesSelect.append(`<option value="${director.name}/${director.lastname1}">${director.name} ${director.lastname1}</option>`);
@@ -1073,10 +1073,10 @@ class VideoSystemView {
         contanierSelectPerson.append(alertsSelect.clone());
 
 
-        let contanierSelectActor = $('<div class="col-md-6">');
-        contanierSelectActor.append('<label for="newproActor" class="form-label">Actor</label>');
+        let contanierSelectActor = $('<div class="col-md-4">');
+        contanierSelectActor.append('<label for="newproActor" class="form-label">Actores:</label>');
 
-        let categoriesSelectActor = $(`<select class="form-select" multiple aria-label="multiple select Actores" id="newproActor" name="newproActor" aria-describedby="actor" required></select>`);
+        let categoriesSelectActor = $(`<select class="form-select" aria-label="multiple select Actores" id="newproActor" name="newproActor" aria-describedby="actor" multiple required></select>`);
 
         for (let actor of actorIterator) {
             categoriesSelectActor.append(`<option value="${actor.name}/${actor.lastname1}">${actor.name} ${actor.lastname1}</option>`);
@@ -1234,7 +1234,7 @@ class VideoSystemView {
                         </div>
                         <div class="modal-footer">
                             <button type="button" id='buttonClose' class="btn btn-secondary buttonClose" data-bs-dismiss="modal">Cerrar</button>
-
+                                                      
                         </div>
                     </form>
                 </div>
@@ -1242,15 +1242,16 @@ class VideoSystemView {
         </div>`);
 
         let bodyForm = $('#formBody');
-
+        let contenedor = $(`<div id='selectProd'></div>`);
         let select = $(`<select class="form-select mb-4" id='selectProd' aria-label="Default select example">`);
 
         select.append(`<option value="">Seleccione una produccion</option>`);
         for (let prod of productionsIterator) {
             select.append(`<option value="${prod.title}">${prod.title}</option>`);
         }
-
-        bodyForm.append(select);
+        contenedor.append(select);
+        contenedor.append(`<div class="invalid-feedback">Debes seleccionar una produccion.</div>`);
+        bodyForm.append(contenedor);
     }
 
 
@@ -1286,6 +1287,7 @@ class VideoSystemView {
         contanierPerson.append(`<div class="col-md-2 d-flex justify-content-center align-items-center">
           <button type="button" class="btn btn-primary directorButton">
           <i class="bi bi-arrow-left-right"></i></button>
+          
         </div>`);
 
         //Segundo select, que son directores que estan asignados 
@@ -1389,8 +1391,8 @@ class VideoSystemView {
                     </div>
                     <div class="col-md-6 p-3">
                         <label for="Pimage" class="form-label">Imagen</label>
-                        <input type="file" class="form-control" id="Pimage" name='Pimage'>
-                        <div class="invalid-feedback">La imagen es obligatorio.</div>
+                        <input type="file" class="form-control" id="Pimage" name='Pimage' required>
+                        <div class="invalid-feedback">La imagen es obligatorio y con extensión jpg, png o gif.</div>
                         <div class="valid-feedback">Correcto.</div>
                     </div>
                     </div>
@@ -1406,6 +1408,11 @@ class VideoSystemView {
         </div>`);
     }
 
+    /**
+     * Mostramos el modal del formulario de eliminar Personas
+     * @param {*} directorIterator 
+     * @param {*} actorIterator 
+     */
     showModalRemovePerson(directorIterator, actorIterator) {
         $('body').append(`<div class="modal fade" id="formRemPerson" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
         <div class="modal-dialog">
@@ -1459,8 +1466,8 @@ class VideoSystemView {
         for (let actor of actorIterator) {
             selectActor.append(`<option value="${actor.name}/${actor.lastname1}">${actor.name} ${actor.lastname1}</option>`);
         }
-  
-    }   
+
+    }
 
 }
 

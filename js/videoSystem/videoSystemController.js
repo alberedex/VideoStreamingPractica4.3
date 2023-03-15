@@ -233,8 +233,8 @@ class VideoSystemController {
         );
     }
 
-    //En respuesta a un cambio de datos
-    onInit = () => {
+      //En respuesta a un cambio de datos
+      onInit = () => {
         this.#videoSystemView.showProductionsInit(this.#videoSystemModel.productions);
         this.#videoSystemView.init(this.#videoSystemModel.categories);
         this.#videoSystemView.bindCategoriesList(this.handleProductionsCategoryList);
@@ -312,7 +312,6 @@ class VideoSystemController {
 
         this.#videoSystemView.showFichaPersonNewWindow(actor, this.#videoSystemModel.getProdutionsActor(actor));
 
-        // this.#videoSystemView.bindProductions(this.handleProduction);
     }
 
     //Director nueva ventana
@@ -322,12 +321,15 @@ class VideoSystemController {
 
         this.#videoSystemView.showFichaPersonNewWindow(director, this.#videoSystemModel.getProductionsDirector(director));
 
-        // this.#videoSystemView.bindProductions(this.handleProduction);
     }
     //Para cerrar todas las ventanas registradas
     handleClose = () => {
         this.#videoSystemView.closeWindows();
     }
+
+    /**
+     * FORMULARIOS
+     */
 
     //Donde el manejador enlaza la vista del formulario con los eventos
     handlerNewCategoryForm = () => {
@@ -361,8 +363,6 @@ class VideoSystemController {
         this.#videoSystemView.showCategoriesInMenu(this.#videoSystemModel.categories);
         this.#videoSystemView.bindCategoriesListMenu(this.handleProductionsCategoryList);
 
-        // this.#videoSystemView.init(this.#videoSystemModel.categories);
-        // this.#videoSystemView.bindCategoriesList(this.handleProductionsCategoryList);
     }
 
     //Donde va a mostrar el formulario de Eliminar categoria
@@ -412,13 +412,13 @@ class VideoSystemController {
     }
 
     //Recibo tras de validar correctamente los datos para crear produccion
-    handleCreateProduction = (title, nationality, publication, synopsis, image, categorias, directores, actores, typePro) => {
+    handleCreateProduction = (title, nationality, publication, synopsis, image, categorias, directores, actores, locations, typePro) => {
         let prod;
         if (typePro == 'Movie') {
-            prod = this.#videoSystemModel.getMovie(title, nationality, publication, synopsis, image);
+            prod = this.#videoSystemModel.getMovie(title, nationality, publication, synopsis, image, undefined, locations);
 
         } else if (typePro == 'Serie') {
-            prod = this.#videoSystemModel.getSerie(title, nationality, publication, synopsis, image);
+            prod = this.#videoSystemModel.getSerie(title, nationality, publication, synopsis, image, undefined, locations);
         }
 
         let done, error;
@@ -456,7 +456,7 @@ class VideoSystemController {
         }
         this.#videoSystemView.showMessageActionAddProd(done, prod, error);
         this.#videoSystemView.bindCloseModalAlert(); //Enlazar el evento para cerrar el modal de mensaje de accion y eliminar del DOM
-        // this.onAddCategory();
+
         refreshMain();
     }
 
